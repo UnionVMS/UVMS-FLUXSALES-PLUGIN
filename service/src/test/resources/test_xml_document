@@ -1,0 +1,98 @@
+<urn:FLUXSalesReportMessage xmlns:urn="urn:un:unece:uncefact:data:standard:FLUXSalesReportMessage:3"
+                            xmlns:urn1="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:20"
+                            xmlns:urn2="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:20">
+    <urn:FLUXReportDocument>
+        <!--1 or more repetitions:-->
+        <urn1:ID>token</urn1:ID>
+
+        <urn1:ReferencedID>abc</urn1:ReferencedID>
+        <urn1:CreationDateTime>
+            <urn2:DateTime>2002-06-24T17:46:32+02:00</urn2:DateTime>
+        </urn1:CreationDateTime>
+        <urn1:PurposeCode>3</urn1:PurposeCode>
+        <urn1:OwnerFLUXParty>
+            <urn1:ID>BEL</urn1:ID>
+        </urn1:OwnerFLUXParty>
+    </urn:FLUXReportDocument>
+    <urn:SalesReport>
+        <urn1:ItemTypeCode>SN</urn1:ItemTypeCode>
+        <urn1:IncludedSalesDocument>
+            <urn1:ID>abcdefghijklmnop</urn1:ID>
+            <urn1:CurrencyCode>EURO</urn1:CurrencyCode>
+            <urn1:SpecifiedSalesEvent>
+                <urn1:OccurrenceDateTime>
+                    <urn2:DateTime>2002-06-24T17:46:32+02:00</urn2:DateTime>
+                </urn1:OccurrenceDateTime>
+            </urn1:SpecifiedSalesEvent>
+            <urn1:TotalSalesPrice>
+                <urn1:ChargeAmount>3</urn1:ChargeAmount>
+            </urn1:TotalSalesPrice>
+            <!--TODO: check, not sure-->
+            <urn1:SpecifiedSalesParty>
+                <urn1:ID>btwnummer</urn1:ID>
+                <urn1:RoleCode>SELLER</urn1:RoleCode>
+                <urn1:Name>BEL</urn1:Name>
+            </urn1:SpecifiedSalesParty>
+            <urn1:SpecifiedSalesParty>
+                <urn1:ID>btwnummer</urn1:ID>
+                <urn1:RoleCode>BUYER</urn1:RoleCode>
+                <urn1:Name>SWE</urn1:Name>
+            </urn1:SpecifiedSalesParty>
+            <!--TODO: check, not sure-->
+            <urn1:SpecifiedFishingActivity>
+                <urn1:TypeCode>LAN</urn1:TypeCode>
+                <urn1:SpecifiedDelimitedPeriod>
+                    <urn1:StartDateTime>2002-06-24T17:46:32+02:00</urn1:StartDateTime>
+                </urn1:SpecifiedDelimitedPeriod>
+                <urn1:RelatedVesselTransportMeans>
+                    <urn1:ID schemeID="CFR">CFR</urn1:ID>
+                    <urn1:SpecifiedRegistrationEvent>
+                    </urn1:SpecifiedRegistrationEvent>
+                    <urn1:SpecifiedContactParty>
+                        <urn1:RoleCode>ROLE</urn1:RoleCode>
+                        <urn1:SpecifiedContactPerson>
+                            <urn1:FamilyName>name</urn1:FamilyName>
+                        </urn1:SpecifiedContactPerson>
+                    </urn1:SpecifiedContactParty>
+                </urn1:RelatedVesselTransportMeans>
+                <urn1:SpecifiedFishingTrip>
+                    <urn1:ID schemeID="EU_TRIP_ID">ID</urn1:ID>
+                </urn1:SpecifiedFishingTrip>
+                <urn1:RelatedFLUXLocation>
+                    <urn1:TypeCode listID="FLUX_LOCATION_TYPE">ddd</urn1:TypeCode>
+                </urn1:RelatedFLUXLocation>
+            </urn1:SpecifiedFishingActivity>
+            <urn1:SpecifiedSalesBatch>
+                <urn1:SpecifiedAAPProduct>
+                    <urn1:SpeciesCode>SAL</urn1:SpeciesCode>
+                    <urn1:UsageCode>EAT</urn1:UsageCode>
+                    <urn1:AppliedAAPProcess>
+                        <urn1:TypeCode listID="FISH_PRESENTATION">GUT</urn1:TypeCode>
+                        <urn1:TypeCode listID="FISH_PRESERVATION">SALT</urn1:TypeCode>
+                        <urn1:TypeCode listID="FISH_FRESHNESS">OLD</urn1:TypeCode>
+                    </urn1:AppliedAAPProcess>
+                    <urn1:SpecifiedSizeDistribution>
+                        <urn1:ClassCode>LSC</urn1:ClassCode>
+                        <urn1:CategoryCode>CAT</urn1:CategoryCode>
+                    </urn1:SpecifiedSizeDistribution>
+                    <urn1:TotalSalesPrice>
+                        <urn1:ChargeAmount>2</urn1:ChargeAmount>
+                    </urn1:TotalSalesPrice>
+                    <urn1:OriginFLUXLocation>
+                        <urn1:TypeCode listID="FLUX_LOCATION_TYPE">fff</urn1:TypeCode>
+                        <urn1:Name>LV</urn1:Name>
+                        <urn1:PostalStructuredAddress>
+                            <urn1:CityName>Brussels</urn1:CityName>
+                            <urn1:CountryID>BEL</urn1:CountryID>
+                            <urn1:StreetName>Koning Albert II-laan 35</urn1:StreetName>
+                        </urn1:PostalStructuredAddress>
+                    </urn1:OriginFLUXLocation>
+                </urn1:SpecifiedAAPProduct>
+            </urn1:SpecifiedSalesBatch>
+            <urn1:SpecifiedFLUXLocation>
+                <urn1:TypeCode listID="FLUX_LOCATION_TYPE">ppp</urn1:TypeCode>
+            </urn1:SpecifiedFLUXLocation>
+        </urn1:IncludedSalesDocument>
+
+    </urn:SalesReport>
+</urn:FLUXSalesReportMessage>

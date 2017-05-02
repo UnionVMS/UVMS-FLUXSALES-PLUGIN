@@ -20,6 +20,7 @@ import eu.europa.ec.fisheries.uvms.plugins.flux.mapper.FLUXSalesReportMessageMap
 import eu.europa.ec.fisheries.uvms.plugins.flux.mapper.FluxMessageResponseMapper;
 import eu.europa.ec.fisheries.uvms.plugins.flux.mapper.MappingException;
 import eu.europa.ec.fisheries.uvms.plugins.flux.service.ExchangeService;
+import eu.europa.ec.fisheries.uvms.plugins.flux.service.RequestTypeHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,6 +55,9 @@ public class FluxMessageReceiverBean implements BridgeConnectorPortType {
     @EJB
     private FLUXSalesQueryMessageMapper fluxSalesQueryMessageMapper;
 
+    @EJB
+    private RequestTypeHelper requestTypeHelper;
+
     @Override
     public ResponseType post(RequestType request) {
 
@@ -64,7 +68,7 @@ public class FluxMessageReceiverBean implements BridgeConnectorPortType {
         }
 
         try {
-            switch (request.getDF()) {
+            switch (requestTypeHelper.determineMessageType(request)) {
                 case FluxDataFlowName.VESSEL_POSITION:
                     receiveVesselPosition(request);
                     break;

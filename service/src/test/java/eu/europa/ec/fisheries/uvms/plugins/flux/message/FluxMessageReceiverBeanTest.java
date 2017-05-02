@@ -2,9 +2,12 @@ package eu.europa.ec.fisheries.uvms.plugins.flux.message;
 
 import eu.europa.ec.fisheries.uvms.plugins.flux.StartupBean;
 import eu.europa.ec.fisheries.uvms.plugins.flux.constants.FluxDataFlowName;
+import eu.europa.ec.fisheries.uvms.plugins.flux.framework.XMLResourceLoader;
 import eu.europa.ec.fisheries.uvms.plugins.flux.mapper.FLUXSalesQueryMessageMapper;
 import eu.europa.ec.fisheries.uvms.plugins.flux.mapper.FLUXSalesReportMessageMapper;
 import eu.europa.ec.fisheries.uvms.plugins.flux.service.ExchangeService;
+import eu.europa.ec.fisheries.uvms.plugins.flux.service.RequestTypeHelper;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -19,6 +22,7 @@ import static org.mockito.Mockito.*;
 @RunWith(MockitoJUnitRunner.class)//TODO STIJN
 public class FluxMessageReceiverBeanTest {
 
+    public static final String TEST_XML_DOCUMENT = "test_xml_document";
     @InjectMocks
     private FluxMessageReceiverBean fluxMessageReceiverBean;
 
@@ -34,17 +38,27 @@ public class FluxMessageReceiverBeanTest {
     @Mock
     private ExchangeService exchangeService;
 
+    @Mock
+    private RequestTypeHelper requestTypeHelper;
+
+    private XMLResourceLoader xmlResourceLoader;
+
+    @Before
+    public void setUp() throws Exception {
+        xmlResourceLoader = new XMLResourceLoader();
+    }
+
     @Test
     public void postSalesReportWhenSuccess() throws Exception {
         //data set
         RequestType request = new RequestType();
-        request.setDF(FluxDataFlowName.SALES_REPORT);
 
         String reportAsString = "report";
 
         //mock
         doReturn(true).when(startupBean).isIsEnabled();
         doReturn(reportAsString).when(fluxSalesReportMessageMapper).mapToSalesReportString(request);
+        doReturn("FLUXSalesReportMessage").when(requestTypeHelper).determineMessageType(request);
 
         //execute
         ResponseType response = fluxMessageReceiverBean.post(request);
@@ -69,6 +83,7 @@ public class FluxMessageReceiverBeanTest {
         //mock
         doReturn(true).when(startupBean).isIsEnabled();
         doReturn(reportAsString).when(fluxSalesReportMessageMapper).mapToSalesReportString(request);
+        doReturn("FLUXSalesReportMessage").when(requestTypeHelper).determineMessageType(request);
         doThrow(new RuntimeException("oops")).when(exchangeService).sendSalesReportToExchange(reportAsString);
 
         //execute
@@ -87,13 +102,13 @@ public class FluxMessageReceiverBeanTest {
     public void postSalesQueryWhenSuccess() throws Exception {
         //data set
         RequestType request = new RequestType();
-        request.setDF(FluxDataFlowName.SALES_QUERY);
 
         String queryAsString = "query";
 
         //mock
         doReturn(true).when(startupBean).isIsEnabled();
         doReturn(queryAsString).when(fluxSalesQueryMessageMapper).mapToSalesQueryString(request);
+        doReturn("FLUXSalesQueryMessage").when(requestTypeHelper).determineMessageType(request);
         doThrow(new RuntimeException("oops")).when(exchangeService).sendSalesQueryToExchange(queryAsString);
 
         //execute
@@ -112,13 +127,13 @@ public class FluxMessageReceiverBeanTest {
     public void postSalesQueryWhenProcessingMessageGoesWrong() throws Exception {
         //data set
         RequestType request = new RequestType();
-        request.setDF(FluxDataFlowName.SALES_QUERY);
 
         String queryAsString = "query";
 
         //mock
         doReturn(true).when(startupBean).isIsEnabled();
         doReturn(queryAsString).when(fluxSalesQueryMessageMapper).mapToSalesQueryString(request);
+        doReturn("FLUXSalesQueryMessage").when(requestTypeHelper).determineMessageType(request);
 
         //execute
         ResponseType response = fluxMessageReceiverBean.post(request);
