@@ -7,29 +7,20 @@ package eu.europa.ec.fisheries.uvms.plugins.flux.mapper;
 
 import eu.europa.ec.fisheries.schema.exchange.movement.asset.v1.AssetId;
 import eu.europa.ec.fisheries.schema.exchange.movement.asset.v1.AssetIdList;
-import eu.europa.ec.fisheries.schema.exchange.movement.v1.MovementBaseType;
-import eu.europa.ec.fisheries.schema.exchange.movement.v1.MovementComChannelType;
-import eu.europa.ec.fisheries.schema.exchange.movement.v1.MovementPoint;
-import eu.europa.ec.fisheries.schema.exchange.movement.v1.MovementSourceType;
-import eu.europa.ec.fisheries.schema.exchange.movement.v1.MovementTypeType;
-import eu.europa.ec.fisheries.schema.exchange.movement.v1.SetReportMovementType;
+import eu.europa.ec.fisheries.schema.exchange.movement.v1.*;
 import eu.europa.ec.fisheries.schema.exchange.plugin.types.v1.PluginType;
 import eu.europa.ec.fisheries.uvms.plugins.flux.exception.PluginException;
-import eu.europa.ec.fisheries.uvms.plugins.flux.mockdata.FluxReportMock;
+import eu.europa.ec.fisheries.uvms.plugins.flux.mockdata.FluxVesselPositionReportMock;
 import eu.europa.ec.fisheries.uvms.plugins.flux.mockdata.MockConstants;
-import java.util.HashMap;
-import java.util.List;
-import javax.xml.bind.JAXBException;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 import xeu.bridge_connector.v1.RequestType;
+
+import javax.xml.bind.JAXBException;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  *
@@ -59,7 +50,7 @@ public class FluxMessageResponseMapperTest {
 
     @Test
     public void testFluxMessageResponseMapper() throws JAXBException, PluginException {
-        RequestType mapToResponseType = FluxReportMock.mapToResponseType();
+        RequestType mapToResponseType = FluxVesselPositionReportMock.mapToResponseType();
 
         List<SetReportMovementType> mapToMovementType = FluxMessageResponseMapper.mapToMovementType(mapToResponseType, MockConstants.REGISTER_CLASSNAME);
 

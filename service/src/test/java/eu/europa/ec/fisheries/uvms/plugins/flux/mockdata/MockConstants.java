@@ -5,14 +5,16 @@
  */
 package eu.europa.ec.fisheries.uvms.plugins.flux.mockdata;
 
+import org.joda.time.DateTime;
+
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
 
 /**
  *
@@ -48,6 +50,7 @@ public class MockConstants {
     public static final Double LONGITUDE = 9.0;
 
     public static final Date NOW_DATE = new Date();
+    public static final DateTime NOW_DATE_JODA = new DateTime();
     public static final XMLGregorianCalendar NOW_DATE_GREGORIAN = getXmlGregorianTime(NOW_DATE);
 
     public static final String FLUX_DATA_FLOW = "http://dataflow";

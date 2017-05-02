@@ -12,14 +12,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 package eu.europa.ec.fisheries.uvms.plugins.flux;
 
 import eu.europa.ec.fisheries.schema.exchange.plugin.types.v1.PluginType;
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import javax.ejb.*;
-import javax.jms.JMSException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import eu.europa.ec.fisheries.schema.exchange.service.v1.CapabilityListType;
 import eu.europa.ec.fisheries.schema.exchange.service.v1.ServiceType;
 import eu.europa.ec.fisheries.schema.exchange.service.v1.SettingListType;
@@ -29,8 +21,15 @@ import eu.europa.ec.fisheries.uvms.exchange.model.mapper.ExchangeModuleRequestMa
 import eu.europa.ec.fisheries.uvms.plugins.flux.mapper.ServiceMapper;
 import eu.europa.ec.fisheries.uvms.plugins.flux.producer.PluginMessageProducer;
 import eu.europa.ec.fisheries.uvms.plugins.flux.service.ExchangeService;
-import java.util.Map;
 import eu.europa.ec.fisheries.uvms.plugins.flux.service.FileHandlerBean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.ejb.*;
+import javax.jms.JMSException;
+import java.util.Map;
 
 @Singleton
 @Startup
@@ -64,9 +63,9 @@ public class StartupBean extends PluginDataHolder {
 
         //This must be loaded first!!! Not doing that will end in dire problems later on!
         super.setPluginApplicaitonProperties(fileHandler.getPropertiesFromFile(PluginDataHolder.PLUGIN_PROPERTIES));
-        REGISTER_CLASS_NAME = getPLuginApplicationProperty("application.groupid");
+        REGISTER_CLASS_NAME = getPluginApplicationProperty("application.groupid");
 
-        //Theese can be loaded in any order
+        //These can be loaded in any order
         super.setPluginProperties(fileHandler.getPropertiesFromFile(PluginDataHolder.PROPERTIES));
         super.setPluginCapabilities(fileHandler.getPropertiesFromFile(PluginDataHolder.CAPABILITIES));
 
@@ -79,7 +78,7 @@ public class StartupBean extends PluginDataHolder {
         serviceType = ServiceMapper.getServiceType(
                 getRegisterClassName(),
                 getApplicaionName(),
-                "Plugin for sending and recieving data to and from FLUX",
+                "Plugin for sending and receiving data to and from FLUX",
                 PluginType.FLUX,
                 getPluginResponseSubscriptionName());
 
@@ -136,7 +135,7 @@ public class StartupBean extends PluginDataHolder {
         }
     }
 
-    public String getPLuginApplicationProperty(String key) {
+    public String getPluginApplicationProperty(String key) {
         try {
             return (String) super.getPluginApplicaitonProperties().get(key);
         } catch (Exception e) {
@@ -146,7 +145,7 @@ public class StartupBean extends PluginDataHolder {
     }
 
     public String getPluginResponseSubscriptionName() {
-        return getRegisterClassName() + getPLuginApplicationProperty("application.responseTopicName");
+        return getRegisterClassName() + getPluginApplicationProperty("application.responseTopicName");
     }
 
     public String getResponseTopicMessageName() {
@@ -158,7 +157,7 @@ public class StartupBean extends PluginDataHolder {
     }
 
     public String getApplicaionName() {
-        return getPLuginApplicationProperty("application.name");
+        return getPluginApplicationProperty("application.name");
     }
 
     public String getSetting(String key) {

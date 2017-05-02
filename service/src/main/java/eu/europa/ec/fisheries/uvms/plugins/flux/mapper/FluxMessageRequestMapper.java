@@ -18,41 +18,10 @@ import eu.europa.ec.fisheries.schema.exchange.movement.v1.MovementType;
 import eu.europa.ec.fisheries.uvms.plugins.flux.StartupBean;
 import eu.europa.ec.fisheries.uvms.plugins.flux.exception.PluginException;
 import eu.europa.ec.fisheries.uvms.plugins.flux.util.DateUtil;
-
-import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.UUID;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.transform.dom.DOMResult;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
-import javax.ejb.EJB;
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.ws.BindingProvider;
-import javax.xml.ws.handler.MessageContext;
 import un.unece.uncefact.data.standard.fluxvesselpositionmessage._4.FLUXVesselPositionMessage;
-
-import un.unece.uncefact.data.standard.reusableaggregatebusinessinformationentity._18.FLUXGeographicalCoordinateType;
-import un.unece.uncefact.data.standard.reusableaggregatebusinessinformationentity._18.FLUXPartyType;
-import un.unece.uncefact.data.standard.reusableaggregatebusinessinformationentity._18.FLUXReportDocumentType;
-import un.unece.uncefact.data.standard.reusableaggregatebusinessinformationentity._18.VesselCountryType;
-import un.unece.uncefact.data.standard.reusableaggregatebusinessinformationentity._18.VesselGeographicalCoordinateType;
-import un.unece.uncefact.data.standard.reusableaggregatebusinessinformationentity._18.VesselPositionEventType;
-import un.unece.uncefact.data.standard.reusableaggregatebusinessinformationentity._18.VesselTransportMeansType;
+import un.unece.uncefact.data.standard.reusableaggregatebusinessinformationentity._18.*;
 import un.unece.uncefact.data.standard.unqualifieddatatype._18.CodeType;
 import un.unece.uncefact.data.standard.unqualifieddatatype._18.DateTimeType;
 import un.unece.uncefact.data.standard.unqualifieddatatype._18.IDType;
@@ -60,6 +29,21 @@ import un.unece.uncefact.data.standard.unqualifieddatatype._18.MeasureType;
 import xeu.connector_bridge.v1.ObjectFactory;
 
 import xeu.connector_bridge.v1.PostMsgType;
+
+import javax.ejb.EJB;
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.transform.dom.DOMResult;
+import javax.xml.ws.BindingProvider;
+import javax.xml.ws.handler.MessageContext;
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  *
@@ -73,6 +57,24 @@ public class FluxMessageRequestMapper {
 
     @EJB
     StartupBean settings;
+
+    public PostMsgType mapToResponse(Object message, String id, String df, String ad) throws JAXBException {
+        PostMsgType postMsgType = new PostMsgType();
+        postMsgType.setID(id);
+        postMsgType.setAD(ad);
+        postMsgType.setDF(df);
+
+        JAXBContext context = JAXBContext.newInstance(message.getClass());
+        Marshaller marshaller = context.createMarshaller();
+        DOMResult domResult = new DOMResult();
+        marshaller.marshal(message, domResult);
+
+        Element elt = ((Document) domResult.getNode()).getDocumentElement();
+
+        postMsgType.setAny(elt);
+
+        return postMsgType;
+    }
 
     public PostMsgType mapToRequest(MovementType movement, String messageId, String recipient) throws JAXBException, MappingException {
 
@@ -171,7 +173,7 @@ public class FluxMessageRequestMapper {
 
         if (ids.containsKey(AssetIdType.IRCS.name()) && movement.getIrcs() != null) {
             if (!movement.getIrcs().equals(ids.get(AssetIdType.IRCS.name()))) {
-                throw new MappingException("Asset IRCS does not match when mapping AssetID ( There are 2 ways of getting Ircs in this #%¤#£€@ object! :( and they do not match )");
+                throw new MappingException("Asset IRCS does not match when mapping AssetID ( There are 2 ways of getting Ircs in this *** object! :( and they do not match )");
             }
         }
 

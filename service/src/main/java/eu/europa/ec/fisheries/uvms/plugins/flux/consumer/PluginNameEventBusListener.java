@@ -11,35 +11,26 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.plugins.flux.consumer;
 
-import javax.ejb.ActivationConfigProperty;
-import javax.ejb.EJB;
-import javax.ejb.MessageDriven;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageListener;
-import javax.jms.TextMessage;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import eu.europa.ec.fisheries.schema.exchange.common.v1.AcknowledgeType;
 import eu.europa.ec.fisheries.schema.exchange.common.v1.AcknowledgeTypeType;
-import eu.europa.ec.fisheries.schema.exchange.plugin.v1.PingRequest;
-import eu.europa.ec.fisheries.schema.exchange.plugin.v1.PluginBaseRequest;
-import eu.europa.ec.fisheries.schema.exchange.plugin.v1.SetCommandRequest;
-import eu.europa.ec.fisheries.schema.exchange.plugin.v1.SetConfigRequest;
-import eu.europa.ec.fisheries.schema.exchange.plugin.v1.SetReportRequest;
-import eu.europa.ec.fisheries.schema.exchange.plugin.v1.StartRequest;
-import eu.europa.ec.fisheries.schema.exchange.plugin.v1.StopRequest;
+import eu.europa.ec.fisheries.schema.exchange.plugin.v1.*;
 import eu.europa.ec.fisheries.uvms.exchange.model.constant.ExchangeModelConstants;
 import eu.europa.ec.fisheries.uvms.exchange.model.exception.ExchangeModelMarshallException;
 import eu.europa.ec.fisheries.uvms.exchange.model.mapper.ExchangePluginResponseMapper;
 import eu.europa.ec.fisheries.uvms.exchange.model.mapper.JAXBMarshaller;
 import eu.europa.ec.fisheries.uvms.plugins.flux.StartupBean;
+import eu.europa.ec.fisheries.uvms.plugins.flux.exception.PluginException;
 import eu.europa.ec.fisheries.uvms.plugins.flux.producer.PluginMessageProducer;
 import eu.europa.ec.fisheries.uvms.plugins.flux.service.PluginService;
+import eu.europa.ec.fisheries.uvms.sales.model.exception.SalesMarshallException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.ejb.*;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.MessageListener;
+import javax.jms.TextMessage;
 
 @MessageDriven(mappedName = ExchangeModelConstants.PLUGIN_EVENTBUS, activationConfig = {
     @ActivationConfigProperty(propertyName = "messagingType", propertyValue = ExchangeModelConstants.CONNECTION_TYPE),
@@ -78,36 +69,40 @@ public class PluginNameEventBusListener implements MessageListener {
                 case SET_CONFIG:
                     SetConfigRequest setConfigRequest = JAXBMarshaller.unmarshallTextMessage(textMessage, SetConfigRequest.class);
                     AcknowledgeTypeType setConfig = service.setConfig(setConfigRequest.getConfigurations());
-                    AcknowledgeType setConfigAck = ExchangePluginResponseMapper.mapToAcknowlegeType(textMessage.getJMSMessageID(), setConfig);
+                    AcknowledgeType setConfigAck = ExchangePluginResponseMapper.mapToAcknowledgeType(textMessage.getJMSMessageID(), setConfig);
                     responseMessage = ExchangePluginResponseMapper.mapToSetConfigResponse(startup.getRegisterClassName(), setConfigAck);
                     break;
                 case SET_COMMAND:
                     SetCommandRequest setCommandRequest = JAXBMarshaller.unmarshallTextMessage(textMessage, SetCommandRequest.class);
                     AcknowledgeTypeType setCommand = service.setCommand(setCommandRequest.getCommand());
-                    AcknowledgeType setCommandAck = ExchangePluginResponseMapper.mapToAcknowlegeType(textMessage.getJMSMessageID(), setCommand);
+                    AcknowledgeType setCommandAck = ExchangePluginResponseMapper.mapToAcknowledgeType(textMessage.getJMSMessageID(), setCommand);
                     responseMessage = ExchangePluginResponseMapper.mapToSetCommandResponse(startup.getRegisterClassName(), setCommandAck);
                     break;
                 case SET_REPORT:
                     SetReportRequest setReportRequest = JAXBMarshaller.unmarshallTextMessage(textMessage, SetReportRequest.class);
                     AcknowledgeTypeType setReport = service.setReport(setReportRequest.getReport());
-                    AcknowledgeType setReportAck = ExchangePluginResponseMapper.mapToAcknowlegeType(textMessage.getJMSMessageID(), setReport);
+                    AcknowledgeType setReportAck = ExchangePluginResponseMapper.mapToAcknowledgeType(textMessage.getJMSMessageID(), setReport);
                     responseMessage = ExchangePluginResponseMapper.mapToSetReportResponse(startup.getRegisterClassName(), setReportAck);
                     break;
                 case START:
                     StartRequest startRequest = JAXBMarshaller.unmarshallTextMessage(textMessage, StartRequest.class);
                     AcknowledgeTypeType start = service.start();
-                    AcknowledgeType startAck = ExchangePluginResponseMapper.mapToAcknowlegeType(textMessage.getJMSMessageID(), start);
+                    AcknowledgeType startAck = ExchangePluginResponseMapper.mapToAcknowledgeType(textMessage.getJMSMessageID(), start);
                     responseMessage = ExchangePluginResponseMapper.mapToStartResponse(startup.getRegisterClassName(), startAck);
                     break;
                 case STOP:
                     StopRequest stopRequest = JAXBMarshaller.unmarshallTextMessage(textMessage, StopRequest.class);
                     AcknowledgeTypeType stop = service.stop();
-                    AcknowledgeType stopAck = ExchangePluginResponseMapper.mapToAcknowlegeType(textMessage.getJMSMessageID(), stop);
+                    AcknowledgeType stopAck = ExchangePluginResponseMapper.mapToAcknowledgeType(textMessage.getJMSMessageID(), stop);
                     responseMessage = ExchangePluginResponseMapper.mapToStopResponse(startup.getRegisterClassName(), stopAck);
                     break;
                 case PING:
                     PingRequest pingRequest = JAXBMarshaller.unmarshallTextMessage(textMessage, PingRequest.class);
                     responseMessage = ExchangePluginResponseMapper.mapToPingResponse(startup.isIsEnabled(), startup.isIsEnabled());
+                    break;
+                case SALES_QUERY_RESPONSE:
+                    SalesMessageResponse salesQueryResponse = JAXBMarshaller.unmarshallTextMessage(textMessage, SalesMessageResponse.class);
+                    service.sendSalesQuery(salesQueryResponse);
                     break;
                 default:
                     LOG.error("Not supported method");
@@ -119,6 +114,8 @@ public class PluginNameEventBusListener implements MessageListener {
         } catch (ExchangeModelMarshallException | NullPointerException e) {
             LOG.error("[ Error when receiving message in flux " + startup.getRegisterClassName() + " ]", e);
         } catch (JMSException ex) {
+            LOG.error("[ Error when handling JMS message in flux " + startup.getRegisterClassName() + " ]", ex);
+        } catch (PluginException | SalesMarshallException ex) {
             LOG.error("[ Error when handling JMS message in flux " + startup.getRegisterClassName() + " ]", ex);
         }
     }

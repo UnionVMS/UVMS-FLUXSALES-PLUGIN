@@ -13,20 +13,25 @@ package eu.europa.ec.fisheries.uvms.plugins.flux.message;
 
 import eu.europa.ec.fisheries.schema.exchange.movement.v1.SetReportMovementType;
 import eu.europa.ec.fisheries.uvms.plugins.flux.StartupBean;
+import eu.europa.ec.fisheries.uvms.plugins.flux.constants.FluxDataFlowName;
+import eu.europa.ec.fisheries.uvms.plugins.flux.exception.PluginException;
+import eu.europa.ec.fisheries.uvms.plugins.flux.mapper.FLUXSalesQueryMessageMapper;
+import eu.europa.ec.fisheries.uvms.plugins.flux.mapper.FLUXSalesReportMessageMapper;
 import eu.europa.ec.fisheries.uvms.plugins.flux.mapper.FluxMessageResponseMapper;
+import eu.europa.ec.fisheries.uvms.plugins.flux.mapper.MappingException;
 import eu.europa.ec.fisheries.uvms.plugins.flux.service.ExchangeService;
-import java.util.List;
-import javax.ejb.EJB;
-
-import javax.ejb.Stateless;
-import javax.jws.WebService;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import xeu.bridge_connector.v1.RequestType;
 import xeu.bridge_connector.v1.ResponseType;
 import xeu.bridge_connector.wsdl.v1.BridgeConnectorPortType;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import javax.jws.WebService;
+import javax.xml.bind.JAXBException;
+import java.util.List;
 
 /**
  *
@@ -35,16 +40,22 @@ import xeu.bridge_connector.wsdl.v1.BridgeConnectorPortType;
 @WebService(serviceName = "MovementService", targetNamespace = "urn:xeu:bridge-connector:wsdl:v1", portName = "BridgeConnectorPortType", endpointInterface = "xeu.bridge_connector.wsdl.v1.BridgeConnectorPortType")
 public class FluxMessageReceiverBean implements BridgeConnectorPortType {
 
-    private static Logger LOG = LoggerFactory.getLogger(FluxMessageReceiverBean.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FluxMessageReceiverBean.class);
 
     @EJB
-    ExchangeService exchange;
+    private ExchangeService exchange;
 
     @EJB
-    StartupBean startupBean;
+    private StartupBean startupBean;
+
+    @EJB
+    private FLUXSalesReportMessageMapper fluxSalesReportMessageMapper;
+
+    @EJB
+    private FLUXSalesQueryMessageMapper fluxSalesQueryMessageMapper;
 
     @Override
-    public ResponseType post(RequestType rt) {
+    public ResponseType post(RequestType request) {
 
         ResponseType type = new ResponseType();
         if (!startupBean.isIsEnabled()) {
@@ -53,11 +64,20 @@ public class FluxMessageReceiverBean implements BridgeConnectorPortType {
         }
 
         try {
-            LOG.debug("Got positionreport request from FLUX in FLUX plugin");
-            List<SetReportMovementType> movements = FluxMessageResponseMapper.mapToMovementType(rt, startupBean.getRegisterClassName());
-
-            for (SetReportMovementType movement : movements) {
-                exchange.sendMovementReportToExchange(movement);
+            switch (request.getDF()) {
+                case FluxDataFlowName.VESSEL_POSITION:
+                    receiveVesselPosition(request);
+                    break;
+                case FluxDataFlowName.SALES_REPORT:
+                    receiveSalesReport(request);
+                    break;
+                case FluxDataFlowName.SALES_QUERY:
+                    receiveSalesQuery(request);
+                    break;
+                case FluxDataFlowName.SALES_RECEIVE_RESPONSE:
+                    receiveSalesResponse(request);
+                    break;
+                default: throw new PluginException("In the FLUX plugin, no action is defined for a FLUX request with DF " + request.getDF());
             }
 
             type.setStatus("OK");
@@ -67,6 +87,33 @@ public class FluxMessageReceiverBean implements BridgeConnectorPortType {
             type.setStatus("NOK");
             return type;
         }
+    }
+
+    private void receiveVesselPosition(RequestType request) throws JAXBException, PluginException {
+        LOG.debug("Got position report request from FLUX in FLUX plugin");
+        List<SetReportMovementType> movements = FluxMessageResponseMapper.mapToMovementType(request, startupBean.getRegisterClassName());
+
+        for (SetReportMovementType movement : movements) {
+            exchange.sendMovementReportToExchange(movement);
+        }
+    }
+
+    private void receiveSalesResponse(RequestType request) throws MappingException {
+        LOG.debug("Got sales report from FLUX in FLUX plugin");
+        String report = fluxSalesReportMessageMapper.mapToSalesResponseString(request);
+        exchange.sendSalesResponseToExchange(report);
+    }
+
+    private void receiveSalesReport(RequestType request) throws MappingException, PluginException {
+        LOG.debug("Got sales report from FLUX in FLUX plugin");
+        String report = fluxSalesReportMessageMapper.mapToSalesReportString(request);
+        exchange.sendSalesReportToExchange(report);
+    }
+
+    private void receiveSalesQuery(RequestType request) throws MappingException, PluginException {
+        LOG.debug("Got sales report from FLUX in FLUX plugin");
+        String salesQuery = fluxSalesQueryMessageMapper.mapToSalesQueryString(request);
+        exchange.sendSalesQueryToExchange(salesQuery);
     }
 
 }

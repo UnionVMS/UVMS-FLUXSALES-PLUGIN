@@ -11,29 +11,28 @@
  */
 package eu.europa.ec.fisheries.uvms.plugins.flux.service;
 
-import eu.europa.ec.fisheries.schema.exchange.common.v1.AcknowledgeTypeType;
-import eu.europa.ec.fisheries.schema.exchange.common.v1.CommandType;
-import eu.europa.ec.fisheries.schema.exchange.common.v1.CommandTypeType;
-import eu.europa.ec.fisheries.schema.exchange.common.v1.KeyValueType;
-import eu.europa.ec.fisheries.schema.exchange.common.v1.ReportType;
-import eu.europa.ec.fisheries.schema.exchange.common.v1.ReportTypeType;
+import eu.europa.ec.fisheries.schema.exchange.common.v1.*;
 import eu.europa.ec.fisheries.schema.exchange.movement.v1.MovementPoint;
 import eu.europa.ec.fisheries.schema.exchange.movement.v1.MovementType;
 import eu.europa.ec.fisheries.schema.exchange.plugin.types.v1.EmailType;
 import eu.europa.ec.fisheries.schema.exchange.plugin.types.v1.PollType;
+import eu.europa.ec.fisheries.schema.exchange.plugin.v1.SalesMessageResponse;
 import eu.europa.ec.fisheries.schema.exchange.service.v1.SettingListType;
+import eu.europa.ec.fisheries.schema.sales.FLUXSalesResponseMessage;
 import eu.europa.ec.fisheries.uvms.plugins.flux.PortInitiator;
 import eu.europa.ec.fisheries.uvms.plugins.flux.StartupBean;
 import eu.europa.ec.fisheries.uvms.plugins.flux.exception.PluginException;
+import eu.europa.ec.fisheries.uvms.plugins.flux.mapper.FLUXSalesReportMessageMapper;
 import eu.europa.ec.fisheries.uvms.plugins.flux.message.FluxMessageSenderBean;
-import java.util.UUID;
+import eu.europa.ec.fisheries.uvms.sales.model.exception.SalesMarshallException;
+import eu.europa.ec.fisheries.uvms.sales.model.mapper.JAXBMarshaller;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.UUID;
 
 /**
  *
@@ -51,6 +50,10 @@ public class PluginService {
     @EJB
     PortInitiator portInintiator;
 
+
+    @EJB
+    private FLUXSalesReportMessageMapper fluxSalesReportMessageMapper;
+
     final static Logger LOG = LoggerFactory.getLogger(PluginService.class);
 
     /**
@@ -62,10 +65,24 @@ public class PluginService {
     public AcknowledgeTypeType setReport(ReportType report) {
         LOG.info(startupBean.getRegisterClassName() + ".report(" + report.getType().name() + ")");
         LOG.debug("timestamp: " + report.getTimestamp());
-        MovementType movement = report.getMovement();
-        if (movement != null && ReportTypeType.MOVEMENT.equals(report.getType())) {
-            try {
 
+            try {
+            if (report.getMovement() != null && ReportTypeType.MOVEMENT.equals(report.getType())) {
+                sendMovement(report);
+            } else if (report.getSalesReport() != null && ReportTypeType.SALES.equals(report.getType())) {
+                sendSalesReport(report);
+            }
+        } catch (PluginException ex) {
+            LOG.debug("Error when setting report");
+            return AcknowledgeTypeType.NOK;
+        }
+
+        return AcknowledgeTypeType.OK;
+    }
+
+
+    private void sendMovement(ReportType report) throws PluginException {
+        MovementType movement = report.getMovement();
                 MovementPoint pos = movement.getPosition();
                 if (pos != null) {
                     LOG.info("lon: " + pos.getLongitude());
@@ -81,13 +98,16 @@ public class PluginService {
                 }
 
                 sender.sendMovement(movement, messageId, report.getRecipient());
+    }
 
-            } catch (PluginException ex) {
-                LOG.debug("Error when setting report");
-                return AcknowledgeTypeType.NOK;
+    private void sendSalesReport(ReportType report) throws PluginException {
+        String messageId = UUID.randomUUID().toString();
+        sender.sendSalesReport(report.getSalesReport(), messageId, report.getRecipient());
             }
-        }
-        return AcknowledgeTypeType.OK;
+
+    public void sendSalesQuery(SalesMessageResponse salesQueryResponse) throws PluginException, SalesMarshallException {
+        String messageId = UUID.randomUUID().toString();
+        sender.sendSalesQuery(salesQueryResponse, messageId);
     }
 
     /**
@@ -151,7 +171,7 @@ public class PluginService {
     }
 
     /**
-     * Start the flux. Use this to disable functionality in the flux
+     * Stop the flux. Use this to disable functionality in the flux
      *
      * @return
      */
@@ -167,4 +187,13 @@ public class PluginService {
         }
     }
 
+    public AcknowledgeTypeType handleIncomingResponse(String message) {
+        try {
+            FLUXSalesResponseMessage fluxSalesResponseMessage = JAXBMarshaller.unmarshallString(message, FLUXSalesResponseMessage.class);
+        } catch (SalesMarshallException e) {
+            LOG.error("Failed to marshal FLUXSalesResponseMessage", e);
+            return AcknowledgeTypeType.NOK;
+        }
+        return AcknowledgeTypeType.OK;
+    }
 }

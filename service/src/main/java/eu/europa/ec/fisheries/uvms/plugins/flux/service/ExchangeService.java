@@ -11,22 +11,21 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.plugins.flux.service;
 
-import java.util.UUID;
-
-import javax.ejb.EJB;
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
-import javax.jms.JMSException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import eu.europa.ec.fisheries.schema.exchange.movement.v1.SetReportMovementType;
+import eu.europa.ec.fisheries.schema.exchange.plugin.types.v1.PluginType;
 import eu.europa.ec.fisheries.uvms.exchange.model.exception.ExchangeModelMarshallException;
 import eu.europa.ec.fisheries.uvms.exchange.model.mapper.ExchangeModuleRequestMapper;
 import eu.europa.ec.fisheries.uvms.plugins.flux.StartupBean;
 import eu.europa.ec.fisheries.uvms.plugins.flux.constants.ModuleQueue;
 import eu.europa.ec.fisheries.uvms.plugins.flux.producer.PluginMessageProducer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.ejb.EJB;
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
+import javax.jms.JMSException;
+import java.util.UUID;
 
 /**
  **/
@@ -48,10 +47,42 @@ public class ExchangeService {
             String messageId = producer.sendModuleMessage(text, ModuleQueue.EXCHANGE);
             startupBean.getCachedMovement().put(messageId, reportType);
         } catch (ExchangeModelMarshallException e) {
-            LOG.error("Couldn't map movement to setreportmovementtype");
+            LOG.error("Couldn't map movement in FLUX plugin to SetReportMovementType", e);
         } catch (JMSException e) {
-            LOG.error("couldn't send movement");
+            LOG.error("Couldn't send movement from the FLUX plugin to Exchange", e);
             startupBean.getCachedMovement().put(UUID.randomUUID().toString(), reportType);
+        }
+    }
+
+    public void sendSalesReportToExchange(String report) {
+        try {
+            String text = ExchangeModuleRequestMapper.createSetSalesReportRequest(report, "FLUX", PluginType.FLUX);
+            producer.sendModuleMessage(text, ModuleQueue.EXCHANGE);
+        } catch (ExchangeModelMarshallException e) {
+            LOG.error("Couldn't map the sales report in the FLUX Plugin to SetSalesReportType. Report is " + report, e);
+        } catch (JMSException e) {
+            LOG.error("Couldn't send sales report from the FLUX plugin to Exchange. Report is " + report, e);
+        }
+    }
+    public void sendSalesResponseToExchange(String report) {
+        try {
+            String text = ExchangeModuleRequestMapper.createReceivedSalesMessage(report, "FLUX", PluginType.FLUX);
+            producer.sendModuleMessage(text, ModuleQueue.EXCHANGE);
+        } catch (ExchangeModelMarshallException e) {
+            LOG.error("Couldn't map the sales report in the FLUX Plugin to ReceivedSalesMessage. Report is " + report, e);
+        } catch (JMSException e) {
+            LOG.error("Couldn't send sales report from the FLUX plugin to Exchange. Report is " + report, e);
+        }
+    }
+
+    public void sendSalesQueryToExchange(String query) {
+        try {
+            String text = ExchangeModuleRequestMapper.createSetSalesQueryRequest(query, "FLUX", PluginType.FLUX);
+            producer.sendModuleMessage(text, ModuleQueue.EXCHANGE);
+        } catch (ExchangeModelMarshallException e) {
+            LOG.error("Couldn't map the sales query in the FLUX Plugin to SetSalesReportType. Report is " + query, e);
+        } catch (JMSException e) {
+            LOG.error("Couldn't send sales query from the FLUX plugin to Exchange. Report is " + query, e);
         }
     }
 }

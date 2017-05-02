@@ -9,10 +9,14 @@ package eu.europa.ec.fisheries.uvms.plugins.flux.mapper;
  *
  * @author jojoha
  */
-class MappingException extends Exception {
+public class MappingException extends Exception {
 
     public MappingException(String message) {
         super(message);
+    }
+
+    public MappingException(String message, Throwable root) {
+        super(message, root);
     }
 
 }

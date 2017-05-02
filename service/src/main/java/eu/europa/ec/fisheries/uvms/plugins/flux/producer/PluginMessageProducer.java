@@ -12,22 +12,18 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 package eu.europa.ec.fisheries.uvms.plugins.flux.producer;
 
 import eu.europa.ec.fisheries.uvms.exchange.model.constant.ExchangeModelConstants;
+import eu.europa.ec.fisheries.uvms.message.JMSUtils;
+import eu.europa.ec.fisheries.uvms.plugins.flux.constants.ModuleQueue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.jms.*;
 import javax.naming.InitialContext;
-import javax.naming.NamingException;
-
-import eu.europa.ec.fisheries.uvms.message.JMSUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import eu.europa.ec.fisheries.uvms.plugins.flux.constants.ModuleQueue;
 
 @Stateless
 @LocalBean
@@ -53,7 +49,8 @@ public class PluginMessageProducer {
             LOG.error("Failed to get InitialContext",e);
             throw new RuntimeException(e);
         }
-        connectionFactory = JMSUtils.lookupConnectionFactory(ctx, ExchangeModelConstants.CONNECTION_FACTORY);
+        //connectionFactory = JMSUtils.lookupConnectionFactory(ctx, ExchangeModelConstants.CONNECTION_FACTORY);
+        connectionFactory = JMSUtils.lookupConnectionFactory();
         try {
             connection = connectionFactory.createConnection();
             connection.start();
@@ -147,7 +144,7 @@ public class PluginMessageProducer {
 
     private javax.jms.MessageProducer getProducer(Session session, Destination destination) throws JMSException {
         javax.jms.MessageProducer producer = session.createProducer(destination);
-        producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
+        producer.setDeliveryMode(DeliveryMode.PERSISTENT);
         producer.setTimeToLive(60000L);
         return producer;
     }
