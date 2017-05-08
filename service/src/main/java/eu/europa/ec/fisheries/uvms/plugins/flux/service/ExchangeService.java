@@ -13,11 +13,14 @@ package eu.europa.ec.fisheries.uvms.plugins.flux.service;
 
 import eu.europa.ec.fisheries.schema.exchange.movement.v1.SetReportMovementType;
 import eu.europa.ec.fisheries.schema.exchange.plugin.types.v1.PluginType;
+import eu.europa.ec.fisheries.schema.sales.Report;
 import eu.europa.ec.fisheries.uvms.exchange.model.exception.ExchangeModelMarshallException;
 import eu.europa.ec.fisheries.uvms.exchange.model.mapper.ExchangeModuleRequestMapper;
 import eu.europa.ec.fisheries.uvms.plugins.flux.StartupBean;
 import eu.europa.ec.fisheries.uvms.plugins.flux.constants.ModuleQueue;
 import eu.europa.ec.fisheries.uvms.plugins.flux.producer.PluginMessageProducer;
+import eu.europa.ec.fisheries.uvms.sales.model.exception.SalesMarshallException;
+import eu.europa.ec.fisheries.uvms.sales.model.mapper.JAXBMarshaller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,6 +28,7 @@ import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.jms.JMSException;
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -54,14 +58,24 @@ public class ExchangeService {
         }
     }
 
-    public void sendSalesReportToExchange(String report) {
+    public void sendSalesReportToExchange(Report report) {
+        String reportAsString = null;
+
         try {
-            String text = ExchangeModuleRequestMapper.createSetSalesReportRequest(report, "FLUX", PluginType.FLUX);
+
+            reportAsString = JAXBMarshaller.marshallJaxBObjectToString(report);
+            String guid = report.getFLUXSalesReportMessage().getFLUXReportDocument().getIDS().get(0).getValue();
+            String countryOfSender = report.getFLUXSalesReportMessage().getFLUXReportDocument().getOwnerFLUXParty().getIDS().get(0).getValue();
+
+            String text = ExchangeModuleRequestMapper.createSetSalesReportRequest(reportAsString, guid, countryOfSender,  "FLUX", PluginType.FLUX, new Date());
             producer.sendModuleMessage(text, ModuleQueue.EXCHANGE);
+
         } catch (ExchangeModelMarshallException e) {
-            LOG.error("Couldn't map the sales report in the FLUX Plugin to SetSalesReportType. Report is " + report, e);
+            LOG.error("Couldn't map the sales report in the FLUX Plugin to SetSalesReportType.", e);
         } catch (JMSException e) {
-            LOG.error("Couldn't send sales report from the FLUX plugin to Exchange. Report is " + report, e);
+            LOG.error("Couldn't send sales report from the FLUX plugin to Exchange. Report is " + reportAsString, e);
+        } catch (SalesMarshallException e) {
+            LOG.error("Couldn't marshall the supplied sales report", e);
         }
     }
     public void sendSalesResponseToExchange(String report) {

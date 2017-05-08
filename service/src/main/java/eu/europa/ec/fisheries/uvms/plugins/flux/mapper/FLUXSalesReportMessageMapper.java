@@ -31,18 +31,15 @@ public class FLUXSalesReportMessageMapper {
     @Inject
     private MapperFacade mapper;
 
-    public String mapToSalesReportString(RequestType request) throws MappingException {
+    public Report mapToReport(RequestType request) throws MappingException {
         try {
             un.unece.uncefact.data.standard.fluxsalesreportmessage._3.FLUXSalesReportMessage fluxSalesReportMessage = unpackFluxSalesReportMessage(request);
-
             FLUXSalesReportMessage mappedFluxSalesReportMessage = mapper.map(fluxSalesReportMessage, FLUXSalesReportMessage.class);
 
-            Report report = new Report();
-            report.setFLUXSalesReportMessage(mappedFluxSalesReportMessage);
-
-            return JAXBMarshaller.marshallJaxBObjectToString(report);
-        } catch (SalesMarshallException | JAXBException e) {
-            throw new MappingException("Could not map sales report to a string", e);
+            return new Report()
+                    .withFLUXSalesReportMessage(mappedFluxSalesReportMessage);
+        } catch (JAXBException e) {
+            throw new MappingException("Could not unmarshall the supplied xml for a sales report", e);
         }
     }
 

@@ -12,6 +12,7 @@
 package eu.europa.ec.fisheries.uvms.plugins.flux.message;
 
 import eu.europa.ec.fisheries.schema.exchange.movement.v1.SetReportMovementType;
+import eu.europa.ec.fisheries.schema.sales.Report;
 import eu.europa.ec.fisheries.uvms.plugins.flux.StartupBean;
 import eu.europa.ec.fisheries.uvms.plugins.flux.constants.FluxDataFlowName;
 import eu.europa.ec.fisheries.uvms.plugins.flux.exception.PluginException;
@@ -110,7 +111,7 @@ public class FluxMessageReceiverBean implements BridgeConnectorPortType {
 
     private void receiveSalesReport(RequestType request) throws MappingException, PluginException {
         LOG.debug("Got sales report from FLUX in FLUX plugin");
-        String report = fluxSalesReportMessageMapper.mapToSalesReportString(request);
+        Report report = fluxSalesReportMessageMapper.mapToReport(request);
         exchange.sendSalesReportToExchange(report);
     }
 
