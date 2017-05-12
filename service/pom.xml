@@ -2,14 +2,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>flux-service</artifactId>
+    <artifactId>flux-sales-plugin-service</artifactId>
     <name>${project.parent.artifactId}-service</name>
     <packaging>ejb</packaging>
 
     <parent>
         <groupId>eu.europa.ec.fisheries.uvms.plugins</groupId>
-        <artifactId>flux</artifactId>
-        <version>3.0.0-SNAPSHOT</version>
+        <artifactId>flux-sales-plugin</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <properties>
@@ -32,11 +32,6 @@
             <artifactId>exchange-model</artifactId>
             <version>${exchange.model.version}</version>
             <classifier>${exchange.classifier}</classifier>
-        </dependency>
-        <dependency>
-            <groupId>eu.europa.ec.fisheries.uvms.service.client.flux</groupId>
-            <artifactId>flux-movement</artifactId>
-            <version>${flux.movement.client.version}</version>
         </dependency>
         <dependency>
             <groupId>eu.europa.ec.fisheries.uvms.service.client.flux</groupId>

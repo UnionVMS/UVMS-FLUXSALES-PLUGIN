@@ -1,5 +1,4 @@
 target
-/service/src/main/resources/plugin.properties
 .idea
 **/*.iml
 */target
