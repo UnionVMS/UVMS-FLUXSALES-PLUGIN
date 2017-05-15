@@ -1,6 +1,6 @@
 # FLUX-Sales plugin
 
-####Module description/purpose
+#### Module description/purpose
 
 This is a plugin for the Exchange module.
 
