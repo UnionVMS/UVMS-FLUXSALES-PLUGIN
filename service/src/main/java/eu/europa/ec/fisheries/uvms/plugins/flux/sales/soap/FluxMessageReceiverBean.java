@@ -11,6 +11,8 @@
  */
 package eu.europa.ec.fisheries.uvms.plugins.flux.sales.soap;
 
+import eu.europa.ec.fisheries.schema.sales.FLUXSalesQueryMessage;
+import eu.europa.ec.fisheries.schema.sales.FLUXSalesResponseMessage;
 import eu.europa.ec.fisheries.schema.sales.Report;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.StartupBean;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.constants.FluxDataFlowName;
@@ -92,8 +94,8 @@ public class FluxMessageReceiverBean implements BridgeConnectorPortType {
 
     private void receiveSalesResponse(RequestType request) throws MappingException {
         LOG.debug("Got sales report from FLUX in FLUX plugin");
-        String report = fluxSalesResponseMessageMapper.mapToSalesResponseString(request);
-        exchange.sendSalesResponseToExchange(report);
+        FLUXSalesResponseMessage fluxSalesResponseMessage = fluxSalesResponseMessageMapper.mapToSalesResponse(request);
+        exchange.sendSalesResponseToExchange(fluxSalesResponseMessage);
     }
 
     private void receiveSalesReport(RequestType request) throws MappingException, PluginException {
@@ -104,7 +106,7 @@ public class FluxMessageReceiverBean implements BridgeConnectorPortType {
 
     private void receiveSalesQuery(RequestType request) throws MappingException, PluginException {
         LOG.debug("Got sales report from FLUX in FLUX plugin");
-        String salesQuery = fluxSalesQueryMessageMapper.mapToSalesQueryString(request);
+        FLUXSalesQueryMessage salesQuery = fluxSalesQueryMessageMapper.mapToSalesQuery(request);
         exchange.sendSalesQueryToExchange(salesQuery);
     }
 

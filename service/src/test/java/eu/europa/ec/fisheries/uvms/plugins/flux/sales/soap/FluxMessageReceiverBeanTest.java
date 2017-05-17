@@ -1,5 +1,7 @@
 package eu.europa.ec.fisheries.uvms.plugins.flux.sales.soap;
 
+import eu.europa.ec.fisheries.schema.sales.FLUXSalesQueryMessage;
+import eu.europa.ec.fisheries.schema.sales.FLUXSalesResponseMessage;
 import eu.europa.ec.fisheries.schema.sales.Report;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.StartupBean;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.constants.FluxDataFlowName;
@@ -98,21 +100,21 @@ public class FluxMessageReceiverBeanTest {
         //data set
         RequestType request = new RequestType();
 
-        String queryAsString = "query";
+        FLUXSalesQueryMessage query = new FLUXSalesQueryMessage();
 
         //mock
         doReturn(true).when(startupBean).isIsEnabled();
-        doReturn(queryAsString).when(fluxSalesQueryMessageMapper).mapToSalesQueryString(request);
+        doReturn(query).when(fluxSalesQueryMessageMapper).mapToSalesQuery(request);
         doReturn("FLUXSalesQueryMessage").when(requestTypeHelper).determineMessageType(request);
-        doThrow(new RuntimeException("oops")).when(exchangeService).sendSalesQueryToExchange(queryAsString);
+        doThrow(new RuntimeException("oops")).when(exchangeService).sendSalesQueryToExchange(query);
 
         //execute
         ResponseType response = fluxMessageReceiverBean.post(request);
 
         //verify and assert
         verify(startupBean).isIsEnabled();
-        verify(fluxSalesQueryMessageMapper).mapToSalesQueryString(request);
-        verify(exchangeService).sendSalesQueryToExchange(queryAsString);
+        verify(fluxSalesQueryMessageMapper).mapToSalesQuery(request);
+        verify(exchangeService).sendSalesQueryToExchange(query);
         verifyNoMoreInteractions(fluxSalesQueryMessageMapper, startupBean, exchangeService);
 
         assertEquals("NOK", response.getStatus());
@@ -123,11 +125,11 @@ public class FluxMessageReceiverBeanTest {
         //data set
         RequestType request = new RequestType();
 
-        String queryAsString = "query";
+        FLUXSalesQueryMessage query = new FLUXSalesQueryMessage();
 
         //mock
         doReturn(true).when(startupBean).isIsEnabled();
-        doReturn(queryAsString).when(fluxSalesQueryMessageMapper).mapToSalesQueryString(request);
+        doReturn(query).when(fluxSalesQueryMessageMapper).mapToSalesQuery(request);
         doReturn("FLUXSalesQueryMessage").when(requestTypeHelper).determineMessageType(request);
 
         //execute
@@ -135,8 +137,8 @@ public class FluxMessageReceiverBeanTest {
 
         //verify and assert
         verify(startupBean).isIsEnabled();
-        verify(fluxSalesQueryMessageMapper).mapToSalesQueryString(request);
-        verify(exchangeService).sendSalesQueryToExchange(queryAsString);
+        verify(fluxSalesQueryMessageMapper).mapToSalesQuery(request);
+        verify(exchangeService).sendSalesQueryToExchange(query);
         verifyNoMoreInteractions(fluxSalesQueryMessageMapper, startupBean, exchangeService);
 
         assertEquals("OK", response.getStatus());
@@ -147,24 +149,24 @@ public class FluxMessageReceiverBeanTest {
         //data set
         RequestType request = new RequestType();
 
-        String responseAsString = "response";
+        FLUXSalesResponseMessage response = new FLUXSalesResponseMessage();
 
         //mock
         doReturn(true).when(startupBean).isIsEnabled();
-        doReturn(responseAsString).when(fluxSalesResponseMessageMapper).mapToSalesResponseString(request);
+        doReturn(response).when(fluxSalesResponseMessageMapper).mapToSalesResponse(request);
         doReturn("FLUXSalesResponseMessage").when(requestTypeHelper).determineMessageType(request);
-        doThrow(new RuntimeException("oops")).when(exchangeService).sendSalesResponseToExchange(responseAsString);
+        doThrow(new RuntimeException("oops")).when(exchangeService).sendSalesResponseToExchange(response);
 
         //execute
-        ResponseType response = fluxMessageReceiverBean.post(request);
+        ResponseType responseType = fluxMessageReceiverBean.post(request);
 
         //verify and assert
         verify(startupBean).isIsEnabled();
-        verify(fluxSalesResponseMessageMapper).mapToSalesResponseString(request);
-        verify(exchangeService).sendSalesResponseToExchange(responseAsString);
+        verify(fluxSalesResponseMessageMapper).mapToSalesResponse(request);
+        verify(exchangeService).sendSalesResponseToExchange(response);
         verifyNoMoreInteractions(fluxSalesResponseMessageMapper, startupBean, exchangeService);
 
-        assertEquals("NOK", response.getStatus());
+        assertEquals("NOK", responseType.getStatus());
     }
 
     @Test
@@ -172,23 +174,23 @@ public class FluxMessageReceiverBeanTest {
         //data set
         RequestType request = new RequestType();
 
-        String responseAsString = "response";
+        FLUXSalesResponseMessage response = new FLUXSalesResponseMessage();
 
         //mock
         doReturn(true).when(startupBean).isIsEnabled();
-        doReturn(responseAsString).when(fluxSalesResponseMessageMapper).mapToSalesResponseString(request);
+        doReturn(response).when(fluxSalesResponseMessageMapper).mapToSalesResponse(request);
         doReturn("FLUXSalesResponseMessage").when(requestTypeHelper).determineMessageType(request);
 
         //execute
-        ResponseType response = fluxMessageReceiverBean.post(request);
+        ResponseType responseType = fluxMessageReceiverBean.post(request);
 
         //verify and assert
         verify(startupBean).isIsEnabled();
-        verify(fluxSalesResponseMessageMapper).mapToSalesResponseString(request);
-        verify(exchangeService).sendSalesResponseToExchange(responseAsString);
+        verify(fluxSalesResponseMessageMapper).mapToSalesResponse(request);
+        verify(exchangeService).sendSalesResponseToExchange(response);
         verifyNoMoreInteractions(fluxSalesResponseMessageMapper, startupBean, exchangeService);
 
-        assertEquals("OK", response.getStatus());
+        assertEquals("OK", responseType.getStatus());
     }
 
     @Test

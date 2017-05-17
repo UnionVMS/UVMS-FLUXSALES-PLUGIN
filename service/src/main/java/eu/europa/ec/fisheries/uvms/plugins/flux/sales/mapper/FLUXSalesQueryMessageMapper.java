@@ -2,8 +2,6 @@ package eu.europa.ec.fisheries.uvms.plugins.flux.sales.mapper;
 
 import eu.europa.ec.fisheries.schema.sales.FLUXSalesQueryMessage;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.exception.MappingException;
-import eu.europa.ec.fisheries.uvms.sales.model.exception.SalesMarshallException;
-import eu.europa.ec.fisheries.uvms.sales.model.mapper.JAXBMarshaller;
 import ma.glasnost.orika.MapperFacade;
 import xeu.bridge_connector.v1.RequestType;
 
@@ -19,16 +17,12 @@ public class FLUXSalesQueryMessageMapper {
     @Inject
     private MapperFacade mapper;
 
-    public String mapToSalesQueryString(RequestType request) throws MappingException {
+    public FLUXSalesQueryMessage mapToSalesQuery(RequestType request) throws MappingException {
         try {
             un.unece.uncefact.data.standard.fluxsalesquerymessage._3.FLUXSalesQueryMessage fluxSalesQueryMessage = unpackFluxSalesQueryMessage(request);
-
-
-            FLUXSalesQueryMessage mappedFluxSalesReportMessage = mapper.map(fluxSalesQueryMessage, FLUXSalesQueryMessage.class);
-
-            return JAXBMarshaller.marshallJaxBObjectToString(mappedFluxSalesReportMessage);
-        } catch (SalesMarshallException | JAXBException e) {
-            throw new MappingException("Could not map sales query to a string", e);
+            return mapper.map(fluxSalesQueryMessage, FLUXSalesQueryMessage.class);
+        } catch (JAXBException e) {
+            throw new MappingException("Could not unmarshall the supplied xml for a sales query.", e);
         }
     }
 
