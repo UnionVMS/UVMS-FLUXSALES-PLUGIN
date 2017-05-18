@@ -13,6 +13,8 @@ package eu.europa.ec.fisheries.uvms.plugins.flux.sales.soap;
 
 import eu.europa.ec.fisheries.schema.exchange.plugin.v1.SendSalesReportRequest;
 import eu.europa.ec.fisheries.schema.exchange.plugin.v1.SendSalesResponseRequest;
+import eu.europa.ec.fisheries.schema.sales.FLUXSalesReportMessage;
+import eu.europa.ec.fisheries.schema.sales.FLUXSalesResponseMessage;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.PortInitiator;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.StartupBean;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.exception.MappingException;
@@ -82,12 +84,12 @@ public class FluxMessageSenderBean {
     }
 
     private un.unece.uncefact.data.standard.fluxsalesresponsemessage._3.FLUXSalesResponseMessage unmarshalAndMapToUNCEFACTFluxSalesResponseMessage(SendSalesResponseRequest request) throws SalesMarshallException {
-        eu.europa.ec.fisheries.schema.sales.FLUXSalesResponseMessage fluxSalesResponseMessage = JAXBMarshaller.unmarshallString(request.getResponse(), un.unece.uncefact.data.standard.fluxsalesresponsemessage._3.FLUXSalesResponseMessage.class);
+        eu.europa.ec.fisheries.schema.sales.FLUXSalesResponseMessage fluxSalesResponseMessage = JAXBMarshaller.unmarshallString(request.getResponse(), FLUXSalesResponseMessage.class);
         return mapper.map(fluxSalesResponseMessage, un.unece.uncefact.data.standard.fluxsalesresponsemessage._3.FLUXSalesResponseMessage.class);
     }
 
     private un.unece.uncefact.data.standard.fluxsalesreportmessage._3.FLUXSalesReportMessage unmarshalAndMapToUNCEFACTFluxSalesReportMessage(SendSalesReportRequest request) throws SalesMarshallException {
-        eu.europa.ec.fisheries.schema.sales.FLUXSalesResponseMessage fluxSalesResponseMessage = JAXBMarshaller.unmarshallString(request.getReport(), un.unece.uncefact.data.standard.fluxsalesresponsemessage._3.FLUXSalesResponseMessage.class);
+        eu.europa.ec.fisheries.schema.sales.FLUXSalesResponseMessage fluxSalesResponseMessage = JAXBMarshaller.unmarshallString(request.getReport(), FLUXSalesReportMessage.class);
         return mapper.map(fluxSalesResponseMessage, un.unece.uncefact.data.standard.fluxsalesreportmessage._3.FLUXSalesReportMessage.class);
     }
 
