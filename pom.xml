@@ -19,8 +19,8 @@
         <maven.compiler.target>1.7</maven.compiler.target>
 
         <uvms.common.version>2.0.18-SNAPSHOT</uvms.common.version>
-        <connector-bridge.client.version>1.0.4</connector-bridge.client.version>
-        <bridge-connector.client.version>1.0.4</bridge-connector.client.version>
+        <connector-bridge.client.version>1.0.3-SNAPSHOT</connector-bridge.client.version>
+        <bridge-connector.client.version>1.0.3-SNAPSHOT</bridge-connector.client.version>
         <flux.movement.client.version>2.0.1-SNAPSHOT</flux.movement.client.version>
         <flux.sales.client.version>1.0.0-SNAPSHOT</flux.sales.client.version>
         <sales.model.version>1.0.0-SNAPSHOT</sales.model.version>
@@ -83,19 +83,6 @@
             <url>http://nexus.focus.fish/nexus/</url>
         </repository>
     </repositories>
-    
-    <distributionManagement> 
-        <repository>
-            <id>focus-releases</id>
-            <name>UnionVms Repository</name>
-            <url>http://nexus.focus.fish/nexus/content/repositories/releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>focus-snapshots</id>
-            <name>UnionVms Snapshot Repository</name>
-            <url>http://nexus.focus.fish/nexus/content/repositories/snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
 
     <scm>
         <connection>scm:git:https://github.com/UnionVMS/UVMS-FLUXSALES-PLUGIN.git</connection>
@@ -126,6 +113,17 @@
             </plugin>
         </plugins>
     </build>
+    <profiles>
+        <profile>
+            <id>belgium-local</id>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>lv-snapshots</id>
+                    <url>https://apjenp01.dg3.be/nexus/repository/maven-snapshots/</url>
+                </snapshotRepository>
+            </distributionManagement>
+        </profile>
+    </profiles>
     
     <modules>
         <module>service</module>
