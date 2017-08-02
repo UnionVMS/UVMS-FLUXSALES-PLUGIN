@@ -72,11 +72,11 @@ public class PluginRegistrationListener implements MessageListener {
                         switch (registerResponse.getAck().getType()) {
                             case OK:
                                 LOG.info("Register OK");
-                                startupService.setIsRegistered(Boolean.TRUE);
+                                startupService.setRegistered(Boolean.TRUE);
                                 break;
                             case NOK:
                                 LOG.info("Register NOK: " + registerResponse.getAck().getMessage());
-                                startupService.setIsRegistered(Boolean.FALSE);
+                                startupService.setRegistered(Boolean.FALSE);
                                 break;
                             default:
                                 LOG.error("[ Type not supported: ]" + request.getMethod());

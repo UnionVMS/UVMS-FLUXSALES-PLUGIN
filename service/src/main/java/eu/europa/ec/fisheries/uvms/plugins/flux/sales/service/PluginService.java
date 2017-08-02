@@ -83,10 +83,10 @@ public class PluginService {
     public AcknowledgeTypeType start() {
         LOG.info(startupBean.getRegisterClassName() + ".start()");
         try {
-            startupBean.setIsEnabled(Boolean.TRUE);
+            startupBean.setEnabled(Boolean.TRUE);
             return AcknowledgeTypeType.OK;
         } catch (Exception e) {
-            startupBean.setIsEnabled(Boolean.FALSE);
+            startupBean.setEnabled(Boolean.FALSE);
             LOG.error("Failed to start {}", startupBean.getRegisterClassName());
             return AcknowledgeTypeType.NOK;
         }
@@ -101,10 +101,10 @@ public class PluginService {
     public AcknowledgeTypeType stop() {
         LOG.info(startupBean.getRegisterClassName() + ".stop()");
         try {
-            startupBean.setIsEnabled(Boolean.FALSE);
+            startupBean.setEnabled(Boolean.FALSE);
             return AcknowledgeTypeType.OK;
         } catch (Exception e) {
-            startupBean.setIsEnabled(Boolean.TRUE);
+            startupBean.setEnabled(Boolean.TRUE);
             LOG.error("Failed to stop {}", startupBean.getRegisterClassName());
             return AcknowledgeTypeType.NOK;
         }

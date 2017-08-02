@@ -64,7 +64,7 @@ public class FluxMessageReceiverBean implements BridgeConnectorPortType {
     public ResponseType post(RequestType request) {
 
         ResponseType type = new ResponseType();
-        if (!startupBean.isIsEnabled()) {
+        if (!startupBean.isEnabled()) {
             type.setStatus("NOK");
             return type;
         }

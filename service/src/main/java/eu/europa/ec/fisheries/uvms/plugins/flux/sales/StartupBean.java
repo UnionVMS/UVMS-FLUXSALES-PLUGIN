@@ -174,19 +174,19 @@ public class StartupBean extends PluginDataHolder {
         this.waitingForResponse = waitingForResponse;
     }
 
-    public boolean isIsRegistered() {
+    public boolean isRegistered() {
         return isRegistered;
     }
 
-    public void setIsRegistered(boolean isRegistered) {
+    public void setRegistered(boolean isRegistered) {
         this.isRegistered = isRegistered;
     }
 
-    public boolean isIsEnabled() {
+    public boolean isEnabled() {
         return isEnabled;
     }
 
-    public void setIsEnabled(boolean isEnabled) {
+    public void setEnabled(boolean isEnabled) {
         this.isEnabled = isEnabled;
     }
 

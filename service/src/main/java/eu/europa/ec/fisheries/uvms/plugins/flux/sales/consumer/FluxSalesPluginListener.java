@@ -93,7 +93,7 @@ public class FluxSalesPluginListener implements MessageListener {
                     responseMessage = ExchangePluginResponseMapper.mapToStopResponse(startup.getRegisterClassName(), stopAck);
                     break;
                 case PING:
-                    responseMessage = ExchangePluginResponseMapper.mapToPingResponse(startup.isIsEnabled(), startup.isIsEnabled());
+                    responseMessage = ExchangePluginResponseMapper.mapToPingResponse(startup.isEnabled(), startup.isEnabled());
                     break;
                 case SEND_SALES_RESPONSE:
                     SendSalesResponseRequest salesResponse = JAXBMarshaller.unmarshallTextMessage(textMessage, SendSalesResponseRequest.class);

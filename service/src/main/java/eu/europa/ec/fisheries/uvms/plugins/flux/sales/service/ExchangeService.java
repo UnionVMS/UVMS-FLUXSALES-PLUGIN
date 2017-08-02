@@ -19,6 +19,9 @@ import eu.europa.ec.fisheries.uvms.exchange.model.exception.ExchangeModelMarshal
 import eu.europa.ec.fisheries.uvms.exchange.model.mapper.ExchangeModuleRequestMapper;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.constants.ModuleQueue;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.producer.PluginMessageProducer;
+import eu.europa.ec.fisheries.uvms.plugins.flux.sales.service.helper.QueryHelper;
+import eu.europa.ec.fisheries.uvms.plugins.flux.sales.service.helper.ReportHelper;
+import eu.europa.ec.fisheries.uvms.plugins.flux.sales.service.helper.ResponseHelper;
 import eu.europa.ec.fisheries.uvms.sales.model.exception.SalesMarshallException;
 import eu.europa.ec.fisheries.uvms.sales.model.mapper.JAXBMarshaller;
 import org.slf4j.Logger;
@@ -37,15 +40,24 @@ public class ExchangeService {
     final static Logger LOG = LoggerFactory.getLogger(ExchangeService.class);
 
     @EJB
-    PluginMessageProducer producer;
+    private PluginMessageProducer producer;
+
+    @EJB
+    private ReportHelper reportHelper;
+
+    @EJB
+    private ResponseHelper responseHelper;
+
+    @EJB
+    private QueryHelper queryHelper;
 
     public void sendSalesReportToExchange(Report report) {
         String reportAsString = null;
 
         try {
             reportAsString = JAXBMarshaller.marshallJaxBObjectToString(report);
-            String guid = report.getFLUXSalesReportMessage().getFLUXReportDocument().getIDS().get(0).getValue();
-            String countryOfSender = report.getFLUXSalesReportMessage().getFLUXReportDocument().getOwnerFLUXParty().getIDS().get(0).getValue();
+            String guid = reportHelper.getGuidOrNull(report);
+            String countryOfSender = reportHelper.getCountryOfSenderOrNull(report);
 
             String text = ExchangeModuleRequestMapper.createReceiveSalesReportRequest(reportAsString, guid, countryOfSender,  "FLUX", PluginType.FLUX, new Date());
             producer.sendModuleMessage(text, ModuleQueue.EXCHANGE);
@@ -61,8 +73,8 @@ public class ExchangeService {
     public void sendSalesResponseToExchange(FLUXSalesResponseMessage response) {
         try {
             String responseAsString = JAXBMarshaller.marshallJaxBObjectToString(response);
-            String guid = response.getFLUXResponseDocument().getIDS().get(0).getValue();
-            String countryOfSender = response.getFLUXResponseDocument().getRespondentFLUXParty().getIDS().get(0).getValue();
+            String guid = responseHelper.getGuidOrNull(response);
+            String countryOfSender = responseHelper.getCountryOfSenderOrNull(response);
 
             String text = ExchangeModuleRequestMapper.createReceiveSalesResponseRequest(responseAsString, guid, countryOfSender, new Date(), "FLUX", PluginType.FLUX);
             producer.sendModuleMessage(text, ModuleQueue.EXCHANGE);
@@ -78,8 +90,8 @@ public class ExchangeService {
     public void sendSalesQueryToExchange(FLUXSalesQueryMessage query) {
         try {
             String queryAsString = JAXBMarshaller.marshallJaxBObjectToString(query);
-            String guid = query.getSalesQuery().getID().getValue();
-            String countryOfSender = query.getSalesQuery().getSubmitterFLUXParty().getIDS().get(0).getValue();
+            String guid = queryHelper.getGuidOrNull(query);
+            String countryOfSender = queryHelper.getCountryOfSenderOrNull(query);
 
             String text = ExchangeModuleRequestMapper.createReceiveSalesQueryRequest(queryAsString, guid, countryOfSender, new Date(), "FLUX", PluginType.FLUX);
             producer.sendModuleMessage(text, ModuleQueue.EXCHANGE);
