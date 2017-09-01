@@ -18,15 +18,15 @@
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
 
+        <flux.sales.plugin.flux.model.version>${project.version}</flux.sales.plugin.flux.model.version>
         <uvms.common.version>2.0.18-SNAPSHOT</uvms.common.version>
-        <connector-bridge.client.version>1.0.3-SNAPSHOT</connector-bridge.client.version>
-        <bridge-connector.client.version>1.0.3-SNAPSHOT</bridge-connector.client.version>
         <flux.movement.client.version>2.0.1-SNAPSHOT</flux.movement.client.version>
         <flux.sales.client.version>1.0.0-SNAPSHOT</flux.sales.client.version>
         <sales.model.version>1.0.3-SNAPSHOT</sales.model.version>
         <exchange.model.version>3.0.6-SNAPSHOT</exchange.model.version>
         <exchange.classifier>date</exchange.classifier>
 
+        <maven.ejb.plugin.version>3.0.0</maven.ejb.plugin.version>
         <jodatime.version>2.9.1</jodatime.version>
         <release.branch.name>release-2.1.2-legolas</release.branch.name>
         <project.scm.id>github</project.scm.id>
@@ -126,6 +126,7 @@
     </profiles>
     
     <modules>
+        <module>flux-model</module>
         <module>service</module>
         <module>module</module>
     </modules>

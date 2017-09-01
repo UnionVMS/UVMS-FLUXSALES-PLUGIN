@@ -25,8 +25,8 @@ import eu.europa.ec.fisheries.uvms.plugins.flux.sales.service.ExchangeService;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.service.RequestTypeHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import xeu.bridge_connector.v1.RequestType;
-import xeu.bridge_connector.v1.ResponseType;
+import xeu.bridge_connector.v1.Connector2BridgeRequest;
+import xeu.bridge_connector.v1.Connector2BridgeResponse;
 import xeu.bridge_connector.wsdl.v1.BridgeConnectorPortType;
 
 import javax.ejb.EJB;
@@ -61,12 +61,12 @@ public class FluxMessageReceiverBean implements BridgeConnectorPortType {
     private RequestTypeHelper requestTypeHelper;
 
     @Override
-    public ResponseType post(RequestType request) {
+    public Connector2BridgeResponse post(Connector2BridgeRequest request) {
 
-        ResponseType type = new ResponseType();
+        Connector2BridgeResponse response = new Connector2BridgeResponse();
         if (!startupBean.isEnabled()) {
-            type.setStatus("NOK");
-            return type;
+            response.setStatus("NOK");
+            return response;
         }
 
         try {
@@ -83,28 +83,28 @@ public class FluxMessageReceiverBean implements BridgeConnectorPortType {
                 default: throw new PluginException("In the FLUX plugin, no action is defined for a FLUX request with DF " + request.getDF());
             }
 
-            type.setStatus("OK");
-            return type;
+            response.setStatus("OK");
+            return response;
         } catch (Exception e) {
             LOG.error("[ Error when receiving data from FLUX. ]", e);
-            type.setStatus("NOK");
-            return type;
+            response.setStatus("NOK");
+            return response;
         }
     }
 
-    private void receiveSalesResponse(RequestType request) throws MappingException {
+    private void receiveSalesResponse(Connector2BridgeRequest request) throws MappingException {
         LOG.debug("Got sales report from FLUX in FLUX plugin");
         FLUXSalesResponseMessage fluxSalesResponseMessage = fluxSalesResponseMessageMapper.mapToSalesResponse(request);
         exchange.sendSalesResponseToExchange(fluxSalesResponseMessage);
     }
 
-    private void receiveSalesReport(RequestType request) throws MappingException, PluginException {
+    private void receiveSalesReport(Connector2BridgeRequest request) throws MappingException, PluginException {
         LOG.debug("Got sales report from FLUX in FLUX plugin");
         Report report = fluxSalesReportMessageMapper.mapToReport(request);
         exchange.sendSalesReportToExchange(report);
     }
 
-    private void receiveSalesQuery(RequestType request) throws MappingException, PluginException {
+    private void receiveSalesQuery(Connector2BridgeRequest request) throws MappingException, PluginException {
         LOG.debug("Got sales report from FLUX in FLUX plugin");
         FLUXSalesQueryMessage salesQuery = fluxSalesQueryMessageMapper.mapToSalesQuery(request);
         exchange.sendSalesQueryToExchange(salesQuery);

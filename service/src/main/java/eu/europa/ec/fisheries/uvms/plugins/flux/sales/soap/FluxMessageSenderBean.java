@@ -25,8 +25,7 @@ import eu.europa.ec.fisheries.uvms.sales.model.mapper.JAXBMarshaller;
 import ma.glasnost.orika.MapperFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import xeu.connector_bridge.v1.PostMsgOutType;
-import xeu.connector_bridge.v1.PostMsgType;
+import xeu.connector_bridge.v1.POSTMSG;
 import xeu.connector_bridge.wsdl.v1.BridgeConnectorPortType;
 
 import javax.ejb.EJB;
@@ -57,26 +56,26 @@ public class FluxMessageSenderBean {
     private static final Logger LOG = LoggerFactory.getLogger(FluxMessageSenderBean.class);
 
 
-    public String sendSalesReportToFlux(SendSalesReportRequest salesReport) throws PluginException, SalesMarshallException {
+    public void sendSalesReportToFlux(SendSalesReportRequest salesReport) throws PluginException, SalesMarshallException {
         try {
             un.unece.uncefact.data.standard.fluxsalesreportmessage._3.FLUXSalesReportMessage marshalledResponse = unmarshalAndMapToUNCEFACTFluxSalesReportMessage(salesReport);
             String recipient = salesReport.getRecipient();
 
-            PostMsgType request = postMsgTypeMapper.wrapInPostMsgType(marshalledResponse, SALES_DF, recipient);
-            return sendPostMsgType(request, recipient);
+            POSTMSG request = postMsgTypeMapper.wrapInPostMsgType(marshalledResponse, SALES_DF, recipient);
+            sendPostMsgType(request);
         } catch (MappingException e) {
             LOG.error("[ Error when sending sales report to FLUX. ] {}", e.getMessage());
             throw new PluginException(e);
         }
     }
 
-    public String sendSalesResponseToFlux(SendSalesResponseRequest salesResponse) throws SalesMarshallException, PluginException {
+    public void sendSalesResponseToFlux(SendSalesResponseRequest salesResponse) throws SalesMarshallException, PluginException {
         try {
             un.unece.uncefact.data.standard.fluxsalesresponsemessage._3.FLUXSalesResponseMessage marshalledResponse = unmarshalAndMapToUNCEFACTFluxSalesResponseMessage(salesResponse);
             String recipient = salesResponse.getRecipient();
 
-            PostMsgType postMsgType = postMsgTypeMapper.wrapInPostMsgType(marshalledResponse, SALES_DF, recipient);
-            return sendPostMsgType(postMsgType, recipient);
+            POSTMSG postMsgType = postMsgTypeMapper.wrapInPostMsgType(marshalledResponse, SALES_DF, recipient);
+            sendPostMsgType(postMsgType);
         } catch (PluginException | MappingException e) {
             LOG.error("[ Error when sending sales response to FLUX. ] {}", e.getMessage());
             throw new PluginException(e);
@@ -93,11 +92,8 @@ public class FluxMessageSenderBean {
         return mapper.map(fluxSalesResponseMessage, un.unece.uncefact.data.standard.fluxsalesreportmessage._3.FLUXSalesReportMessage.class);
     }
 
-    public String sendPostMsgType(PostMsgType request, String recipient) throws PluginException {
+    public void sendPostMsgType(POSTMSG request) throws PluginException {
         try {
-
-            LOG.info("Sending message to EU [ {} ] with messageID: {} ", request.getID());
-
             BridgeConnectorPortType portType = port.getPort();
 
             //TODO Add these in properties table
@@ -109,20 +105,7 @@ public class FluxMessageSenderBean {
             headerValues.put(headerKey, headerValue);
             postMsgTypeMapper.addHeaderValueToRequest(portType, headerValues);
 
-            PostMsgOutType resp = portType.post(request);
-
-            if (resp.getAssignedON() == null) {
-                LOG.info("Failed to send PostMsgType to flux Recipient {}, Message id {} Should correlate with the GUID of the sent report", recipient, request.getID());
-            } else {
-                LOG.info("Success when sending to flux MessageId {} ( Should correlate with the GUID of the sent report ) Recipient {} ", request.getID(), recipient);
-            }
-
-            if (request.getID() != null && !request.getID().isEmpty()) {
-                return request.getID();
-            } else {
-                throw new PluginException("No MessageID in request, MessageID must be set!");
-            }
-
+            portType.post(request);
         } catch (Exception e) {
             LOG.error("[ Error when sending a message to FLUX. ] {}", e.getMessage());
             throw new PluginException(e);

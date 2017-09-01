@@ -23,6 +23,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>flux-sales-plugin-flux-model</artifactId>
+            <version>${flux.sales.plugin.flux.model.version}</version>
+        </dependency>
+        <dependency>
             <groupId>ma.glasnost.orika</groupId>
             <artifactId>orika-core</artifactId>
             <version>${orika.version}</version>
@@ -43,17 +48,6 @@
             <artifactId>sales-model</artifactId>
             <version>${sales.model.version}</version>
         </dependency>
-        <dependency>
-            <groupId>eu.europa.ec.fisheries.uvms.service.client</groupId>
-            <artifactId>connector-bridge-client</artifactId>
-            <version>${connector-bridge.client.version}</version>
-        </dependency>
-        <!-- incoming messages from FLUX -->
-        <dependency>
-            <groupId>eu.europa.ec.fisheries.uvms.service.client</groupId>
-            <artifactId>bridge-connector-client</artifactId>
-            <version>${bridge-connector.client.version}</version>
-        </dependency> 
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>

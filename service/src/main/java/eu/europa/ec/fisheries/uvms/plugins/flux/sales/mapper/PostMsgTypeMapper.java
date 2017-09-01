@@ -14,7 +14,7 @@ package eu.europa.ec.fisheries.uvms.plugins.flux.sales.mapper;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.exception.MappingException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import xeu.connector_bridge.v1.PostMsgType;
+import xeu.connector_bridge.v1.POSTMSG;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -38,13 +38,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class PostMsgTypeMapper {
 
 
-    public PostMsgType wrapInPostMsgType(@NotNull Object toBeWrapped, @NotNull String df, @NotNull String ad) throws MappingException {
+    public POSTMSG wrapInPostMsgType(@NotNull Object toBeWrapped, @NotNull String df, @NotNull String ad) throws MappingException {
         validateInputs(toBeWrapped, df, ad);
 
-        PostMsgType message = new PostMsgType();
+        POSTMSG message = new POSTMSG();
+        message.setBUSINESSUUID(UUID.randomUUID().toString());
         message.setAD(ad);
         message.setDF(df);
-        message.setID(UUID.randomUUID().toString());
         message.setAny(marshalToDOM(toBeWrapped));
 
         return message;
@@ -69,9 +69,9 @@ public class PostMsgTypeMapper {
         }
     }
 
-    public PostMsgType mapToResponse(Object message, String id, String df, String ad) throws JAXBException {
-        PostMsgType postMsgType = new PostMsgType();
-        postMsgType.setID(id);
+    public POSTMSG mapToResponse(Object message, String id, String df, String ad) throws JAXBException {
+        POSTMSG postMsgType = new POSTMSG();
+        postMsgType.setBUSINESSUUID(id);
         postMsgType.setAD(ad);
         postMsgType.setDF(df);
 

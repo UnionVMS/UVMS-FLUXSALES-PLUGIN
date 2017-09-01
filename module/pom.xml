@@ -35,6 +35,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>flux-sales-plugin-flux-model</artifactId>
+            <version>${project.version}</version>
+            <type>ejb</type>
+        </dependency>
+        <dependency>
             <groupId>${project.groupId}</groupId>  
             <artifactId>flux-sales-plugin-service</artifactId>
             <version>${project.version}</version>

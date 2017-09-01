@@ -3,7 +3,7 @@ package eu.europa.ec.fisheries.uvms.plugins.flux.sales.mapper;
 import eu.europa.ec.fisheries.schema.sales.FLUXSalesQueryMessage;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.exception.MappingException;
 import ma.glasnost.orika.MapperFacade;
-import xeu.bridge_connector.v1.RequestType;
+import xeu.bridge_connector.v1.Connector2BridgeRequest;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -17,7 +17,7 @@ public class FLUXSalesQueryMessageMapper {
     @Inject
     private MapperFacade mapper;
 
-    public FLUXSalesQueryMessage mapToSalesQuery(RequestType request) throws MappingException {
+    public FLUXSalesQueryMessage mapToSalesQuery(Connector2BridgeRequest request) throws MappingException {
         try {
             un.unece.uncefact.data.standard.fluxsalesquerymessage._3.FLUXSalesQueryMessage fluxSalesQueryMessage = unpackFluxSalesQueryMessage(request);
             return mapper.map(fluxSalesQueryMessage, FLUXSalesQueryMessage.class);
@@ -27,7 +27,7 @@ public class FLUXSalesQueryMessageMapper {
     }
 
 
-    private un.unece.uncefact.data.standard.fluxsalesquerymessage._3.FLUXSalesQueryMessage unpackFluxSalesQueryMessage(RequestType request) throws JAXBException {
+    private un.unece.uncefact.data.standard.fluxsalesquerymessage._3.FLUXSalesQueryMessage unpackFluxSalesQueryMessage(Connector2BridgeRequest request) throws JAXBException {
         JAXBContext jc = JAXBContext.newInstance(un.unece.uncefact.data.standard.fluxsalesquerymessage._3.FLUXSalesQueryMessage.class);
         Unmarshaller unmarshaller = jc.createUnmarshaller();
         return (un.unece.uncefact.data.standard.fluxsalesquerymessage._3.FLUXSalesQueryMessage) unmarshaller.unmarshal(request.getAny());

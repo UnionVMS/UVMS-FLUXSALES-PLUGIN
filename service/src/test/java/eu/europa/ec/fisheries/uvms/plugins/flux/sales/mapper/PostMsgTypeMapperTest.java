@@ -6,7 +6,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import xeu.connector_bridge.v1.PostMsgType;
+import xeu.connector_bridge.v1.POSTMSG;
 
 import static org.junit.Assert.assertEquals;
 
@@ -29,7 +29,7 @@ public class PostMsgTypeMapperTest {
 
         SendSalesReportRequest toBeWrapped = new SendSalesReportRequest();
 
-        PostMsgType postMsgType = postMsgTypeMapper.wrapInPostMsgType(toBeWrapped, DF, AD);
+        POSTMSG postMsgType = postMsgTypeMapper.wrapInPostMsgType(toBeWrapped, DF, AD);
 
         assertEquals(AD, postMsgType.getAD());
         assertEquals(DF, postMsgType.getDF());
