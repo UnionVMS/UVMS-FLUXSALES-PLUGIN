@@ -21,17 +21,4 @@ public class ResponseHelper {
         }
     }
 
-    public String getCountryOfSenderOrNull(FLUXSalesResponseMessage response) {
-        try {
-            return response.getFLUXResponseDocument()
-                    .getRespondentFLUXParty()
-                    .getIDS()
-                    .get(0)
-                    .getValue();
-        } catch (NullPointerException | IndexOutOfBoundsException e) {
-            log.error("Invalid response. Does not contain a country of sender.", e);
-            return null;
-        }
-    }
-
 }

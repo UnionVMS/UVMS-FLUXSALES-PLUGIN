@@ -1,10 +1,10 @@
 package eu.europa.ec.fisheries.uvms.plugins.flux.sales.service.helper;
 
-import eu.europa.ec.fisheries.schema.sales.*;
+import eu.europa.ec.fisheries.schema.sales.FLUXSalesQueryMessage;
+import eu.europa.ec.fisheries.schema.sales.IDType;
+import eu.europa.ec.fisheries.schema.sales.SalesQueryType;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -51,60 +51,5 @@ public class QueryHelperTest {
                 .withSalesQuery(new SalesQueryType()
                                 .withID(new IDType()));
         assertNull(queryHelper.getGuidOrNull(query));
-    }
-
-    @Test
-    public void getCountryOfSenderOrNullWhenChainIsComplete() throws Exception {
-        FLUXSalesQueryMessage query = new FLUXSalesQueryMessage()
-                        .withSalesQuery(new SalesQueryType()
-                            .withSubmitterFLUXParty(new FLUXPartyType()
-                                    .withIDS(new IDType()
-                                            .withValue("1"))));
-        assertEquals("1", queryHelper.getCountryOfSenderOrNull(query));
-    }
-
-    @Test
-    public void getCountryOfSenderOrNullWhenFluxSalesQueryMessageIsNull() throws Exception {
-        assertNull(queryHelper.getCountryOfSenderOrNull(null));
-    }
-
-
-    @Test
-    public void getCountryOfSenderOrNullWhenSalesQueryIsNull() throws Exception {
-        FLUXSalesQueryMessage query = new FLUXSalesQueryMessage();
-        assertNull(queryHelper.getCountryOfSenderOrNull(query));
-    }
-
-    @Test
-    public void getCountryOfSenderOrNullWhenSubmitterFLUXPartyIsNull() throws Exception {
-        FLUXSalesQueryMessage query = new FLUXSalesQueryMessage()
-                .withSalesQuery(new SalesQueryType());
-        assertNull(queryHelper.getCountryOfSenderOrNull(query));
-    }
-
-    @Test
-    public void getCountryOfSenderOrNullWhenIDSIsNull() throws Exception {
-        FLUXSalesQueryMessage query = new FLUXSalesQueryMessage()
-                .withSalesQuery(new SalesQueryType()
-                        .withSubmitterFLUXParty(new FLUXPartyType()));
-        assertNull(queryHelper.getCountryOfSenderOrNull(query));
-    }
-
-    @Test
-    public void getCountryOfSenderOrNullWhenIDSIsEmpty() throws Exception {
-        FLUXSalesQueryMessage query = new FLUXSalesQueryMessage()
-                .withSalesQuery(new SalesQueryType()
-                        .withSubmitterFLUXParty(new FLUXPartyType()
-                                .withIDS(new ArrayList<IDType>())));
-        assertNull(queryHelper.getCountryOfSenderOrNull(query));
-    }
-
-    @Test
-    public void getCountryOfSenderOrNullWhenValueIsNull() throws Exception {
-        FLUXSalesQueryMessage query = new FLUXSalesQueryMessage()
-                .withSalesQuery(new SalesQueryType()
-                        .withSubmitterFLUXParty(new FLUXPartyType()
-                                .withIDS(new IDType())));
-        assertNull(queryHelper.getCountryOfSenderOrNull(query));
     }
 }

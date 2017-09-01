@@ -20,17 +20,4 @@ public class QueryHelper {
         }
     }
 
-    public String getCountryOfSenderOrNull(FLUXSalesQueryMessage query) {
-        try {
-            return query.getSalesQuery()
-                    .getSubmitterFLUXParty()
-                    .getIDS()
-                    .get(0)
-                    .getValue();
-        } catch (NullPointerException | IndexOutOfBoundsException e) {
-            log.error("Invalid report. Does not contain a country of sender.", e);
-            return null;
-        }
-    }
-
 }

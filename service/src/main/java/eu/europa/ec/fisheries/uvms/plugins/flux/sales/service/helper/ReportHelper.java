@@ -22,18 +22,4 @@ public class ReportHelper {
         }
     }
 
-    public String getCountryOfSenderOrNull(Report report) {
-        try {
-            return report.getFLUXSalesReportMessage()
-                    .getFLUXReportDocument()
-                    .getOwnerFLUXParty()
-                    .getIDS()
-                    .get(0)
-                    .getValue();
-        } catch (NullPointerException | IndexOutOfBoundsException e) {
-            log.error("Invalid report. Does not contain a country of sender.", e);
-            return null;
-        }
-    }
-
 }
