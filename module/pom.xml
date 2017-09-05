@@ -22,10 +22,11 @@
                 <version>2.7</version>
                 <configuration>
                     <modules>
-                        <ejbModule>
+                        <webModule>
                             <groupId>${project.groupId}</groupId>  
                             <artifactId>flux-sales-plugin-service</artifactId>
-                        </ejbModule>
+                            <contextRoot>flux-sales-plugin</contextRoot>
+                        </webModule>
                     </modules>
                     <skinnyWars>true</skinnyWars>
                 </configuration>
@@ -44,7 +45,7 @@
             <groupId>${project.groupId}</groupId>  
             <artifactId>flux-sales-plugin-service</artifactId>
             <version>${project.version}</version>
-            <type>ejb</type>
+            <type>war</type>
         </dependency>
     </dependencies>
 

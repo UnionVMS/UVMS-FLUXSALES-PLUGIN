@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>flux-sales-plugin-service</artifactId>
     <name>${project.parent.artifactId}-service</name>
-    <packaging>ejb</packaging>
+    <packaging>war</packaging>
 
     <parent>
         <groupId>eu.europa.ec.fisheries.uvms.plugins</groupId>
