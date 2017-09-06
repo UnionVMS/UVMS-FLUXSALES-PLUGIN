@@ -11,8 +11,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.plugins.flux.sales;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import xeu.connector_bridge.wsdl.v1.BridgeConnectorPortType;
 import xeu.connector_bridge.wsdl.v1.BridgeConnectorService;
 
@@ -32,8 +30,6 @@ import java.util.Map;
 @Singleton
 @Startup
 public class PortInitiator {
-
-    private static Logger LOG = LoggerFactory.getLogger(PortInitiator.class);
 
     private BridgeConnectorPortType port;
 

@@ -27,6 +27,10 @@ public class ServiceMapper {
 
     final static Logger LOG = LoggerFactory.getLogger(ServiceMapper.class);
 
+    private ServiceMapper() {
+        //This class contains only static methods. Should not be instantiated.
+    }
+
     public static ServiceType getServiceType(String serviceClassName, String fluxDisplayName, String description, PluginType fluxType, String responseMessageName) {
 
         if (responseMessageName == null) {

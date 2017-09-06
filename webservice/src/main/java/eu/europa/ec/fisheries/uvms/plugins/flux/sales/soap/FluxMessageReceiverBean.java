@@ -93,7 +93,7 @@ public class FluxMessageReceiverBean implements BridgeConnectorPortType {
     }
 
     private void receiveSalesResponse(Connector2BridgeRequest request) throws MappingException {
-        LOG.debug("Got sales report from FLUX in FLUX plugin");
+        LOG.debug("Got sales response from FLUX in FLUX plugin");
         FLUXSalesResponseMessage fluxSalesResponseMessage = fluxSalesResponseMessageMapper.mapToSalesResponse(request);
         String fr = requestHelper.getFRPropertyOrNull(request);
         String on = requestHelper.getONPropertyOrNull(request);
@@ -109,7 +109,7 @@ public class FluxMessageReceiverBean implements BridgeConnectorPortType {
     }
 
     private void receiveSalesQuery(Connector2BridgeRequest request) throws MappingException, PluginException {
-        LOG.debug("Got sales report from FLUX in FLUX plugin");
+        LOG.debug("Got sales query from FLUX in FLUX plugin");
         FLUXSalesQueryMessage salesQuery = fluxSalesQueryMessageMapper.mapToSalesQuery(request);
         String fr = requestHelper.getFRPropertyOrNull(request);
         String on = requestHelper.getONPropertyOrNull(request);
