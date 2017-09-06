@@ -3,12 +3,10 @@ package eu.europa.ec.fisheries.uvms.plugins.flux.sales.mapper;
 
 import eu.europa.ec.fisheries.schema.sales.FLUXSalesReportMessage;
 import eu.europa.ec.fisheries.schema.sales.Report;
-import eu.europa.ec.fisheries.uvms.plugins.flux.sales.StartupBean;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.exception.MappingException;
 import ma.glasnost.orika.MapperFacade;
 import xeu.bridge_connector.v1.Connector2BridgeRequest;
 
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.xml.bind.JAXBContext;
@@ -17,9 +15,6 @@ import javax.xml.bind.Unmarshaller;
 
 @Stateless
 public class FLUXSalesReportMessageMapper {
-
-    @EJB
-    private StartupBean settings;
 
     @Inject
     private MapperFacade mapper;

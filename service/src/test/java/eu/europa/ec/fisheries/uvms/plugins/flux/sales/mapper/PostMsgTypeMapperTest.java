@@ -6,9 +6,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import xeu.connector_bridge.v1.POSTMSG;
-
-import static org.junit.Assert.assertEquals;
 
 public class PostMsgTypeMapperTest {
 
@@ -20,19 +17,6 @@ public class PostMsgTypeMapperTest {
     @Before
     public void setUp() throws Exception {
         postMsgTypeMapper = new PostMsgTypeMapper();
-    }
-
-    @Test
-    public void testWrapInPostMsgTypeWhenObjectIsKnownToJAXB() throws Exception {
-        final String AD = "ad";
-        final String DF = "df";
-
-        SendSalesReportRequest toBeWrapped = new SendSalesReportRequest();
-
-        POSTMSG postMsgType = postMsgTypeMapper.wrapInPostMsgType(toBeWrapped, DF, AD);
-
-        assertEquals(AD, postMsgType.getAD());
-        assertEquals(DF, postMsgType.getDF());
     }
 
     @Test

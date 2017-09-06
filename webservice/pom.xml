@@ -2,9 +2,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>flux-sales-plugin-service</artifactId>
-    <name>${project.parent.artifactId}-service</name>
-    <packaging>ejb</packaging>
+    <artifactId>flux-sales-plugin-webservice</artifactId>
+    <name>${project.parent.artifactId}-webservice</name>
+    <packaging>war</packaging>
 
     <parent>
         <groupId>eu.europa.ec.fisheries.uvms.plugins</groupId>
@@ -29,30 +29,15 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>ma.glasnost.orika</groupId>
-            <artifactId>orika-core</artifactId>
-            <version>${orika.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>eu.europa.ec.fisheries.uvms.exchange</groupId>
-            <artifactId>exchange-model</artifactId>
-            <version>${exchange.model.version}</version>
-            <classifier>${exchange.classifier}</classifier>
-        </dependency>
-        <dependency>
-            <groupId>eu.europa.ec.fisheries.uvms.sales</groupId>
-            <artifactId>sales-model</artifactId>
-            <version>${sales.model.version}</version>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>flux-sales-plugin-service</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
             <version>${jodatime.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>eu.europa.ec.fisheries.uvms</groupId>
-            <artifactId>uvms-commons</artifactId>
-            <version>${uvms.common.version}</version>
         </dependency>
     </dependencies>
     

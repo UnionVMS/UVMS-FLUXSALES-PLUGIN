@@ -22,9 +22,13 @@
                 <version>2.7</version>
                 <configuration>
                     <modules>
-                        <webModule>
+                        <ejbModule>
                             <groupId>${project.groupId}</groupId>  
                             <artifactId>flux-sales-plugin-service</artifactId>
+                        </ejbModule>
+                        <webModule>
+                            <groupId>${project.groupId}</groupId>
+                            <artifactId>flux-sales-plugin-webservice</artifactId>
                             <contextRoot>flux-sales-plugin</contextRoot>
                         </webModule>
                     </modules>
@@ -44,6 +48,12 @@
         <dependency>
             <groupId>${project.groupId}</groupId>  
             <artifactId>flux-sales-plugin-service</artifactId>
+            <version>${project.version}</version>
+            <type>ejb</type>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>flux-sales-plugin-webservice</artifactId>
             <version>${project.version}</version>
             <type>war</type>
         </dependency>

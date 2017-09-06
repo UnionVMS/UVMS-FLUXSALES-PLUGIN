@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
+            targetNamespace="urn:un:unece:uncefact:data:standard:FLUXSalesQueryMessage:3" version="3.0"
+            xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:20"
+            xmlns:rsm="urn:un:unece:uncefact:data:standard:FLUXSalesQueryMessage:3"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <xsd:import namespace="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:20" schemaLocation="UnqualifiedDataType_20p0.xsd" />
+  <xsd:import namespace="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:20" schemaLocation="ReusableAggregateBusinessInformationEntity_20p0.xsd" />
+
+  <xsd:element name="FLUXSalesQueryMessage" type="rsm:FLUXSalesQueryMessageType" />
+  <xsd:complexType name="FLUXSalesQueryMessageType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" name="SalesQuery" type="ram:SalesQueryType" />
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

@@ -133,20 +133,54 @@
                                             <wsdl>${basedir}/src/main/resources/contract/bridge-connector/bridge-connector.wsdl</wsdl>
                                             <wsdlLocation>classpath:contract/bridge-connector/bridge-connector.wsdl</wsdlLocation>
                                             <bindingFiles>
-                                                <bindingFile>${basedir}/src/main/resources/bindings.xml</bindingFile>
+                                                <bindingFile>${basedir}/src/main/resources/bindings-for-connectors.xml</bindingFile>
                                             </bindingFiles>
                                         </wsdlOption>
                                         <wsdlOption>
                                             <wsdl>${basedir}/src/main/resources/contract/connector-bridge/connector-bridge.wsdl</wsdl>
                                             <wsdlLocation>classpath:contract/connector-bridge/connector-bridge.wsdl</wsdlLocation>
                                             <bindingFiles>
-                                                <bindingFile>${basedir}/src/main/resources/bindings.xml</bindingFile>
+                                                <bindingFile>${basedir}/src/main/resources/bindings-for-connectors.xml</bindingFile>
                                             </bindingFiles>
                                         </wsdlOption>
                                     </wsdlOptions>
                                 </configuration>
                                 <goals>
                                     <goal>wsdl2java</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.cxf</groupId>
+                        <artifactId>cxf-xjc-plugin</artifactId>
+                        <version>2.3.0</version>
+                        <executions>
+                            <execution>
+                                <id>generate-client</id>
+                                <phase>generate-sources</phase>
+                                <configuration>
+                                    <sourceRoot>${basedir}/src/main/java/</sourceRoot>
+                                    <xsdOptions>
+                                        <xsdOption>
+                                            <xsd>${basedir}/src/main/resources/contract/sales/FLUXSalesReportMessage_3p0.xsd</xsd>
+                                            <bindingFile>${basedir}/src/main/resources/bindings-for-sales.xml</bindingFile>
+                                            <extension>true</extension>
+                                        </xsdOption>
+                                        <xsdOption>
+                                            <xsd>${basedir}/src/main/resources/contract/sales/FLUXSalesQueryMessage_3p0.xsd</xsd>
+                                            <bindingFile>${basedir}/src/main/resources/bindings-for-sales.xml</bindingFile>
+                                            <extension>true</extension>
+                                        </xsdOption>
+                                        <xsdOption>
+                                            <xsd>${basedir}/src/main/resources/contract/sales/FLUXSalesResponseMessage_3p0.xsd</xsd>
+                                            <bindingFile>${basedir}/src/main/resources/bindings-for-sales.xml</bindingFile>
+                                            <extension>true</extension>
+                                        </xsdOption>
+                                    </xsdOptions>
+                                </configuration>
+                                <goals>
+                                    <goal>xsdtojava</goal>
                                 </goals>
                             </execution>
                         </executions>

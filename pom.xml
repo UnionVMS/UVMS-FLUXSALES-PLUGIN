@@ -18,7 +18,6 @@
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
 
-        <flux.sales.plugin.flux.model.version>${project.version}</flux.sales.plugin.flux.model.version>
         <uvms.common.version>2.0.18-SNAPSHOT</uvms.common.version>
         <flux.movement.client.version>2.0.1-SNAPSHOT</flux.movement.client.version>
         <flux.sales.client.version>1.0.0-SNAPSHOT</flux.sales.client.version>
@@ -128,6 +127,7 @@
     <modules>
         <module>flux-model</module>
         <module>service</module>
+        <module>webservice</module>
         <module>module</module>
     </modules>
 </project>
