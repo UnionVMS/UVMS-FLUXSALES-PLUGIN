@@ -19,6 +19,7 @@ import eu.europa.ec.fisheries.uvms.exchange.model.constant.ExchangeModelConstant
 import eu.europa.ec.fisheries.uvms.exchange.model.exception.ExchangeModelMarshallException;
 import eu.europa.ec.fisheries.uvms.exchange.model.mapper.JAXBMarshaller;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.StartupBean;
+import eu.europa.ec.fisheries.uvms.plugins.flux.sales.service.PluginService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,6 +44,9 @@ public class PluginRegistrationListener implements MessageListener {
 
     @EJB
     private StartupBean startupService;
+
+    @EJB
+    private PluginService pluginService;
 
     @PostConstruct
     public void init() {
@@ -72,6 +76,7 @@ public class PluginRegistrationListener implements MessageListener {
                         switch (registerResponse.getAck().getType()) {
                             case OK:
                                 LOG.info("Register OK");
+                                pluginService.setConfig(registerResponse.getService().getSettingList());
                                 startupService.setRegistered(Boolean.TRUE);
                                 break;
                             case NOK:

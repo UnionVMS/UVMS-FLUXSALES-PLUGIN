@@ -14,11 +14,8 @@ package eu.europa.ec.fisheries.uvms.plugins.flux.sales.service;
 import eu.europa.ec.fisheries.schema.exchange.common.v1.AcknowledgeTypeType;
 import eu.europa.ec.fisheries.schema.exchange.common.v1.KeyValueType;
 import eu.europa.ec.fisheries.schema.exchange.service.v1.SettingListType;
-import eu.europa.ec.fisheries.schema.sales.FLUXSalesResponseMessage;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.PortInitiator;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.StartupBean;
-import eu.europa.ec.fisheries.uvms.sales.model.exception.SalesMarshallException;
-import eu.europa.ec.fisheries.uvms.sales.model.mapper.JAXBMarshaller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,18 +37,6 @@ public class PluginService {
     PortInitiator portInitiator;
 
     final static Logger LOG = LoggerFactory.getLogger(PluginService.class);
-
-
-    public AcknowledgeTypeType handleIncomingResponse(String message) {
-        try {
-            FLUXSalesResponseMessage fluxSalesResponseMessage = JAXBMarshaller.unmarshallString(message, FLUXSalesResponseMessage.class);
-            //TODO send to exchange and rules
-        } catch (SalesMarshallException e) {
-            LOG.error("Failed to marshal FLUXSalesResponseMessage", e);
-            return AcknowledgeTypeType.NOK;
-        }
-        return AcknowledgeTypeType.OK;
-    }
 
     /**
      * Set the config values for the flux
