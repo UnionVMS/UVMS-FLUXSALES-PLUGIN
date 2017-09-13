@@ -60,8 +60,7 @@ public class PortInitiator {
         BridgeConnectorPortType port = service.getBridgeConnectorSOAP11Port();
         BindingProvider bp = (BindingProvider) port;
         Map<String, Object> context = bp.getRequestContext();
-        context.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, "http://localhost:8081/sales-flux-mock");
-        //context.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, startupBean.getSetting("FLUX_ENDPOINT"));
+        context.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, startupBean.getSetting("FLUX_ENDPOINT"));
         return port;
     }
 }

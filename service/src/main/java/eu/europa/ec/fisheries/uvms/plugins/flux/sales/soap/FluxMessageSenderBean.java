@@ -94,15 +94,10 @@ public class FluxMessageSenderBean {
 
     public void sendPostMsgType(POSTMSG request) throws PluginException {
         try {
-            BridgeConnectorPortType portType = port.getPort();
-
-            //TODO Add these in properties table
             Map<String, String> headerValues = new HashMap<>();
+            headerValues.put("connectorID", startupBean.getSetting("CLIENT_ID"));
 
-            String headerKey = startupBean.getSetting("CLIENT_CERT_HEADER");
-            String headerValue = startupBean.getSetting("CLIENT_CERT_USER");
-
-            headerValues.put(headerKey, headerValue);
+            BridgeConnectorPortType portType = port.getPort();
             postMsgTypeMapper.addHeaderValueToRequest(portType, headerValues);
 
             portType.post(request);
