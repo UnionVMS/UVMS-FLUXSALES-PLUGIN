@@ -18,9 +18,9 @@ import java.util.concurrent.ConcurrentHashMap;
  **/
 public abstract class PluginDataHolder {
 
-    public final static String PLUGIN_PROPERTIES = "flux.properties";
-    public final static String PROPERTIES = "settings.properties";
-    public final static String CAPABILITIES = "capabilities.properties";
+    public final static String PLUGIN_PROPERTIES_FILE_NAME = "flux.properties";
+    public final static String SETTINGS_FILE_NAME = "settings.properties";
+    public final static String CAPABILITIES_FILE_NAME = "capabilities.properties";
 
     private Properties fluxApplicationProperties;
     private Properties fluxProperties;

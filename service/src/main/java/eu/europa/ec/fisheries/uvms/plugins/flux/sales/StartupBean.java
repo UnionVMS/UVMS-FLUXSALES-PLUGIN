@@ -58,12 +58,12 @@ public class StartupBean extends PluginDataHolder {
     public void startup() {
 
         //This must be loaded first!!! Not doing that will end in dire problems later on!
-        super.setPluginApplicationProperties(fileHandler.getPropertiesFromFile(PLUGIN_PROPERTIES));
+        super.setPluginApplicationProperties(fileHandler.getPropertiesFromFile(PLUGIN_PROPERTIES_FILE_NAME));
         REGISTER_CLASS_NAME = getPluginApplicationProperty("application.groupid");
 
         //These can be loaded in any order
-        super.setPluginProperties(fileHandler.getPropertiesFromFile(PROPERTIES));
-        super.setPluginCapabilities(fileHandler.getPropertiesFromFile(CAPABILITIES));
+        super.setPluginProperties(fileHandler.getPropertiesFromFile(SETTINGS_FILE_NAME));
+        super.setPluginCapabilities(fileHandler.getPropertiesFromFile(CAPABILITIES_FILE_NAME));
 
         ServiceMapper.mapToMapFromProperties(super.getSettings(), super.getPluginProperties(), getRegisterClassName());
         ServiceMapper.mapToMapFromProperties(super.getCapabilities(), super.getPluginCapabilities(), null);

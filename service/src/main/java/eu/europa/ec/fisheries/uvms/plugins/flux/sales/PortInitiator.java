@@ -57,10 +57,10 @@ public class PortInitiator {
      */
     private BridgeConnectorPortType setupPort() {
         BridgeConnectorService service = new BridgeConnectorService();
-        BridgeConnectorPortType port = service.getBridgeConnectorSOAP11Port();
-        BindingProvider bp = (BindingProvider) port;
+        BridgeConnectorPortType newPort = service.getBridgeConnectorSOAP11Port();
+        BindingProvider bp = (BindingProvider) newPort;
         Map<String, Object> context = bp.getRequestContext();
         context.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, startupBean.getSetting("FLUX_ENDPOINT"));
-        return port;
+        return newPort;
     }
 }
