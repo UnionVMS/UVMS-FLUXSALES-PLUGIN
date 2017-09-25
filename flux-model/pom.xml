@@ -27,6 +27,19 @@
         <jaxb2.fluent.api.version>3.0</jaxb2.fluent.api.version>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.jvnet.jaxb2_commons</groupId>
+            <artifactId>jaxb2-basics</artifactId>
+            <version>${jaxb2.basics.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jvnet.jaxb2_commons</groupId>
+            <artifactId>jaxb2-fluent-api</artifactId>
+            <version>${jaxb2.fluent.api.version}</version>
+        </dependency>
+    </dependencies>
+
     <build>
         <resources>
             <resource>
