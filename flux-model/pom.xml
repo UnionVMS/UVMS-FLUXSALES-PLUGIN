@@ -23,6 +23,8 @@
         <build.helper.plugin.version>1.10</build.helper.plugin.version>
         <jaxb2.version>2.2</jaxb2.version>
         <joda.time.version>2.9.7</joda.time.version>
+        <jaxb2.basics.version>0.9.5</jaxb2.basics.version>
+        <jaxb2.fluent.api.version>3.0</jaxb2.fluent.api.version>
     </properties>
 
     <build>
@@ -133,15 +135,46 @@
                                             <wsdl>${basedir}/src/main/resources/contract/bridge-connector/bridge-connector.wsdl</wsdl>
                                             <wsdlLocation>classpath:contract/bridge-connector/bridge-connector.wsdl</wsdlLocation>
                                             <bindingFiles>
-                                                <bindingFile>${basedir}/src/main/resources/bindings-for-connectors.xml</bindingFile>
+                                                <bindingFile>${basedir}/src/main/resources/bindings.xml</bindingFile>
                                             </bindingFiles>
+                                            <extraargs>
+                                                <extraarg>-xjc-XhashCode</extraarg>
+                                                <extraarg>-xjc-Xequals</extraarg>
+                                                <extraarg>-xjc-XtoString</extraarg>
+                                                <extraarg>-xjc-Xfluent-api</extraarg>
+                                                <extraarg>-p</extraarg>
+                                                <extraarg>http://www.w3.org/2001/XMLSchema=eu.europa.ec.fisheries.schema</extraarg>
+                                            </extraargs>
                                         </wsdlOption>
                                         <wsdlOption>
                                             <wsdl>${basedir}/src/main/resources/contract/connector-bridge/connector-bridge.wsdl</wsdl>
                                             <wsdlLocation>classpath:contract/connector-bridge/connector-bridge.wsdl</wsdlLocation>
                                             <bindingFiles>
-                                                <bindingFile>${basedir}/src/main/resources/bindings-for-connectors.xml</bindingFile>
+                                                <bindingFile>${basedir}/src/main/resources/bindings.xml</bindingFile>
                                             </bindingFiles>
+                                            <extraargs>
+                                                <extraarg>-xjc-XhashCode</extraarg>
+                                                <extraarg>-xjc-Xequals</extraarg>
+                                                <extraarg>-xjc-XtoString</extraarg>
+                                                <extraarg>-xjc-Xfluent-api</extraarg>
+                                                <extraarg>-p</extraarg>
+                                                <extraarg>http://www.w3.org/2001/XMLSchema=eu.europa.ec.fisheries.schema</extraarg>
+                                            </extraargs>
+                                        </wsdlOption>
+                                        <wsdlOption>
+                                            <wsdl>${basedir}/src/main/resources/contract/sales/import-xsd.wsdl</wsdl>
+                                            <wsdlLocation>classpath:contract/sales/import-xsd.wsdl</wsdlLocation>
+                                            <bindingFiles>
+                                                <bindingFile>${basedir}/src/main/resources/bindings.xml</bindingFile>
+                                            </bindingFiles>
+                                            <extraargs>
+                                                <extraarg>-xjc-XhashCode</extraarg>
+                                                <extraarg>-xjc-Xequals</extraarg>
+                                                <extraarg>-xjc-XtoString</extraarg>
+                                                <extraarg>-xjc-Xfluent-api</extraarg>
+                                                <extraarg>-p</extraarg>
+                                                <extraarg>http://www.w3.org/2001/XMLSchema=eu.europa.ec.fisheries.schema</extraarg>
+                                            </extraargs>
                                         </wsdlOption>
                                     </wsdlOptions>
                                 </configuration>
@@ -150,8 +183,20 @@
                                 </goals>
                             </execution>
                         </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.jvnet.jaxb2_commons</groupId>
+                                <artifactId>jaxb2-basics</artifactId>
+                                <version>${jaxb2.basics.version}</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.jvnet.jaxb2_commons</groupId>
+                                <artifactId>jaxb2-fluent-api</artifactId>
+                                <version>${jaxb2.fluent.api.version}</version>
+                            </dependency>
+                        </dependencies>
                     </plugin>
-                    <plugin>
+                    <!--<plugin>
                         <groupId>org.apache.cxf</groupId>
                         <artifactId>cxf-xjc-plugin</artifactId>
                         <version>2.3.0</version>
@@ -184,7 +229,7 @@
                                 </goals>
                             </execution>
                         </executions>
-                    </plugin>
+                    </plugin>-->
                 </plugins>
             </build>
         </profile>
