@@ -23,7 +23,6 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.jms.*;
-import javax.naming.InitialContext;
 
 @Stateless
 @LocalBean
@@ -34,117 +33,93 @@ public class PluginMessageProducer {
 
     private ConnectionFactory connectionFactory;
 
-    private Connection connection = null;
-    private Session session = null;
-
     final static Logger LOG = LoggerFactory.getLogger(PluginMessageProducer.class);
+    final static long TIMEOUT = 60000L;
 
     @PostConstruct
     public void resourceLookup() {
-        LOG.debug("Open connection to JMS broker");
-        InitialContext ctx;
-        try {
-            ctx = new InitialContext();
-        } catch (Exception e) {
-            LOG.error("Failed to get InitialContext",e);
-            throw new RuntimeException(e);
-        }
         connectionFactory = JMSUtils.lookupConnectionFactory();
-        try {
-            connection = connectionFactory.createConnection();
-            connection.start();
-        } catch (JMSException ex) {
-            LOG.error("Error when open connection to JMS broker");
-        }
-        exchangeQueue = JMSUtils.lookupQueue(ctx, ExchangeModelConstants.EXCHANGE_MESSAGE_IN_QUEUE);
-        eventBus = JMSUtils.lookupTopic(ctx, ExchangeModelConstants.PLUGIN_EVENTBUS);
+        exchangeQueue = JMSUtils.lookupQueue(ExchangeModelConstants.EXCHANGE_MESSAGE_IN_QUEUE);
+        eventBus = JMSUtils.lookupTopic(ExchangeModelConstants.PLUGIN_EVENTBUS);
     }
 
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public void sendResponseMessage(String text, TextMessage requestMessage) throws JMSException {
+    public void sendResponseMessage(String text, TextMessage originalJMSMessage) throws JMSException {
+        Connection connection = null;
         try {
-            connectQueue();
 
-            TextMessage message = session.createTextMessage();
-            message.setJMSDestination(requestMessage.getJMSReplyTo());
-            message.setJMSCorrelationID(requestMessage.getJMSMessageID());
-            message.setText(text);
-
-            getProducer(session, requestMessage.getJMSReplyTo()).send(message);
+            connection = connectionFactory.createConnection();
+            final Session session = JMSUtils.connectToQueue(connection);
+            TextMessage response = session.createTextMessage(text);
+            response.setJMSCorrelationID(originalJMSMessage.getJMSMessageID());
+            MessageProducer producer = getProducer(session, originalJMSMessage.getJMSReplyTo(), TIMEOUT);
+            producer.send(response);
 
         } catch (JMSException e) {
-            LOG.error("[ Error when sending jms message. ] {}", e.getMessage());
-            throw new JMSException(e.getMessage());
+            LOG.error("[ Error when returning module request. ] {}", e.getMessage()); //TODO: check error handling
         } finally {
-            disconnectQueue();
+            JMSUtils.disconnectQueue(connection);
         }
     }
 
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public String sendModuleMessage(String text, ModuleQueue queue) throws JMSException {
+        Connection connection = null;
         try {
-            connectQueue();
-
-            TextMessage message = session.createTextMessage();
-            message.setText(text);
+            connection = connectionFactory.createConnection();
+            final Session session = JMSUtils.connectToQueue(connection);
+            TextMessage jmsMessage = createJMSMessage(text, session);
 
             switch (queue) {
                 case EXCHANGE:
-                    getProducer(session, exchangeQueue).send(message);
+                    getProducer(session, exchangeQueue, TIMEOUT).send(jmsMessage);
                     break;
                 default:
-                    LOG.error("[ Sending Queue is not implemented ]");
-                    break;
+                    throw new UnsupportedOperationException("FLUX-Sales plugin has no functionality implemented to talk with " + queue);
             }
 
-            return message.getJMSMessageID();
-        } catch (JMSException e) {
-            LOG.error("[ Error when sending data source message. ] {}", e.getMessage());
+            return jmsMessage.getJMSMessageID();
+        } catch (Exception e) {
+            LOG.error("[ Error when sending a message to " + queue + ". ]", e);
             throw new JMSException(e.getMessage());
         } finally {
-            disconnectQueue();
+            JMSUtils.disconnectQueue(connection);
         }
     }
 
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public String sendEventBusMessage(String text, String serviceName) throws JMSException {
+        Connection connection = null;
         try {
-            connectQueue();
+            connection = connectionFactory.createConnection();
+            final Session session = JMSUtils.connectToQueue(connection);
 
             TextMessage message = session.createTextMessage();
             message.setText(text);
             message.setStringProperty(ExchangeModelConstants.SERVICE_NAME, serviceName);
 
-            getProducer(session, eventBus).send(message);
+            getProducer(session, eventBus, TIMEOUT).send(message);
 
             return message.getJMSMessageID();
-        } catch (JMSException e) {
-            LOG.error("[ Error when sending message. ] {0}", e.getMessage());
+        } catch (Exception e) {
+            LOG.error("[ Error when sending a message ]", e);
             throw new JMSException(e.getMessage());
         } finally {
-            disconnectQueue();
+            JMSUtils.disconnectQueue(connection);
         }
     }
 
-    private void connectQueue() throws JMSException {
-        connection = connectionFactory.createConnection();
-        session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-        connection.start();
+    private TextMessage createJMSMessage(String text, Session session) throws JMSException {
+        TextMessage jmsMessage = session.createTextMessage();
+        jmsMessage.setJMSReplyTo(eventBus);
+        jmsMessage.setText(text);
+        return jmsMessage;
     }
 
-    private void disconnectQueue() {
-        try {
-            connection.stop();
-            connection.close();
-        } catch (JMSException e) {
-            LOG.error("[ Error when stopping or closing JMS queue. ] {}", e.getMessage(), e.getStackTrace());
-        }
-    }
-
-    private javax.jms.MessageProducer getProducer(Session session, Destination destination) throws JMSException {
+    private javax.jms.MessageProducer getProducer(Session session, Destination destination, long timeout) throws JMSException {
         javax.jms.MessageProducer producer = session.createProducer(destination);
-        producer.setDeliveryMode(DeliveryMode.PERSISTENT);
-        producer.setTimeToLive(60000L);
+        producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
+        producer.setTimeToLive(timeout);
         return producer;
     }
 }
