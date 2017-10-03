@@ -4,10 +4,9 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.junit.Test;
 
-import static eu.europa.ec.fisheries.uvms.fluxsales.mapper.XsdDateTimeConverter.marshalDate;
-import static eu.europa.ec.fisheries.uvms.fluxsales.mapper.XsdDateTimeConverter.marshalDateTime;
-import static eu.europa.ec.fisheries.uvms.fluxsales.mapper.XsdDateTimeConverter.unmarshal;
+import static eu.europa.ec.fisheries.uvms.fluxsales.mapper.XsdDateTimeConverter.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class XsdDateTimeConverterTest {
 
@@ -28,6 +27,11 @@ public class XsdDateTimeConverterTest {
     }
 
     @Test
+    public void testUnmarshallWhenArgumentIsNull() {
+        assertNull(unmarshal(null));
+    }
+
+    @Test
     public void testMarshalDate() throws Exception {
         String marshalledDate = marshalDate(DateTime.parse(TIME));
 
@@ -35,10 +39,20 @@ public class XsdDateTimeConverterTest {
     }
 
     @Test
+    public void testMarshalDateWhenArgumentIsNull() {
+        assertNull(marshalDate(null));
+    }
+
+    @Test
     public void testMarshalDateTime() throws Exception {
         String marshalledDate = marshalDateTime(DateTime.parse(TIME));
 
         assertEquals(TIME, marshalledDate);
+    }
+
+    @Test
+    public void testMarshalDateTimeWhenArgumentIsNull() {
+        assertNull(marshalDateTime(null));
     }
 
 }

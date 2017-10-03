@@ -6,14 +6,26 @@ import javax.xml.bind.DatatypeConverter;
 
 public class XsdDateTimeConverter {
     public static DateTime unmarshal(String dateTime) {
-        return new DateTime(DatatypeConverter.parseDate(dateTime));
+        if (dateTime != null) {
+            return new DateTime(DatatypeConverter.parseDate(dateTime));
+        } else {
+            return null;
+        }
     }
 
     public static String marshalDate(DateTime dateTime) {
-        return DatatypeConverter.printDate(dateTime.toGregorianCalendar());
+        if (dateTime != null) {
+            return DatatypeConverter.printDate(dateTime.toGregorianCalendar());
+        } else {
+            return null;
+        }
     }
 
     public static String marshalDateTime(DateTime dateTime) {
-        return DatatypeConverter.printDateTime(dateTime.toGregorianCalendar());
+        if (dateTime != null) {
+            return DatatypeConverter.printDateTime(dateTime.toGregorianCalendar());
+        } else {
+            return null;
+        }
     }
 }
