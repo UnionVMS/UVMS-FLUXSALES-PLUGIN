@@ -36,8 +36,6 @@
         <dependency>
             <groupId>eu.europa.ec.fisheries.uvms.exchange</groupId>
             <artifactId>exchange-model</artifactId>
-            <version>${exchange.model.version}</version>
-            <classifier>${exchange.classifier}</classifier>
         </dependency>
         <dependency>
             <groupId>eu.europa.ec.fisheries.uvms.sales</groupId>

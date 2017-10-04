@@ -20,20 +20,30 @@
         <jacoco.version>0.7.9</jacoco.version>
 
         <uvms.common.version>2.0.29</uvms.common.version>
-        <flux.movement.client.version>2.0.1-SNAPSHOT</flux.movement.client.version>
-        <flux.sales.client.version>1.0.0-SNAPSHOT</flux.sales.client.version>
         <sales.model.version>1.0.4</sales.model.version>
-        <exchange.model.version>3.0.6-SNAPSHOT</exchange.model.version>
-        <exchange.classifier>date</exchange.classifier>
+        <exchange.model.version>4.0.0</exchange.model.version>
 
         <maven.ejb.plugin.version>3.0.0</maven.ejb.plugin.version>
         <jodatime.version>2.9.1</jodatime.version>
-        <release.branch.name>release-2.1.2-legolas</release.branch.name>
-        <project.scm.id>github</project.scm.id>
         <maven-release-plugin>2.5.3</maven-release-plugin>
         <orika.version>1.5.0</orika.version>
     </properties>
-    
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>eu.europa.ec.fisheries.uvms.exchange</groupId>
+                <artifactId>exchange-model</artifactId>
+                <version>${exchange.model.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>joda-time</groupId>
+                <artifactId>joda-time</artifactId>
+                <version>${jodatime.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <dependency>
             <groupId>javax</groupId>
@@ -67,12 +77,6 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
             <version>${logback.core.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>eu.europa.ec.fisheries.uvms.exchange</groupId>
-            <artifactId>exchange-model</artifactId>
-            <version>${exchange.model.version}</version>
-            <classifier>${exchange.classifier}</classifier>
         </dependency>
     </dependencies>
 
