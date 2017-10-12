@@ -13,6 +13,7 @@ package eu.europa.ec.fisheries.uvms.plugins.flux.sales.producer;
 
 import eu.europa.ec.fisheries.uvms.exchange.model.constant.ExchangeModelConstants;
 import eu.europa.ec.fisheries.uvms.message.JMSUtils;
+import eu.europa.ec.fisheries.uvms.message.MessageConstants;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.constants.ModuleQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +30,7 @@ import javax.jms.*;
 public class PluginMessageProducer {
 
     private Queue exchangeQueue;
+    private Queue salesQueue;
     private Topic eventBus;
 
     private ConnectionFactory connectionFactory;
@@ -40,6 +42,7 @@ public class PluginMessageProducer {
     public void resourceLookup() {
         connectionFactory = JMSUtils.lookupConnectionFactory();
         exchangeQueue = JMSUtils.lookupQueue(ExchangeModelConstants.EXCHANGE_MESSAGE_IN_QUEUE);
+        salesQueue = JMSUtils.lookupQueue(MessageConstants.QUEUE_SALES_EVENT);
         eventBus = JMSUtils.lookupTopic(ExchangeModelConstants.PLUGIN_EVENTBUS);
     }
 
@@ -73,6 +76,9 @@ public class PluginMessageProducer {
             switch (queue) {
                 case EXCHANGE:
                     getProducer(session, exchangeQueue, TIMEOUT).send(jmsMessage);
+                    break;
+                case SALES:
+                    getProducer(session, salesQueue, TIMEOUT).send(jmsMessage);
                     break;
                 default:
                     throw new UnsupportedOperationException("FLUX-Sales plugin has no functionality implemented to talk with " + queue);

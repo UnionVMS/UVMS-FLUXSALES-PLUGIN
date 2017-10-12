@@ -22,6 +22,7 @@ import eu.europa.ec.fisheries.uvms.plugins.flux.sales.mapper.FLUXSalesQueryMessa
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.mapper.FLUXSalesReportMessageMapper;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.mapper.FLUXSalesResponseMessageMapper;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.service.ExchangeService;
+import eu.europa.ec.fisheries.uvms.plugins.flux.sales.service.ValidationService;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.service.helper.Connector2BridgeRequestHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,6 +47,9 @@ public class FluxMessageReceiverBean implements BridgeConnectorPortType {
     private ExchangeService exchange;
 
     @EJB
+    private ValidationService validationService;
+
+    @EJB
     private StartupBean startupBean;
 
     @EJB
@@ -68,6 +72,13 @@ public class FluxMessageReceiverBean implements BridgeConnectorPortType {
             response.setStatus("NOK");
             return response;
         }
+
+
+        if (!validationService.validate(request)) {
+            response.setStatus("OK");
+            return response;
+        }
+
 
         try {
             switch (requestHelper.determineMessageType(request)) {

@@ -22,7 +22,7 @@
         <uvms.common.version>2.0.29</uvms.common.version>
         <flux.movement.client.version>2.0.1-SNAPSHOT</flux.movement.client.version>
         <flux.sales.client.version>1.0.0-SNAPSHOT</flux.sales.client.version>
-        <sales.model.version>1.0.4</sales.model.version>
+        <sales.model.version>1.0.6-SNAPSHOT</sales.model.version>
         <exchange.model.version>3.0.6-SNAPSHOT</exchange.model.version>
         <exchange.classifier>date</exchange.classifier>
 
@@ -32,9 +32,20 @@
         <project.scm.id>github</project.scm.id>
         <maven-release-plugin>2.5.3</maven-release-plugin>
         <orika.version>1.5.0</orika.version>
+        <powermock.version>1.7.0RC2</powermock.version>
     </properties>
     
     <dependencies>
+        <dependency>
+            <groupId>org.xmlunit</groupId>
+            <artifactId>xmlunit-core</artifactId>
+            <version>2.5.0</version>
+        </dependency>
+        <dependency>
+            <groupId>xerces</groupId>
+            <artifactId>xercesImpl</artifactId>
+            <version>2.11.0</version>
+        </dependency>
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
@@ -91,6 +102,30 @@
     
     <build>
         <plugins>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.0.2</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <!-- here the phase you need -->
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/service/src/main/resources/sales</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/flux-model/src/main/resources/contract/sales</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-plugin-plugin</artifactId>
