@@ -2,6 +2,8 @@ package eu.europa.ec.fisheries.uvms.plugins.flux.sales.service;
 
 import eu.europa.ec.fisheries.schema.rules.rule.v1.ErrorType;
 import eu.europa.ec.fisheries.schema.rules.rule.v1.ValidationMessageType;
+import eu.europa.ec.fisheries.uvms.exchange.model.exception.ExchangeModelMarshallException;
+import eu.europa.ec.fisheries.uvms.exchange.model.mapper.ExchangeModuleRequestMapper;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.constants.ModuleQueue;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.producer.PluginMessageProducer;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.service.helper.Connector2BridgeRequestHelper;
@@ -60,12 +62,15 @@ public class ValidationService {
 
             String requestForSales = SalesModuleRequestMapper.createRespondToInvalidMessageRequest(requestHelper.getONPropertyOrNull(request),
                     validationResultDto, "FLUX", requestHelper.getFRPropertyOrNull(request), "FLUXTL_ON");
+            String messageForExchange = ExchangeModuleRequestMapper.createReceiveInvalidSalesMessage(requestForSales, "FLUX");
 
-            producer.sendModuleMessage(requestForSales, ModuleQueue.SALES);
+            producer.sendModuleMessage(messageForExchange, ModuleQueue.EXCHANGE);
         } catch (SalesMarshallException e) {
             log.error("Failed to marshall Sales Response", e);
         } catch (JMSException e) {
             log.error("Failed to send createRespondToInvalidMessageRequest to Sales", e);
+        } catch (ExchangeModelMarshallException e) {
+            log.error("Failed to marshall Exchange request", e);
         }
     }
 }
