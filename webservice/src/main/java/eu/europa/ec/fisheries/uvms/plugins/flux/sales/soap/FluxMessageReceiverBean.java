@@ -23,9 +23,11 @@ import eu.europa.ec.fisheries.uvms.plugins.flux.sales.mapper.FLUXSalesReportMess
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.mapper.FLUXSalesResponseMessageMapper;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.service.ExchangeService;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.service.ValidationService;
+import eu.europa.ec.fisheries.uvms.plugins.flux.sales.service.XsdValidatorService;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.service.helper.Connector2BridgeRequestHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xmlunit.validation.ValidationResult;
 import xeu.bridge_connector.v1.Connector2BridgeRequest;
 import xeu.bridge_connector.v1.Connector2BridgeResponse;
 import xeu.bridge_connector.wsdl.v1.BridgeConnectorPortType;
@@ -45,6 +47,9 @@ public class FluxMessageReceiverBean implements BridgeConnectorPortType {
 
     @EJB
     private ExchangeService exchange;
+
+    @EJB
+    private XsdValidatorService xsdValidatorService;
 
     @EJB
     private ValidationService validationService;
@@ -73,8 +78,10 @@ public class FluxMessageReceiverBean implements BridgeConnectorPortType {
             return response;
         }
 
+        ValidationResult validationResult = xsdValidatorService.doesMessagePassXsdValidation(request.getAny());
 
-        if (!validationService.validate(request)) {
+        if (!validationResult.isValid()) {
+            validationService.sendMessageToSales(request, validationResult.getProblems());
             response.setStatus("OK");
             return response;
         }

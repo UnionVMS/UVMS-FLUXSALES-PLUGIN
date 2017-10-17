@@ -13,6 +13,6 @@ package eu.europa.ec.fisheries.uvms.plugins.flux.sales.constants;
 
 public enum ModuleQueue {
 
-    SALES, EXCHANGE
+    EXCHANGE
 
 }

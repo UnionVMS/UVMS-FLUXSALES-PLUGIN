@@ -72,21 +72,6 @@ public class XsdValidatorServiceTest {
         verify(transformer).transform(any(DOMSource.class), any(StreamResult.class));
     }
 
-//    @Test
-//    public void testDoesMessagePassXsdValidationWhenTransformerExceptionWasThrown() throws Exception {
-//        mockStatic(TransformerFactory.class);
-//        Element element = mock(Element.class);
-//        TransformerFactory transformerFactory = mock(TransformerFactory.class);
-//        Transformer transformer = mock(Transformer.class);
-//
-//        when(TransformerFactory.newInstance()).thenReturn(transformerFactory);
-//        doReturn(transformer).when(transformerFactory).newTransformer();
-//        doThrow(new TransformerException("")).when(transformer).transform(any(DOMSource.class), any(StreamResult.class));
-//
-//        assertFalse(xsdValidator.doesMessagePassXsdValidation(element).isValid());
-//        verify(transformer).transform(any(DOMSource.class), any(StreamResult.class));
-//    }
-
     private StreamSource getSource(String s) {
         return new StreamSource(getClass().getResourceAsStream(s));
     }

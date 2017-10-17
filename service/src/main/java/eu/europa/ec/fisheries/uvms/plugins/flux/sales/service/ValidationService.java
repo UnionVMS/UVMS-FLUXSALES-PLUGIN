@@ -25,29 +25,16 @@ import java.util.Arrays;
 public class ValidationService {
 
     @EJB
-    private XsdValidatorService xsdValidatorService;
-
-    @EJB
     private Connector2BridgeRequestHelper requestHelper;
 
     @EJB
     private PluginMessageProducer producer;
 
-    public boolean validate(Connector2BridgeRequest request) {
-        ValidationResult validationResult = xsdValidatorService.doesMessagePassXsdValidation(request.getAny());
-
-        if (!validationResult.isValid()) {
-            sendMessageToSales(request, validationResult.getProblems());
-        }
-
-        return validationResult.isValid();
-    }
-
-    private void sendMessageToSales(Connector2BridgeRequest request, Iterable<ValidationProblem> problems) {
+    public void sendMessageToSales(Connector2BridgeRequest request, Iterable<ValidationProblem> problems) {
         try {
             StringBuilder builder = new StringBuilder();
             for (ValidationProblem problem : problems) {
-                builder.append(problem.getMessage());
+                builder.append(problem.getMessage() + "\n");
             }
 
             ValidationResultDto validationResultDto = new ValidationResultDto();
