@@ -13,6 +13,7 @@ package eu.europa.ec.fisheries.uvms.plugins.flux.sales.producer;
 
 import eu.europa.ec.fisheries.uvms.exchange.model.constant.ExchangeModelConstants;
 import eu.europa.ec.fisheries.uvms.message.JMSUtils;
+import eu.europa.ec.fisheries.uvms.message.MessageConstants;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.constants.ModuleQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

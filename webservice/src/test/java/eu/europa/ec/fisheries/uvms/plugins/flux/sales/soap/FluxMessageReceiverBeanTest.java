@@ -1,5 +1,6 @@
 package eu.europa.ec.fisheries.uvms.plugins.flux.sales.soap;
 
+import com.google.common.collect.Lists;
 import eu.europa.ec.fisheries.schema.sales.FLUXSalesQueryMessage;
 import eu.europa.ec.fisheries.schema.sales.FLUXSalesResponseMessage;
 import eu.europa.ec.fisheries.schema.sales.Report;
@@ -9,12 +10,17 @@ import eu.europa.ec.fisheries.uvms.plugins.flux.sales.mapper.FLUXSalesQueryMessa
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.mapper.FLUXSalesReportMessageMapper;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.mapper.FLUXSalesResponseMessageMapper;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.service.ExchangeService;
+import eu.europa.ec.fisheries.uvms.plugins.flux.sales.service.ValidationService;
+import eu.europa.ec.fisheries.uvms.plugins.flux.sales.service.XsdValidatorService;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.service.helper.Connector2BridgeRequestHelper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.w3c.dom.Element;
+import org.xmlunit.validation.ValidationProblem;
+import org.xmlunit.validation.ValidationResult;
 import xeu.bridge_connector.v1.Connector2BridgeRequest;
 import xeu.bridge_connector.v1.Connector2BridgeResponse;
 
@@ -45,8 +51,13 @@ public class FluxMessageReceiverBeanTest {
     @Mock
     private FLUXSalesResponseMessageMapper fluxSalesResponseMessageMapper;
 
+    @Mock
+    private XsdValidatorService xsdValidatorService;
+
     private final String fr = "BEL";
+
     private final String on = "abcdefg";
+
 
     @Test
     public void postSalesReportWhenSuccess() throws Exception {
@@ -60,6 +71,8 @@ public class FluxMessageReceiverBeanTest {
         doReturn(report).when(fluxSalesReportMessageMapper).mapToReport(request);
         doReturn(fr).when(requestHelper).getFRPropertyOrNull(request);
         doReturn(on).when(requestHelper).getONPropertyOrNull(request);
+        doReturn(new ValidationResult(true, Lists.<ValidationProblem>newArrayList())).when(xsdValidatorService).doesMessagePassXsdValidation(any(Element.class));
+
 
         //execute
         Connector2BridgeResponse response = fluxMessageReceiverBean.post(request);
@@ -90,6 +103,7 @@ public class FluxMessageReceiverBeanTest {
         doReturn(fr).when(requestHelper).getFRPropertyOrNull(request);
         doReturn(on).when(requestHelper).getONPropertyOrNull(request);
         doThrow(new RuntimeException("oops")).when(exchangeService).sendSalesReportToExchange(report, fr, on);
+        doReturn(new ValidationResult(true, Lists.<ValidationProblem>newArrayList())).when(xsdValidatorService).doesMessagePassXsdValidation(any(Element.class));
 
         //execute
         Connector2BridgeResponse response = fluxMessageReceiverBean.post(request);
@@ -119,6 +133,7 @@ public class FluxMessageReceiverBeanTest {
         doReturn(fr).when(requestHelper).getFRPropertyOrNull(request);
         doReturn(on).when(requestHelper).getONPropertyOrNull(request);
         doThrow(new RuntimeException("oops")).when(exchangeService).sendSalesQueryToExchange(query, fr, on);
+        doReturn(new ValidationResult(true, Lists.<ValidationProblem>newArrayList())).when(xsdValidatorService).doesMessagePassXsdValidation(any(Element.class));
 
         //execute
         Connector2BridgeResponse response = fluxMessageReceiverBean.post(request);
@@ -147,6 +162,7 @@ public class FluxMessageReceiverBeanTest {
         doReturn(query).when(fluxSalesQueryMessageMapper).mapToSalesQuery(request);
         doReturn(fr).when(requestHelper).getFRPropertyOrNull(request);
         doReturn(on).when(requestHelper).getONPropertyOrNull(request);
+        doReturn(new ValidationResult(true, Lists.<ValidationProblem>newArrayList())).when(xsdValidatorService).doesMessagePassXsdValidation(any(Element.class));
 
         //execute
         Connector2BridgeResponse response = fluxMessageReceiverBean.post(request);
@@ -176,6 +192,7 @@ public class FluxMessageReceiverBeanTest {
         doReturn(fr).when(requestHelper).getFRPropertyOrNull(request);
         doReturn(on).when(requestHelper).getONPropertyOrNull(request);
         doThrow(new RuntimeException("oops")).when(exchangeService).sendSalesResponseToExchange(response, fr, on);
+        doReturn(new ValidationResult(true, Lists.<ValidationProblem>newArrayList())).when(xsdValidatorService).doesMessagePassXsdValidation(any(Element.class));
 
         //execute
         Connector2BridgeResponse Connector2BridgeResponse = fluxMessageReceiverBean.post(request);
@@ -204,6 +221,7 @@ public class FluxMessageReceiverBeanTest {
         doReturn(response).when(fluxSalesResponseMessageMapper).mapToSalesResponse(request);
         doReturn(fr).when(requestHelper).getFRPropertyOrNull(request);
         doReturn(on).when(requestHelper).getONPropertyOrNull(request);
+        doReturn(new ValidationResult(true, Lists.<ValidationProblem>newArrayList())).when(xsdValidatorService).doesMessagePassXsdValidation(any(Element.class));
 
         //execute
         Connector2BridgeResponse Connector2BridgeResponse = fluxMessageReceiverBean.post(request);
@@ -248,6 +266,7 @@ public class FluxMessageReceiverBeanTest {
         //mock
         doReturn(true).when(startupBean).isEnabled();
         doReturn("NonExisting").when(requestHelper).determineMessageType(request);
+        doReturn(new ValidationResult(true, Lists.<ValidationProblem>newArrayList())).when(xsdValidatorService).doesMessagePassXsdValidation(any(Element.class));
 
         //execute
         Connector2BridgeResponse response = fluxMessageReceiverBean.post(request);
@@ -259,6 +278,5 @@ public class FluxMessageReceiverBeanTest {
 
         assertEquals("NOK", response.getStatus());
     }
-
 
 }
