@@ -1,13 +1,9 @@
 package eu.europa.ec.fisheries.uvms.plugins.flux.sales.service;
 
-import com.google.common.collect.Lists;
-import eu.europa.ec.fisheries.schema.rules.rule.v1.ErrorType;
-import eu.europa.ec.fisheries.schema.rules.rule.v1.ValidationMessageType;
 import eu.europa.ec.fisheries.uvms.exchange.model.mapper.ExchangeModuleRequestMapper;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.constants.ModuleQueue;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.producer.PluginMessageProducer;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.service.helper.Connector2BridgeRequestHelper;
-import eu.europa.ec.fisheries.uvms.rules.model.dto.ValidationResultDto;
 import eu.europa.ec.fisheries.uvms.sales.model.mapper.SalesModuleRequestMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,7 +23,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.*;
-import static org.powermock.api.mockito.PowerMockito.when;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({SalesModuleRequestMapper.class, ExchangeModuleRequestMapper.class})
@@ -47,21 +42,6 @@ public class ValidationServiceTest {
     public void sendMessageToSales() throws Exception {
         mockStatic(SalesModuleRequestMapper.class, ExchangeModuleRequestMapper.class);
 
-        ValidationResultDto validationResultDto = new ValidationResultDto();
-        ValidationMessageType validationMessageType = new ValidationMessageType();
-        validationMessageType.setBrId("SALE-L00-00-0000");
-        validationMessageType.setLevel("L00");
-        validationMessageType.setErrorType(ErrorType.ERROR);
-        validationMessageType.setMessage(
-                "problem 1\n" +
-                        "problem 2\n" +
-                        "problem 3\n" +
-                        "problem 4\n" +
-                        "problem 5\n");
-
-        validationResultDto.setValidationMessages(Arrays.asList(validationMessageType));
-        validationResultDto.setIsError(true);
-
         List<ValidationProblem> problems = Arrays.asList(new ValidationProblem("problem 1", 1, 1, ValidationProblem.ProblemType.ERROR),
                 new ValidationProblem("problem 2", 1, 1, ValidationProblem.ProblemType.ERROR),
                 new ValidationProblem("problem 3", 1, 1, ValidationProblem.ProblemType.ERROR),
@@ -73,7 +53,7 @@ public class ValidationServiceTest {
         Connector2BridgeRequest connector2BridgeRequest = new Connector2BridgeRequest();
         connector2BridgeRequest.setAny(elementMock);
 
-        when(SalesModuleRequestMapper.createRespondToInvalidMessageRequest(eq("ON"), any(ValidationResultDto.class),
+        when(SalesModuleRequestMapper.createRespondToInvalidMessageRequest(eq("ON"), any(List.class),
                 eq("FLUX"), eq("FR"), eq("FLUXTL_ON"))).thenReturn("createRespondToInvalidMessageRequest");
         when(ExchangeModuleRequestMapper.createReceiveInvalidSalesMessage(eq("createRespondToInvalidMessageRequest"), eq("FLUX")))
                 .thenReturn("createReceiveInvalidSalesMessage");
@@ -86,8 +66,8 @@ public class ValidationServiceTest {
         verify(producer).sendModuleMessage("createReceiveInvalidSalesMessage", ModuleQueue.EXCHANGE);
 
         verifyStatic(ValidationService.class);
-        SalesModuleRequestMapper.createRespondToInvalidMessageRequest("ON", validationResultDto,
-                "FLUX", "FR", "FLUXTL_ON");
+        SalesModuleRequestMapper.createRespondToInvalidMessageRequest(eq("ON"), any(List.class),
+                eq("FLUX"), eq("FR"), eq("FLUXTL_ON"));
         ExchangeModuleRequestMapper.createReceiveInvalidSalesMessage("createRespondToInvalidMessageRequest", "FLUX");
     }
 }
