@@ -105,6 +105,7 @@ public class StartupBean extends PluginDataHolder {
             timer.cancel();
         } else if(numberOfTriesExecuted >= MAX_NUMBER_OF_TRIES) {
             LOG.info(getRegisterClassName() + " failed to register, maximum number of retries reached.");
+            timer.cancel();
         }
     }
 
