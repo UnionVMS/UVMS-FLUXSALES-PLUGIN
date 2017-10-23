@@ -104,7 +104,7 @@ public class StartupBean extends PluginDataHolder {
             LOG.info(getRegisterClassName() + " is registered. Cancelling timer.");
             timer.cancel();
         } else if(numberOfTriesExecuted >= MAX_NUMBER_OF_TRIES) {
-            LOG.info(getRegisterClassName() + " failed to register, maximum number of retries reached.");
+            LOG.error(getRegisterClassName() + " failed to register, maximum number of retries reached.");
             timer.cancel();
         }
     }
@@ -116,7 +116,7 @@ public class StartupBean extends PluginDataHolder {
             String registerServiceRequest = ExchangeModuleRequestMapper.createRegisterServiceRequest(serviceType, capabilities, settingList);
             messageProducer.sendEventBusMessage(registerServiceRequest, ExchangeModelConstants.EXCHANGE_REGISTER_SERVICE);
         } catch (JMSException | ExchangeModelMarshallException e) {
-            LOG.error("Failed to send registration message to {}", ExchangeModelConstants.EXCHANGE_REGISTER_SERVICE);
+            LOG.error("Failed to send registration message to " + ExchangeModelConstants.EXCHANGE_REGISTER_SERVICE, e);
             setWaitingForResponse(false);
         }
 
