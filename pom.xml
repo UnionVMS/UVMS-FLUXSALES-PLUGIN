@@ -25,6 +25,7 @@
         <uvms.common.version>2.0.29</uvms.common.version>
         <sales.model.version>1.0.6</sales.model.version>
         <exchange.model.version>4.0.3</exchange.model.version>
+        <rules.model.version>3.0.11</rules.model.version>
 
         <maven.ejb.plugin.version>3.0.0</maven.ejb.plugin.version>
         <maven-release-plugin>2.5.3</maven-release-plugin>
@@ -46,7 +47,7 @@
         <dependency>
             <groupId>eu.europa.ec.fisheries.uvms.rules</groupId>
             <artifactId>rules-model</artifactId>
-            <version>3.0.11-SNAPSHOT</version>
+            <version>${rules.model.version}</version>
         </dependency>
         <dependency>
             <groupId>org.xmlunit</groupId>
