@@ -1,5 +1,6 @@
 package eu.europa.ec.fisheries.uvms.plugins.flux.sales.service;
 
+import eu.europa.ec.fisheries.schema.exchange.plugin.types.v1.PluginType;
 import eu.europa.ec.fisheries.schema.sales.ValidationQualityAnalysisType;
 import eu.europa.ec.fisheries.uvms.exchange.model.exception.ExchangeModelMarshallException;
 import eu.europa.ec.fisheries.uvms.exchange.model.mapper.ExchangeModuleRequestMapper;
@@ -18,6 +19,7 @@ import javax.ejb.Stateless;
 import javax.jms.JMSException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 @Stateless
 @Slf4j
@@ -38,9 +40,11 @@ public class ValidationService {
 
             ValidationQualityAnalysisType validationQualityAnalysis = ValidationQualityAnalysisMapper.map("SALE-L00-00-0000", "L00", "ERR", builder.toString(), new ArrayList<String>());
 
-            String requestForSales = SalesModuleRequestMapper.createRespondToInvalidMessageRequest(requestHelper.getONPropertyOrNull(request),
-                    Arrays.asList(validationQualityAnalysis), "FLUX", requestHelper.getFRPropertyOrNull(request), "FLUXTL_ON");
-            String messageForExchange = ExchangeModuleRequestMapper.createReceiveInvalidSalesMessage(requestForSales, "FLUX");
+            String onProperty = requestHelper.getONPropertyOrNull(request);
+            String frProperty = requestHelper.getFRPropertyOrNull(request);
+            String requestForSales = SalesModuleRequestMapper.createRespondToInvalidMessageRequest(onProperty,
+                    Arrays.asList(validationQualityAnalysis), "FLUX", frProperty, "FLUXTL_ON");
+            String messageForExchange = ExchangeModuleRequestMapper.createReceiveInvalidSalesMessage(requestForSales, onProperty, frProperty, new Date(), "FLUX", PluginType.FLUX);
 
             producer.sendModuleMessage(messageForExchange, ModuleQueue.EXCHANGE);
         } catch (SalesMarshallException e) {

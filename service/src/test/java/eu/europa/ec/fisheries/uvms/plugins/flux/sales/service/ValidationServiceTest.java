@@ -1,5 +1,6 @@
 package eu.europa.ec.fisheries.uvms.plugins.flux.sales.service;
 
+import eu.europa.ec.fisheries.schema.exchange.plugin.types.v1.PluginType;
 import eu.europa.ec.fisheries.uvms.exchange.model.mapper.ExchangeModuleRequestMapper;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.constants.ModuleQueue;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.producer.PluginMessageProducer;
@@ -17,10 +18,12 @@ import org.xmlunit.validation.ValidationProblem;
 import xeu.bridge_connector.v1.Connector2BridgeRequest;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.*;
 
@@ -55,7 +58,7 @@ public class ValidationServiceTest {
 
         when(SalesModuleRequestMapper.createRespondToInvalidMessageRequest(eq("ON"), any(List.class),
                 eq("FLUX"), eq("FR"), eq("FLUXTL_ON"))).thenReturn("createRespondToInvalidMessageRequest");
-        when(ExchangeModuleRequestMapper.createReceiveInvalidSalesMessage(eq("createRespondToInvalidMessageRequest"), eq("FLUX")))
+        when(ExchangeModuleRequestMapper.createReceiveInvalidSalesMessage(eq("createRespondToInvalidMessageRequest"), eq("ON"), eq("FR"), isA(Date.class), eq("FLUX"), eq(PluginType.FLUX)))
                 .thenReturn("createReceiveInvalidSalesMessage");
 
         doReturn("ON").when(helper).getONPropertyOrNull(any(Connector2BridgeRequest.class));
@@ -68,6 +71,6 @@ public class ValidationServiceTest {
         verifyStatic(ValidationService.class);
         SalesModuleRequestMapper.createRespondToInvalidMessageRequest(eq("ON"), any(List.class),
                 eq("FLUX"), eq("FR"), eq("FLUXTL_ON"));
-        ExchangeModuleRequestMapper.createReceiveInvalidSalesMessage("createRespondToInvalidMessageRequest", "FLUX");
+        ExchangeModuleRequestMapper.createReceiveInvalidSalesMessage(eq("createRespondToInvalidMessageRequest"), eq("ON"), eq("FR"), isA(Date.class), eq("FLUX"), eq(PluginType.FLUX));
     }
 }
