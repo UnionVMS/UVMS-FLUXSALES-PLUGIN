@@ -39,8 +39,6 @@ import java.util.Map;
 @Stateless
 public class FluxMessageSenderBean {
 
-    public static final String SALES_DF = "urn:un:unece:uncefact:fisheries:FLUX:SALES:EU:2";
-
     @EJB
     private PortInitiator port;
 
@@ -61,7 +59,7 @@ public class FluxMessageSenderBean {
             un.unece.uncefact.data.standard.fluxsalesreportmessage._3.FLUXSalesReportMessage marshalledResponse = unmarshalAndMapToUNCEFACTFluxSalesReportMessage(salesReport);
             String recipient = salesReport.getRecipient();
 
-            POSTMSG request = postMsgTypeMapper.wrapInPostMsgType(marshalledResponse, SALES_DF, recipient);
+            POSTMSG request = postMsgTypeMapper.wrapInPostMsgType(marshalledResponse, startupBean.getSetting("DF"), recipient);
             sendPostMsgType(request);
         } catch (MappingException e) {
             LOG.error("[ Error when sending sales report to FLUX. ] {}", e.getMessage());
@@ -74,7 +72,7 @@ public class FluxMessageSenderBean {
             un.unece.uncefact.data.standard.fluxsalesresponsemessage._3.FLUXSalesResponseMessage marshalledResponse = unmarshalAndMapToUNCEFACTFluxSalesResponseMessage(salesResponse);
             String recipient = salesResponse.getRecipient();
 
-            POSTMSG postMsgType = postMsgTypeMapper.wrapInPostMsgType(marshalledResponse, SALES_DF, recipient);
+            POSTMSG postMsgType = postMsgTypeMapper.wrapInPostMsgType(marshalledResponse, startupBean.getSetting("DF"), recipient);
             sendPostMsgType(postMsgType);
         } catch (PluginException | MappingException e) {
             LOG.error("[ Error when sending sales response to FLUX. ] {}", e.getMessage());

@@ -12,6 +12,8 @@
 package eu.europa.ec.fisheries.uvms.plugins.flux.sales.mapper;
 
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.exception.MappingException;
+import lombok.extern.slf4j.Slf4j;
+import org.joda.time.DateTime;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import xeu.connector_bridge.v1.POSTMSG;
@@ -35,6 +37,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 @LocalBean
 @Stateless
+@Slf4j
 public class PostMsgTypeMapper {
 
 
@@ -45,6 +48,7 @@ public class PostMsgTypeMapper {
         message.setBUSINESSUUID(UUID.randomUUID().toString());
         message.setAD(ad);
         message.setDF(df);
+        message.setDT(DateTime.now());
         message.setAny(marshalToDOM(toBeWrapped));
 
         return message;
