@@ -86,7 +86,6 @@ public class FluxMessageReceiverBean implements BridgeConnectorPortType {
             return response;
         }
 
-
         try {
             switch (requestHelper.determineMessageType(request)) {
                 case FluxDataFlowName.SALES_REPORT:
