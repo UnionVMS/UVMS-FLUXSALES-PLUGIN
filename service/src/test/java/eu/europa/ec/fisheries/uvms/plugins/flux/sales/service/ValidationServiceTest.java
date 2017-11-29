@@ -2,8 +2,7 @@ package eu.europa.ec.fisheries.uvms.plugins.flux.sales.service;
 
 import eu.europa.ec.fisheries.schema.exchange.plugin.types.v1.PluginType;
 import eu.europa.ec.fisheries.uvms.exchange.model.mapper.ExchangeModuleRequestMapper;
-import eu.europa.ec.fisheries.uvms.plugins.flux.sales.constants.ModuleQueue;
-import eu.europa.ec.fisheries.uvms.plugins.flux.sales.producer.PluginMessageProducer;
+import eu.europa.ec.fisheries.uvms.plugins.flux.sales.producer.ExchangeEventMessageProducerBean;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.service.helper.Connector2BridgeRequestHelper;
 import eu.europa.ec.fisheries.uvms.sales.model.mapper.SalesModuleRequestMapper;
 import org.junit.Test;
@@ -36,7 +35,7 @@ public class ValidationServiceTest {
     private ValidationService validationService;
 
     @Mock
-    private PluginMessageProducer producer;
+    ExchangeEventMessageProducerBean producer;
 
     @Mock
     private Connector2BridgeRequestHelper helper;
@@ -66,7 +65,7 @@ public class ValidationServiceTest {
 
         validationService.sendMessageToSales(connector2BridgeRequest, problems);
 
-        verify(producer).sendModuleMessage("createReceiveInvalidSalesMessage", ModuleQueue.EXCHANGE);
+        verify(producer).sendModuleMessage("createReceiveInvalidSalesMessage", null);
 
         verifyStatic(ValidationService.class);
         SalesModuleRequestMapper.createRespondToInvalidMessageRequest(eq("ON"), any(List.class),

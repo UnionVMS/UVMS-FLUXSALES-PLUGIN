@@ -22,7 +22,7 @@
         <maven.compiler.target>1.7</maven.compiler.target>
         <jacoco.version>0.7.9</jacoco.version>
 
-        <uvms.common.version>2.0.29</uvms.common.version>
+        <uvms.common.version>3.0.5</uvms.common.version>
         <sales.model.version>1.0.6</sales.model.version>
         <exchange.model.version>4.0.4</exchange.model.version>
         <rules.model.version>3.0.11</rules.model.version>
@@ -31,6 +31,7 @@
         <maven-release-plugin>2.5.3</maven-release-plugin>
         <orika.version>1.5.0</orika.version>
         <powermock.version>1.7.3</powermock.version>
+        <lombok.version>1.16.18</lombok.version>
     </properties>
 
     <dependencyManagement>
@@ -39,6 +40,16 @@
                 <groupId>eu.europa.ec.fisheries.uvms.exchange</groupId>
                 <artifactId>exchange-model</artifactId>
                 <version>${exchange.model.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>eu.europa.ec.fisheries.uvms.commons</groupId>
+                <artifactId>uvms-commons-message</artifactId>
+                <version>${uvms.common.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
