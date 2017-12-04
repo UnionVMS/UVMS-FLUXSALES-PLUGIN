@@ -11,11 +11,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.plugins.flux.sales.service;
 
+import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import eu.europa.ec.fisheries.schema.exchange.plugin.types.v1.PluginType;
 import eu.europa.ec.fisheries.schema.sales.FLUXSalesQueryMessage;
 import eu.europa.ec.fisheries.schema.sales.FLUXSalesResponseMessage;
 import eu.europa.ec.fisheries.schema.sales.Report;
+import eu.europa.ec.fisheries.schema.sales.SalesIdType;
 import eu.europa.ec.fisheries.uvms.exchange.model.exception.ExchangeModelMarshallException;
 import eu.europa.ec.fisheries.uvms.exchange.model.mapper.ExchangeModuleRequestMapper;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.constants.ModuleQueue;
@@ -58,7 +60,7 @@ public class ExchangeService {
             String guid = Optional  .fromNullable(reportHelper.getGuidOrNull(report))
                                     .or(on);
 
-            String text = ExchangeModuleRequestMapper.createReceiveSalesReportRequest(reportAsString, guid, fr,  "FLUX", PluginType.FLUX, new Date());
+            String text = ExchangeModuleRequestMapper.createReceiveSalesReportRequest(reportAsString, guid, fr,  "FLUX", PluginType.FLUX, new Date(), on);
             producer.sendModuleMessage(text, ModuleQueue.EXCHANGE);
 
         } catch (ExchangeModelMarshallException e) {
@@ -75,7 +77,8 @@ public class ExchangeService {
             String guid = Optional  .fromNullable(responseHelper.getGuidOrNull(response))
                                     .or(on);
 
-            String text = ExchangeModuleRequestMapper.createReceiveSalesResponseRequest(responseAsString, guid, fr, new Date(), "FLUX", PluginType.FLUX);
+            String text = ExchangeModuleRequestMapper.createReceiveSalesResponseRequest(responseAsString, guid, fr,
+                    new Date(), "FLUX", PluginType.FLUX, on);
             producer.sendModuleMessage(text, ModuleQueue.EXCHANGE);
         } catch (ExchangeModelMarshallException e) {
             LOG.error("Couldn't map the sales response in the FLUX Plugin to ReceiveSalesResponseRequest. Response is " + response, e);
@@ -92,7 +95,7 @@ public class ExchangeService {
             String guid = Optional  .fromNullable(queryHelper.getGuidOrNull(query))
                                     .or(on);
 
-            String text = ExchangeModuleRequestMapper.createReceiveSalesQueryRequest(queryAsString, guid, fr, new Date(), "FLUX", PluginType.FLUX);
+            String text = ExchangeModuleRequestMapper.createReceiveSalesQueryRequest(queryAsString, guid, fr, new Date(), "FLUX", PluginType.FLUX, on);
             producer.sendModuleMessage(text, ModuleQueue.EXCHANGE);
         } catch (ExchangeModelMarshallException e) {
             LOG.error("Couldn't map the sales query in the FLUX Plugin to ReceiveSalesQueryRequest. Query is " + query, e);

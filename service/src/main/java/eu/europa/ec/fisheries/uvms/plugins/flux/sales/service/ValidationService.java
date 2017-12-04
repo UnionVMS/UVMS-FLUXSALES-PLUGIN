@@ -1,6 +1,9 @@
 package eu.europa.ec.fisheries.uvms.plugins.flux.sales.service;
 
+import com.google.common.base.Function;
+import com.google.common.base.Optional;
 import eu.europa.ec.fisheries.schema.exchange.plugin.types.v1.PluginType;
+import eu.europa.ec.fisheries.schema.sales.SalesIdType;
 import eu.europa.ec.fisheries.schema.sales.ValidationQualityAnalysisType;
 import eu.europa.ec.fisheries.uvms.exchange.model.exception.ExchangeModelMarshallException;
 import eu.europa.ec.fisheries.uvms.exchange.model.mapper.ExchangeModuleRequestMapper;
@@ -43,8 +46,9 @@ public class ValidationService {
             String onProperty = requestHelper.getONPropertyOrNull(request);
             String frProperty = requestHelper.getFRPropertyOrNull(request);
             String requestForSales = SalesModuleRequestMapper.createRespondToInvalidMessageRequest(onProperty,
-                    Arrays.asList(validationQualityAnalysis), "FLUX", frProperty, "FLUXTL_ON");
-            String messageForExchange = ExchangeModuleRequestMapper.createReceiveInvalidSalesMessage(requestForSales, onProperty, frProperty, new Date(), "FLUX", PluginType.FLUX);
+                    Arrays.asList(validationQualityAnalysis), "FLUX", frProperty, SalesIdType.FLUXTL_ON);
+            String messageForExchange = ExchangeModuleRequestMapper.createReceiveInvalidSalesMessage(requestForSales, onProperty,
+                    frProperty, new Date(), "FLUX", PluginType.FLUX);
 
             producer.sendModuleMessage(messageForExchange, ModuleQueue.EXCHANGE);
         } catch (SalesMarshallException e) {

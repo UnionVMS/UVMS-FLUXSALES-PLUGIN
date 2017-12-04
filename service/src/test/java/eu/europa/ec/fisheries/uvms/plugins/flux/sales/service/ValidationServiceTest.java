@@ -1,6 +1,7 @@
 package eu.europa.ec.fisheries.uvms.plugins.flux.sales.service;
 
 import eu.europa.ec.fisheries.schema.exchange.plugin.types.v1.PluginType;
+import eu.europa.ec.fisheries.schema.sales.SalesIdType;
 import eu.europa.ec.fisheries.uvms.exchange.model.mapper.ExchangeModuleRequestMapper;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.constants.ModuleQueue;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.producer.PluginMessageProducer;
@@ -57,7 +58,7 @@ public class ValidationServiceTest {
         connector2BridgeRequest.setAny(elementMock);
 
         when(SalesModuleRequestMapper.createRespondToInvalidMessageRequest(eq("ON"), any(List.class),
-                eq("FLUX"), eq("FR"), eq("FLUXTL_ON"))).thenReturn("createRespondToInvalidMessageRequest");
+                eq("FLUX"), eq("FR"), eq(SalesIdType.FLUXTL_ON))).thenReturn("createRespondToInvalidMessageRequest");
         when(ExchangeModuleRequestMapper.createReceiveInvalidSalesMessage(eq("createRespondToInvalidMessageRequest"), eq("ON"), eq("FR"), isA(Date.class), eq("FLUX"), eq(PluginType.FLUX)))
                 .thenReturn("createReceiveInvalidSalesMessage");
 
@@ -70,7 +71,7 @@ public class ValidationServiceTest {
 
         verifyStatic(ValidationService.class);
         SalesModuleRequestMapper.createRespondToInvalidMessageRequest(eq("ON"), any(List.class),
-                eq("FLUX"), eq("FR"), eq("FLUXTL_ON"));
+                eq("FLUX"), eq("FR"), eq(SalesIdType.FLUXTL_ON));
         ExchangeModuleRequestMapper.createReceiveInvalidSalesMessage(eq("createRespondToInvalidMessageRequest"), eq("ON"), eq("FR"), isA(Date.class), eq("FLUX"), eq(PluginType.FLUX));
     }
 }
