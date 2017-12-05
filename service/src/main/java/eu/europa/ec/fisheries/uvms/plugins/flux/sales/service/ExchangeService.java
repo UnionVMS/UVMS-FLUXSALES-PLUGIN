@@ -20,8 +20,7 @@ import eu.europa.ec.fisheries.schema.sales.Report;
 import eu.europa.ec.fisheries.schema.sales.SalesIdType;
 import eu.europa.ec.fisheries.uvms.exchange.model.exception.ExchangeModelMarshallException;
 import eu.europa.ec.fisheries.uvms.exchange.model.mapper.ExchangeModuleRequestMapper;
-import eu.europa.ec.fisheries.uvms.plugins.flux.sales.constants.ModuleQueue;
-import eu.europa.ec.fisheries.uvms.plugins.flux.sales.producer.PluginMessageProducer;
+import eu.europa.ec.fisheries.uvms.plugins.flux.sales.producer.ExchangeEventMessageProducerBean;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.service.helper.QueryHelper;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.service.helper.ReportHelper;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.service.helper.ResponseHelper;
@@ -33,7 +32,6 @@ import org.slf4j.LoggerFactory;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
-import javax.jms.JMSException;
 import java.util.Date;
 
 @LocalBean
@@ -43,7 +41,7 @@ public class ExchangeService {
     final static Logger LOG = LoggerFactory.getLogger(ExchangeService.class);
 
     @EJB
-    private PluginMessageProducer producer;
+    ExchangeEventMessageProducerBean producer;
 
     @EJB
     private ReportHelper reportHelper;
@@ -57,20 +55,21 @@ public class ExchangeService {
     public void sendSalesReportToExchange(Report report, String fr, String on) {
         try {
             String reportAsString = JAXBMarshaller.marshallJaxBObjectToString(report);
-            String guid = Optional  .fromNullable(reportHelper.getGuidOrNull(report))
-                                    .or(on);
+            String guid = Optional.fromNullable(reportHelper.getGuidOrNull(report))
+                    .or(on);
 
-            String text = ExchangeModuleRequestMapper.createReceiveSalesReportRequest(reportAsString, guid, fr,  "FLUX", PluginType.FLUX, new Date(), on);
-            producer.sendModuleMessage(text, ModuleQueue.EXCHANGE);
+            String text = ExchangeModuleRequestMapper.createReceiveSalesReportRequest(reportAsString, guid, fr, "FLUX", PluginType.FLUX, new Date(), on);
+            producer.sendModuleMessage(text, null);
 
         } catch (ExchangeModelMarshallException e) {
             LOG.error("Couldn't map the sales report in the FLUX Plugin to ReceiveSalesReportRequest.", e);
-        } catch (JMSException e) {
-            LOG.error("Couldn't send sales report from the FLUX plugin to Exchange. Report is " + report, e);
         } catch (SalesMarshallException e) {
             LOG.error("Couldn't marshall the supplied sales report", e);
+        } catch (Exception e) {
+            LOG.error("Couldn't send sales report from the FLUX plugin to Exchange. Report is " + report, e);
         }
     }
+
     public void sendSalesResponseToExchange(FLUXSalesResponseMessage response, String fr, String on) {
         try {
             String responseAsString = JAXBMarshaller.marshallJaxBObjectToString(response);
@@ -79,13 +78,13 @@ public class ExchangeService {
 
             String text = ExchangeModuleRequestMapper.createReceiveSalesResponseRequest(responseAsString, guid, fr,
                     new Date(), "FLUX", PluginType.FLUX, on);
-            producer.sendModuleMessage(text, ModuleQueue.EXCHANGE);
+            producer.sendModuleMessage(text, null);
         } catch (ExchangeModelMarshallException e) {
             LOG.error("Couldn't map the sales response in the FLUX Plugin to ReceiveSalesResponseRequest. Response is " + response, e);
-        } catch (JMSException e) {
-            LOG.error("Couldn't send sales response from the FLUX plugin to Exchange. Report is " + response, e);
         } catch (SalesMarshallException e) {
             LOG.error("Couldn't marshall the supplied sales response", e);
+        } catch (Exception e) {
+            LOG.error("Couldn't send sales response from the FLUX plugin to Exchange. Report is " + response, e);
         }
     }
 
@@ -96,13 +95,13 @@ public class ExchangeService {
                                     .or(on);
 
             String text = ExchangeModuleRequestMapper.createReceiveSalesQueryRequest(queryAsString, guid, fr, new Date(), "FLUX", PluginType.FLUX, on);
-            producer.sendModuleMessage(text, ModuleQueue.EXCHANGE);
+            producer.sendModuleMessage(text, null);
         } catch (ExchangeModelMarshallException e) {
             LOG.error("Couldn't map the sales query in the FLUX Plugin to ReceiveSalesQueryRequest. Query is " + query, e);
-        } catch (JMSException e) {
-            LOG.error("Couldn't send sales query from the FLUX plugin to Exchange. Report is " + query, e);
         } catch (SalesMarshallException e) {
             LOG.error("Couldn't marshall the supplied sales query", e);
+        } catch (Exception e) {
+            LOG.error("Couldn't send sales query from the FLUX plugin to Exchange. Report is " + query, e);
         }
     }
 }

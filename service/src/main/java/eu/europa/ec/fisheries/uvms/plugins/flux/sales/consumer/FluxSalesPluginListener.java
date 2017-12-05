@@ -23,7 +23,7 @@ import eu.europa.ec.fisheries.uvms.exchange.model.mapper.ExchangePluginResponseM
 import eu.europa.ec.fisheries.uvms.exchange.model.mapper.JAXBMarshaller;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.StartupBean;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.exception.PluginException;
-import eu.europa.ec.fisheries.uvms.plugins.flux.sales.producer.PluginMessageProducer;
+import eu.europa.ec.fisheries.uvms.plugins.flux.sales.producer.ExchangeEventMessageProducerBean;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.service.PluginService;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.soap.FluxMessageSenderBean;
 import eu.europa.ec.fisheries.uvms.sales.model.exception.SalesMarshallException;
@@ -56,7 +56,7 @@ public class FluxSalesPluginListener implements MessageListener {
     private FluxMessageSenderBean senderToFLUX;
 
     @EJB
-    private PluginMessageProducer messageProducer;
+    private ExchangeEventMessageProducerBean messageProducer;
 
     @EJB
     private StartupBean startup;
@@ -109,7 +109,7 @@ public class FluxSalesPluginListener implements MessageListener {
             }
 
             if (responseMessage != null) {
-                messageProducer.sendResponseMessage(responseMessage, textMessage);
+                messageProducer.sendModuleResponseMessage(textMessage, responseMessage);
             }
 
         } catch (ExchangeModelMarshallException | NullPointerException e) {

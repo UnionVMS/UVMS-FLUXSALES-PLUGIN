@@ -7,8 +7,7 @@ import eu.europa.ec.fisheries.schema.sales.SalesIdType;
 import eu.europa.ec.fisheries.schema.sales.ValidationQualityAnalysisType;
 import eu.europa.ec.fisheries.uvms.exchange.model.exception.ExchangeModelMarshallException;
 import eu.europa.ec.fisheries.uvms.exchange.model.mapper.ExchangeModuleRequestMapper;
-import eu.europa.ec.fisheries.uvms.plugins.flux.sales.constants.ModuleQueue;
-import eu.europa.ec.fisheries.uvms.plugins.flux.sales.producer.PluginMessageProducer;
+import eu.europa.ec.fisheries.uvms.plugins.flux.sales.producer.ExchangeEventMessageProducerBean;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.service.helper.Connector2BridgeRequestHelper;
 import eu.europa.ec.fisheries.uvms.sales.model.exception.SalesMarshallException;
 import eu.europa.ec.fisheries.uvms.sales.model.mapper.SalesModuleRequestMapper;
@@ -19,7 +18,6 @@ import xeu.bridge_connector.v1.Connector2BridgeRequest;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.jms.JMSException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -32,7 +30,7 @@ public class ValidationService {
     private Connector2BridgeRequestHelper requestHelper;
 
     @EJB
-    private PluginMessageProducer producer;
+    ExchangeEventMessageProducerBean producer;
 
     public void sendMessageToSales(Connector2BridgeRequest request, Iterable<ValidationProblem> problems) {
         try {
@@ -50,13 +48,13 @@ public class ValidationService {
             String messageForExchange = ExchangeModuleRequestMapper.createReceiveInvalidSalesMessage(requestForSales, onProperty,
                     frProperty, new Date(), "FLUX", PluginType.FLUX);
 
-            producer.sendModuleMessage(messageForExchange, ModuleQueue.EXCHANGE);
+            producer.sendModuleMessage(messageForExchange, null);
         } catch (SalesMarshallException e) {
             log.error("Failed to marshall Sales Response", e);
-        } catch (JMSException e) {
-            log.error("Failed to send createRespondToInvalidMessageRequest to Sales", e);
         } catch (ExchangeModelMarshallException e) {
             log.error("Failed to marshall Exchange request", e);
+        } catch (Exception e) {
+            log.error("Failed to send createRespondToInvalidMessageRequest to Sales", e);
         }
     }
 }

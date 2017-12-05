@@ -15,11 +15,12 @@ import eu.europa.ec.fisheries.schema.exchange.plugin.types.v1.PluginType;
 import eu.europa.ec.fisheries.schema.exchange.service.v1.CapabilityListType;
 import eu.europa.ec.fisheries.schema.exchange.service.v1.ServiceType;
 import eu.europa.ec.fisheries.schema.exchange.service.v1.SettingListType;
+import eu.europa.ec.fisheries.uvms.commons.message.api.MessageException;
 import eu.europa.ec.fisheries.uvms.exchange.model.constant.ExchangeModelConstants;
 import eu.europa.ec.fisheries.uvms.exchange.model.exception.ExchangeModelMarshallException;
 import eu.europa.ec.fisheries.uvms.exchange.model.mapper.ExchangeModuleRequestMapper;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.mapper.ServiceMapper;
-import eu.europa.ec.fisheries.uvms.plugins.flux.sales.producer.PluginMessageProducer;
+import eu.europa.ec.fisheries.uvms.plugins.flux.sales.producer.EventBusMessageProducerBean;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.service.FileHandlerBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,12 +28,11 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.*;
-import javax.jms.JMSException;
 import java.util.Map;
 
 @Singleton
 @Startup
-@DependsOn({"PluginMessageProducer", "FileHandlerBean", "PluginRegistrationListener", "FluxSalesPluginListener"})
+@DependsOn({"FileHandlerBean", "PluginRegistrationListener", "FluxSalesPluginListener"})
 public class StartupBean extends PluginDataHolder {
 
     final static Logger LOG = LoggerFactory.getLogger(StartupBean.class);
@@ -45,7 +45,7 @@ public class StartupBean extends PluginDataHolder {
     private String REGISTER_CLASS_NAME = "";
 
     @EJB
-    private PluginMessageProducer messageProducer;
+    EventBusMessageProducerBean eventBusMessageProducerBean;
 
     @EJB
     private FileHandlerBean fileHandler;
@@ -114,8 +114,8 @@ public class StartupBean extends PluginDataHolder {
         setWaitingForResponse(true);
         try {
             String registerServiceRequest = ExchangeModuleRequestMapper.createRegisterServiceRequest(serviceType, capabilities, settingList);
-            messageProducer.sendEventBusMessage(registerServiceRequest, ExchangeModelConstants.EXCHANGE_REGISTER_SERVICE);
-        } catch (JMSException | ExchangeModelMarshallException e) {
+            eventBusMessageProducerBean.sendEventBusMessage(registerServiceRequest, ExchangeModelConstants.EXCHANGE_REGISTER_SERVICE);
+        } catch (MessageException | ExchangeModelMarshallException e) {
             LOG.error("Failed to send registration message to " + ExchangeModelConstants.EXCHANGE_REGISTER_SERVICE, e);
             setWaitingForResponse(false);
         }
@@ -126,8 +126,8 @@ public class StartupBean extends PluginDataHolder {
         LOG.info("Unregistering from Exchange Module");
         try {
             String unregisterServiceRequest = ExchangeModuleRequestMapper.createUnregisterServiceRequest(serviceType);
-            messageProducer.sendEventBusMessage(unregisterServiceRequest, ExchangeModelConstants.EXCHANGE_REGISTER_SERVICE);
-        } catch (JMSException | ExchangeModelMarshallException e) {
+            eventBusMessageProducerBean.sendEventBusMessage(unregisterServiceRequest, ExchangeModelConstants.EXCHANGE_REGISTER_SERVICE);
+        } catch (MessageException | ExchangeModelMarshallException e) {
             LOG.error("Failed to send unregistration message to {}", ExchangeModelConstants.EXCHANGE_REGISTER_SERVICE);
         }
     }
