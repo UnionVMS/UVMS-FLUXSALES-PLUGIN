@@ -3,3 +3,5 @@ target
 **/*.iml
 */target
 src/main/java/xeu/*
+**/logging.properties
+**/plugin.properties
