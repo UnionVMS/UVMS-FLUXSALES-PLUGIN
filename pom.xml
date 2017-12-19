@@ -24,7 +24,7 @@
 
         <uvms.common.version>3.0.5</uvms.common.version>
         <sales.model.version>1.0.8-SNAPSHOT</sales.model.version>
-        <exchange.model.version>4.0.7-SNAPSHOT</exchange.model.version>
+        <exchange.model.version>4.0.8</exchange.model.version>
         <rules.model.version>3.0.19-SNAPSHOT</rules.model.version>
 
         <maven.ejb.plugin.version>3.0.0</maven.ejb.plugin.version>
