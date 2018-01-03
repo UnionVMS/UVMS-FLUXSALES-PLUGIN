@@ -2,3 +2,5 @@ target
 .idea
 **/*.iml
 */target
+**/logging.properties
+**/plugin.properties
