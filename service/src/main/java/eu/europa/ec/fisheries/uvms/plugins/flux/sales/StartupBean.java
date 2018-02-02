@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.*;
+import javax.jms.DeliveryMode;
 import java.util.Map;
 
 @Singleton
@@ -37,6 +38,7 @@ public class StartupBean extends PluginDataHolder {
 
     final static Logger LOG = LoggerFactory.getLogger(StartupBean.class);
 
+    private final static long TIME_TO_LIVE = 1800000L;
     private final static int MAX_NUMBER_OF_TRIES = 10;
     private boolean isRegistered = false;
     private boolean isEnabled = false;
@@ -114,7 +116,7 @@ public class StartupBean extends PluginDataHolder {
         setWaitingForResponse(true);
         try {
             String registerServiceRequest = ExchangeModuleRequestMapper.createRegisterServiceRequest(serviceType, capabilities, settingList);
-            eventBusMessageProducerBean.sendEventBusMessage(registerServiceRequest, ExchangeModelConstants.EXCHANGE_REGISTER_SERVICE);
+            eventBusMessageProducerBean.sendEventBusMessage(registerServiceRequest, ExchangeModelConstants.EXCHANGE_REGISTER_SERVICE, DeliveryMode.NON_PERSISTENT, TIME_TO_LIVE);
         } catch (MessageException | ExchangeModelMarshallException e) {
             LOG.error("Failed to send registration message to " + ExchangeModelConstants.EXCHANGE_REGISTER_SERVICE, e);
             setWaitingForResponse(false);
@@ -126,7 +128,7 @@ public class StartupBean extends PluginDataHolder {
         LOG.info("Unregistering from Exchange Module");
         try {
             String unregisterServiceRequest = ExchangeModuleRequestMapper.createUnregisterServiceRequest(serviceType);
-            eventBusMessageProducerBean.sendEventBusMessage(unregisterServiceRequest, ExchangeModelConstants.EXCHANGE_REGISTER_SERVICE);
+            eventBusMessageProducerBean.sendEventBusMessage(unregisterServiceRequest, ExchangeModelConstants.EXCHANGE_REGISTER_SERVICE, DeliveryMode.NON_PERSISTENT, TIME_TO_LIVE);
         } catch (MessageException | ExchangeModelMarshallException e) {
             LOG.error("Failed to send unregistration message to {}", ExchangeModelConstants.EXCHANGE_REGISTER_SERVICE);
         }
