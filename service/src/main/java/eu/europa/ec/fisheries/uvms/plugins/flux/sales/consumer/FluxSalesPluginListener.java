@@ -17,6 +17,7 @@ import eu.europa.ec.fisheries.schema.exchange.plugin.v1.PluginBaseRequest;
 import eu.europa.ec.fisheries.schema.exchange.plugin.v1.SendSalesReportRequest;
 import eu.europa.ec.fisheries.schema.exchange.plugin.v1.SendSalesResponseRequest;
 import eu.europa.ec.fisheries.schema.exchange.plugin.v1.SetConfigRequest;
+import eu.europa.ec.fisheries.uvms.commons.message.api.MessageException;
 import eu.europa.ec.fisheries.uvms.exchange.model.constant.ExchangeModelConstants;
 import eu.europa.ec.fisheries.uvms.exchange.model.exception.ExchangeModelMarshallException;
 import eu.europa.ec.fisheries.uvms.exchange.model.mapper.ExchangePluginResponseMapper;
@@ -109,12 +110,12 @@ public class FluxSalesPluginListener implements MessageListener {
             }
 
             if (responseMessage != null) {
-                messageProducer.sendModuleResponseMessage(textMessage, responseMessage);
+                messageProducer.sendResponseMessageToSender(textMessage, responseMessage);
             }
 
         } catch (ExchangeModelMarshallException | NullPointerException e) {
             LOG.error("[ Error when receiving message in flux " + startup.getRegisterClassName() + " ]", e);
-        } catch (JMSException ex) {
+        } catch (JMSException | MessageException ex) {
             LOG.error("[ Error when handling JMS message in flux " + startup.getRegisterClassName() + " ]", ex);
         } catch (PluginException | SalesMarshallException ex) {
             LOG.error("[ Error when handling JMS message in flux " + startup.getRegisterClassName() + " ]", ex);
