@@ -33,7 +33,7 @@ import java.util.Map;
 
 @Singleton
 @Startup
-@DependsOn({"FileHandlerBean", "PluginRegistrationListener", "FluxSalesPluginListener"})
+@DependsOn({"FileHandlerBean", "EventBusMessageProducerBean", "PluginRegistrationListener", "FluxSalesPluginListener"})
 public class StartupBean extends PluginDataHolder {
 
     final static Logger LOG = LoggerFactory.getLogger(StartupBean.class);
