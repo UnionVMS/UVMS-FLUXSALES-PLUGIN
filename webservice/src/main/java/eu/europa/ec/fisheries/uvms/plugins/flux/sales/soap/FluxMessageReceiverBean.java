@@ -87,7 +87,8 @@ public class FluxMessageReceiverBean implements BridgeConnectorPortType {
         }
 
         try {
-            switch (requestHelper.determineMessageType(request)) {
+            String messageType = requestHelper.determineMessageType(request);
+            switch (messageType) {
                 case FluxDataFlowName.SALES_REPORT:
                     receiveSalesReport(request);
                     break;
@@ -97,7 +98,7 @@ public class FluxMessageReceiverBean implements BridgeConnectorPortType {
                 case FluxDataFlowName.SALES_RECEIVE_RESPONSE:
                     receiveSalesResponse(request);
                     break;
-                default: throw new PluginException("In the FLUX plugin, no action is defined for a FLUX request with DF " + request.getDF());
+                default: throw new PluginException("In the Sales FLUX plugin, no action is defined for a FLUX request with message type " + messageType);
             }
 
             response.setStatus("OK");
