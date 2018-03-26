@@ -14,7 +14,16 @@ public class Connector2BridgeRequestHelper {
 
     public String getFRPropertyOrNull(Connector2BridgeRequest request) {
         //return "FRA";
-        return request.getOtherAttributes().get(QName.valueOf("FR"));
+        try {
+            String fr = request.getOtherAttributes().get(QName.valueOf("FR"));
+            if (fr == null) {
+                return "MOCK"; //TEMPORARY
+            } else {
+                return fr;
+            }
+        } catch (Exception e) {
+            return "MOCK"; //TEMPORARY;
+        }
     }
 
     public String getONPropertyOrNull(Connector2BridgeRequest request) {
