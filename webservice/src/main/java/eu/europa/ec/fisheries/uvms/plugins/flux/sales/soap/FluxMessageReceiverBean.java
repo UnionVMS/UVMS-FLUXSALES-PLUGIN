@@ -27,6 +27,7 @@ import eu.europa.ec.fisheries.uvms.plugins.flux.sales.service.XsdValidatorServic
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.service.helper.Connector2BridgeRequestHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.xmlunit.validation.ValidationResult;
 import xeu.bridge_connector.v1.Connector2BridgeRequest;
 import xeu.bridge_connector.v1.Connector2BridgeResponse;
@@ -35,6 +36,7 @@ import xeu.bridge_connector.wsdl.v1.BridgeConnectorPortType;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.jws.WebService;
+import java.util.UUID;
 
 /**
  * This is the entry point for incoming FLUX messages.
@@ -71,7 +73,8 @@ public class FluxMessageReceiverBean implements BridgeConnectorPortType {
 
     @Override
     public Connector2BridgeResponse post(Connector2BridgeRequest request) {
-
+        MDC.put("requestId", UUID.randomUUID().toString());
+        LOG.info("Received request message");
         Connector2BridgeResponse response = new Connector2BridgeResponse();
         if (!startupBean.isEnabled()) {
             response.setStatus("NOK");
