@@ -29,7 +29,7 @@
                         <webModule>
                             <groupId>${project.groupId}</groupId>
                             <artifactId>flux-sales-plugin-webservice</artifactId>
-                            <contextRoot>flux-sales-plugin</contextRoot>
+                            <contextRoot>${context.root}flux-sales-plugin</contextRoot>
                         </webModule>
                     </modules>
                     <skinnyWars>true</skinnyWars>
