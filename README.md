@@ -16,7 +16,7 @@ The purpose is to make it possible to exchange sales messages over FLUX.
   * FLUXSalesResponseMessage
   
 #### How to use it
-1. Configure your FLUX TL to redirect messages with DF *urn:un:unece:uncefact:fisheries:FLUX:SALES:EU:2* to the SOAP endpoint *[server-path]/flux-sales-plugin/SalesService/FluxMessageReceiverBean*
+1. Configure your FLUX TL to redirect messages with DF *urn:un:unece:uncefact:fisheries:FLUX:SALES:EU:2* to the SOAP endpoint *[server-path]/unionvms/flux-sales-plugin/SalesService/FluxMessageReceiverBean*
   a. The default clientID/connnectorID is "flux-sales-plugin". This can be overridden in the config database
 1. Deploy this plugin, the Exchange, Rules and Sales module (and their dependencies).
 
