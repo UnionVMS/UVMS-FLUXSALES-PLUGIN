@@ -13,16 +13,12 @@ public class Connector2BridgeRequestHelper {
     }
 
     public String getFRPropertyOrNull(Connector2BridgeRequest request) {
-        //return "FRA";
-        try {
-            String fr = request.getOtherAttributes().get(QName.valueOf("FR"));
-            if (fr == null) {
-                return "MOCK"; //TEMPORARY
-            } else {
-                return fr;
-            }
-        } catch (Exception e) {
-            return "MOCK"; //TEMPORARY;
+        String fr = request.getOtherAttributes().get(QName.valueOf("FR"));
+        if (fr != null && fr.contains(":")){
+            int indexOfColon = fr.indexOf(":");
+            return fr.substring(0, indexOfColon);
+        } else {
+            return fr;
         }
     }
 
