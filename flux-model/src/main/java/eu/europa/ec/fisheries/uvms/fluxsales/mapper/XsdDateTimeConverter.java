@@ -1,6 +1,7 @@
 package eu.europa.ec.fisheries.uvms.fluxsales.mapper;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 import javax.xml.bind.DatatypeConverter;
 
@@ -15,7 +16,7 @@ public class XsdDateTimeConverter {
 
     public static String marshalDate(DateTime dateTime) {
         if (dateTime != null) {
-            return DatatypeConverter.printDate(dateTime.toGregorianCalendar());
+            return dateTime.withZone(DateTimeZone.UTC).toString("yyyy-MM-dd'Z'");
         } else {
             return null;
         }
@@ -23,9 +24,10 @@ public class XsdDateTimeConverter {
 
     public static String marshalDateTime(DateTime dateTime) {
         if (dateTime != null) {
-            return DatatypeConverter.printDateTime(dateTime.toGregorianCalendar());
+            return dateTime.withZone(DateTimeZone.UTC).toString("yyyy-MM-dd'T'HH:mm:ss'Z'");
         } else {
             return null;
         }
     }
 }
+

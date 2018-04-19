@@ -10,8 +10,8 @@ import static org.junit.Assert.assertNull;
 
 public class XsdDateTimeConverterTest {
 
-    private final String TIME = "2017-05-11T12:10:38+02:00";
-    private final String DATE = "2017-05-11+02:00";
+    private final String TIME = "2017-05-11T10:10:38Z";
+    private final String DATE = "2017-05-11Z";
 
     @Test
     public void testUnmarshal() throws Exception {
@@ -20,10 +20,10 @@ public class XsdDateTimeConverterTest {
         assertEquals(2017, time.year().get());
         assertEquals(5, time.monthOfYear().get());
         assertEquals(11, time.dayOfMonth().get());
-        assertEquals(12, time.hourOfDay().get());
+        assertEquals(10, time.hourOfDay().get());
         assertEquals(10, time.minuteOfHour().get());
         assertEquals(38, time.secondOfMinute().get());
-        assertEquals(DateTimeZone.forOffsetHours(2), time.getZone());
+        assertEquals(DateTimeZone.UTC, time.getZone());
     }
 
     @Test
