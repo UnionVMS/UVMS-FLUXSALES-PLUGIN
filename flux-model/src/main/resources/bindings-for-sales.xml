@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<jaxb:bindings version="1.0"
+               xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+               xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+               xmlns:xs="http://www.w3.org/2001/XMLSchema"
+               jaxb:extensionBindingPrefixes="xjc">
+
+    <!-- To avoid namespace collisions, we generate the UNCEFACT classes in a different namespace -->
+    <jaxb:bindings schemaLocation="contract/sales/codelist_standard_UNECE_CommunicationMeansTypeCode_D16A.xsd">
+        <jaxb:schemaBindings>
+            <jaxb:package name="eu.europa.ec.fisheries.schema.flux.sales"/>
+        </jaxb:schemaBindings>
+    </jaxb:bindings>
+    <jaxb:bindings schemaLocation="contract/sales/FLUXSalesQueryMessage_3p0.xsd">
+        <jaxb:schemaBindings>
+            <jaxb:package name="eu.europa.ec.fisheries.schema.flux.sales"/>
+        </jaxb:schemaBindings>
+    </jaxb:bindings>
+    <jaxb:bindings schemaLocation="contract/sales/FLUXSalesReportMessage_3p0.xsd">
+        <jaxb:schemaBindings>
+            <jaxb:package name="eu.europa.ec.fisheries.schema.flux.sales"/>
+        </jaxb:schemaBindings>
+    </jaxb:bindings>
+    <jaxb:bindings schemaLocation="contract/sales/FLUXSalesResponseMessage_3p0.xsd">
+        <jaxb:schemaBindings>
+            <jaxb:package name="eu.europa.ec.fisheries.schema.flux.sales"/>
+        </jaxb:schemaBindings>
+    </jaxb:bindings>
+    <jaxb:bindings schemaLocation="contract/sales/QualifiedDataType_20p0.xsd">
+        <jaxb:schemaBindings>
+            <jaxb:package name="eu.europa.ec.fisheries.schema.flux.sales"/>
+        </jaxb:schemaBindings>
+    </jaxb:bindings>
+    <jaxb:bindings schemaLocation="contract/sales/ReusableAggregateBusinessInformationEntity_20p0.xsd">
+        <jaxb:schemaBindings>
+            <jaxb:package name="eu.europa.ec.fisheries.schema.flux.sales"/>
+        </jaxb:schemaBindings>
+    </jaxb:bindings>
+    <jaxb:bindings schemaLocation="contract/sales/UnqualifiedDataType_20p0.xsd">
+        <jaxb:schemaBindings>
+            <jaxb:package name="eu.europa.ec.fisheries.schema.flux.sales"/>
+        </jaxb:schemaBindings>
+    </jaxb:bindings>
+    <jaxb:bindings>
+        <jaxb:globalBindings>
+            <xjc:simple/>
+
+            <!-- use JODA-Time DateTime for xs:date -->
+            <jaxb:javaType name="org.joda.time.DateTime"
+                           xmlType="xs:date"
+                           parseMethod="eu.europa.ec.fisheries.uvms.plugins.flux.sales.model.mapper.XsdDateTimeConverter.unmarshal"
+                           printMethod="eu.europa.ec.fisheries.uvms.plugins.flux.sales.model.mapper.XsdDateTimeConverter.marshalDateTime"/>
+
+            <!-- use JODA-Time DateTime for xs:dateTime -->
+            <jaxb:javaType name="org.joda.time.DateTime"
+                           xmlType="xs:dateTime"
+                           parseMethod="eu.europa.ec.fisheries.uvms.plugins.flux.sales.model.mapper.XsdDateTimeConverter.unmarshal"
+                           printMethod="eu.europa.ec.fisheries.uvms.plugins.flux.sales.model.mapper.XsdDateTimeConverter.marshalDateTime"/>
+
+        </jaxb:globalBindings>
+    </jaxb:bindings>
+</jaxb:bindings>

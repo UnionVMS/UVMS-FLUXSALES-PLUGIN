@@ -82,6 +82,17 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- Necessary to use the classes of this war in the Arquillian tests.
+                 https://eureka.ykyuen.info/2009/10/30/maven-dependency-on-jarwar-package/
+               -->
+            <plugin>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <attachClasses>true</attachClasses>
+                    <classesClassifier>classes</classesClassifier>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 

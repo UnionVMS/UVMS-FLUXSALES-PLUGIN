@@ -32,6 +32,8 @@
         <orika.version>1.5.0</orika.version>
         <powermock.version>1.7.3</powermock.version>
         <lombok.version>1.16.18</lombok.version>
+        <jaxb-impl.version>2.2.7</jaxb-impl.version>
+        <awaitilitiy.version>3.0.0</awaitilitiy.version>
     </properties>
 
     <dependencyManagement>
@@ -50,6 +52,22 @@
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sun.xml.bind</groupId>
+                <artifactId>jaxb-impl</artifactId>
+                <version>${jaxb-impl.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.awaitility</groupId>
+                <artifactId>awaitility</artifactId>
+                <version>${awaitilitiy.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>eu.europa.ec.fisheries.uvms.sales</groupId>
+                <artifactId>sales-model</artifactId>
+                <version>${sales.model.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -216,5 +234,6 @@
         <module>service</module>
         <module>webservice</module>
         <module>module</module>
+        <module>integration-tests</module>
     </modules>
 </project>

@@ -44,22 +44,6 @@
     </dependencies>
 
     <build>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <includes>
-                    <include>bindings.xml</include>
-                </includes>
-                <targetPath>${contract.files.location}</targetPath>
-                <filtering>true</filtering>
-            </resource>
-            <resource>
-                <directory>src/main/resources/contract</directory>
-                <targetPath>${contract.files.location}</targetPath>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
-
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -153,7 +137,7 @@
                                             <wsdl>${basedir}/src/main/resources/contract/bridge-connector/bridge-connector.wsdl</wsdl>
                                             <wsdlLocation>classpath:contract/bridge-connector/bridge-connector.wsdl</wsdlLocation>
                                             <bindingFiles>
-                                                <bindingFile>${basedir}/src/main/resources/bindings.xml</bindingFile>
+                                                <bindingFile>${basedir}/src/main/resources/bindings-for-bridge-connector.xml</bindingFile>
                                             </bindingFiles>
                                             <extraargs>
                                                 <extraarg>-xjc-XhashCode</extraarg>
@@ -161,14 +145,14 @@
                                                 <extraarg>-xjc-XtoString</extraarg>
                                                 <extraarg>-xjc-Xfluent-api</extraarg>
                                                 <extraarg>-p</extraarg>
-                                                <extraarg>http://www.w3.org/2001/XMLSchema=eu.europa.ec.fisheries.schema</extraarg>
+                                                <extraarg>http://www.w3.org/2001/XMLSchema=eu.europa.ec.fisheries.schema.flux.sales</extraarg>
                                             </extraargs>
                                         </wsdlOption>
                                         <wsdlOption>
                                             <wsdl>${basedir}/src/main/resources/contract/connector-bridge/connector-bridge.wsdl</wsdl>
                                             <wsdlLocation>classpath:contract/connector-bridge/connector-bridge.wsdl</wsdlLocation>
                                             <bindingFiles>
-                                                <bindingFile>${basedir}/src/main/resources/bindings.xml</bindingFile>
+                                                <bindingFile>${basedir}/src/main/resources/bindings-for-connector-bridge.xml</bindingFile>
                                             </bindingFiles>
                                             <extraargs>
                                                 <extraarg>-xjc-XhashCode</extraarg>
@@ -176,14 +160,14 @@
                                                 <extraarg>-xjc-XtoString</extraarg>
                                                 <extraarg>-xjc-Xfluent-api</extraarg>
                                                 <extraarg>-p</extraarg>
-                                                <extraarg>http://www.w3.org/2001/XMLSchema=eu.europa.ec.fisheries.schema</extraarg>
+                                                <extraarg>http://www.w3.org/2001/XMLSchema=eu.europa.ec.fisheries.schema.flux.sales</extraarg>
                                             </extraargs>
                                         </wsdlOption>
                                         <wsdlOption>
                                             <wsdl>${basedir}/src/main/resources/contract/sales/import-xsd.wsdl</wsdl>
                                             <wsdlLocation>classpath:contract/sales/import-xsd.wsdl</wsdlLocation>
                                             <bindingFiles>
-                                                <bindingFile>${basedir}/src/main/resources/bindings.xml</bindingFile>
+                                                <bindingFile>${basedir}/src/main/resources/bindings-for-sales.xml</bindingFile>
                                             </bindingFiles>
                                             <extraargs>
                                                 <extraarg>-xjc-XhashCode</extraarg>
@@ -191,7 +175,7 @@
                                                 <extraarg>-xjc-XtoString</extraarg>
                                                 <extraarg>-xjc-Xfluent-api</extraarg>
                                                 <extraarg>-p</extraarg>
-                                                <extraarg>http://www.w3.org/2001/XMLSchema=eu.europa.ec.fisheries.schema</extraarg>
+                                                <extraarg>http://www.w3.org/2001/XMLSchema=eu.europa.ec.fisheries.schema.flux.sales</extraarg>
                                             </extraargs>
                                         </wsdlOption>
                                     </wsdlOptions>
