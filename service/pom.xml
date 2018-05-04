@@ -7,9 +7,9 @@
     <packaging>ejb</packaging>
 
     <parent>
-        <groupId>eu.europa.ec.fisheries.uvms.plugins</groupId>
+        <groupId>eu.europa.ec.fisheries.uvms.plugins.flux.sales</groupId>
         <artifactId>flux-sales-plugin</artifactId>
-        <version>1.0.7</version>
+        <version>1.0.8</version>
     </parent>
 
     <properties>
@@ -41,7 +41,6 @@
         <dependency>
             <groupId>eu.europa.ec.fisheries.uvms.sales</groupId>
             <artifactId>sales-model</artifactId>
-            <version>${sales.model.version}</version>
         </dependency>
         <dependency>
             <groupId>joda-time</groupId>
@@ -107,6 +106,12 @@
                 </executions>
             </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
     </build>
 
 </project>

@@ -7,9 +7,9 @@
     <packaging>ear</packaging>
 
     <parent>
-        <groupId>eu.europa.ec.fisheries.uvms.plugins</groupId>
+        <groupId>eu.europa.ec.fisheries.uvms.plugins.flux.sales</groupId>
         <artifactId>flux-sales-plugin</artifactId>
-        <version>1.0.7</version>
+        <version>1.0.8</version>
     </parent>
 
     <build>
