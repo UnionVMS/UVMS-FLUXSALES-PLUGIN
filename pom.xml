@@ -3,7 +3,7 @@
 
     <groupId>eu.europa.ec.fisheries.uvms.plugins.flux.sales</groupId>
     <artifactId>flux-sales-plugin</artifactId>
-    <version>1.0.8</version>
+    <version>1.0.9-SNAPSHOT</version>
     <packaging>pom</packaging>
     <description>The FLUX plugin which can receive and send sales messages</description>
 
@@ -124,7 +124,7 @@
 
     <scm>
         <connection>scm:git:https://github.com/UnionVMS/UVMS-FLUXSALES-PLUGIN.git</connection>
-        <tag>flux-sales-plugin-1.0.8</tag>
+        <tag>HEAD</tag>
     </scm>
     
     <build>
