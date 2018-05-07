@@ -14,7 +14,6 @@ import java.util.concurrent.Callable;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
 
-@Ignore
 @RunWith(Arquillian.class)
 public class PluginRegistersAndStartsUpIT extends TestOnGoodWorkingPlugin {
 
