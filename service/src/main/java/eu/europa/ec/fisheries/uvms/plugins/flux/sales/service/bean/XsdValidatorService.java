@@ -25,17 +25,18 @@ import java.util.List;
 @Slf4j
 public class XsdValidatorService {
 
-    public ValidationResult doesMessagePassXsdValidation(Element incomingXML) {
+    public ValidationResult doesMessagePassXsdValidation(Element incomingXML, String messageType) {
+
+        // If the incoming message is a response, we don't do XSD validation.
+        if ("fluxsalesresponsemessage".equals(messageType.toLowerCase())) {
+            log.debug("Skipped XSD validation because the incoming message was a response");
+            return new ValidationResult(true, Lists.<ValidationProblem>newArrayList());
+        }
+
         try {
             StringWriter writer = new StringWriter();
             TransformerFactory.newInstance().newTransformer().transform(new DOMSource(incomingXML), new StreamResult(writer));
             String incomingXMLAsString = writer.toString();
-
-            // If the incoming message is a response, we don't do XSD validation.
-            if (incomingXMLAsString.contains("FLUXSalesResponseMessage")) {
-                log.info("Skipping XSD validation because a response was received");
-                return new ValidationResult(true, Lists.<ValidationProblem>newArrayList());
-            }
 
             StringReader reader = new StringReader(incomingXMLAsString);
             Source xmlFile = new StreamSource(reader);

@@ -81,7 +81,9 @@ public class FluxMessageReceiverBean implements BridgeConnectorPortType {
             return response;
         }
 
-        ValidationResult validationResult = xsdValidatorService.doesMessagePassXsdValidation(request.getAny());
+        String messageType = requestHelper.determineMessageType(request);
+
+        ValidationResult validationResult = xsdValidatorService.doesMessagePassXsdValidation(request.getAny(), messageType);
 
         if (!validationResult.isValid()) {
             validationService.sendMessageToSales(request, validationResult.getProblems());
@@ -90,7 +92,6 @@ public class FluxMessageReceiverBean implements BridgeConnectorPortType {
         }
 
         try {
-            String messageType = requestHelper.determineMessageType(request);
             switch (messageType) {
                 case FluxDataFlowName.SALES_REPORT:
                     receiveSalesReport(request);
