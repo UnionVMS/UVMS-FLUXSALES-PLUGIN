@@ -68,7 +68,7 @@ public class XsdValidatorServiceTest {
         when(TransformerFactory.newInstance()).thenReturn(transformerFactory);
         doReturn(transformer).when(transformerFactory).newTransformer();
 
-        assertFalse(xsdValidator.doesMessagePassXsdValidation(element).isValid());
+        assertFalse(xsdValidator.doesMessagePassXsdValidation(element, "FLUXSalesReportMessage").isValid());
         verify(transformer).transform(any(DOMSource.class), any(StreamResult.class));
     }
 

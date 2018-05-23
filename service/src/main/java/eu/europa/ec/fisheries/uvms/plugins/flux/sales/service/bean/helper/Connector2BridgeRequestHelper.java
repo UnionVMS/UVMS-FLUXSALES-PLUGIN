@@ -5,6 +5,8 @@ import xeu.bridge_connector.v1.Connector2BridgeRequest;
 import javax.ejb.Stateless;
 import javax.xml.namespace.QName;
 
+import static org.apache.commons.lang3.Validate.notBlank;
+
 @Stateless
 public class Connector2BridgeRequestHelper {
 
@@ -12,9 +14,13 @@ public class Connector2BridgeRequestHelper {
         return request.getAny().getLocalName();
     }
 
-    public String getFRPropertyOrNull(Connector2BridgeRequest request) {
+    public String getFRPropertyOrException(Connector2BridgeRequest request) {
         String fr = request.getOtherAttributes().get(QName.valueOf("FR"));
-        if (fr != null && fr.contains(":")){
+
+        // FR is optional in the Connector2BridgeRequest, but the ExchangeModuleRequestMapper can't handle nulls.
+        notBlank(fr, "FR value was null or blank");
+
+        if (fr.contains(":")){
             int indexOfColon = fr.indexOf(':');
             return fr.substring(0, indexOfColon);
         } else {
