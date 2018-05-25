@@ -32,7 +32,6 @@ import static org.awaitility.Awaitility.await;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-@Ignore
 @RunWith(Arquillian.class)
 public class ReceiveSalesResponseIT extends TestOnGoodWorkingPlugin {
 

@@ -81,7 +81,9 @@ public class FluxMessageReceiverBean implements BridgeConnectorPortType {
             return response;
         }
 
-        ValidationResult validationResult = xsdValidatorService.doesMessagePassXsdValidation(request.getAny());
+        String messageType = requestHelper.determineMessageType(request);
+
+        ValidationResult validationResult = xsdValidatorService.doesMessagePassXsdValidation(request.getAny(), messageType);
 
         if (!validationResult.isValid()) {
             validationService.sendMessageToSales(request, validationResult.getProblems());
@@ -90,7 +92,6 @@ public class FluxMessageReceiverBean implements BridgeConnectorPortType {
         }
 
         try {
-            String messageType = requestHelper.determineMessageType(request);
             switch (messageType) {
                 case FluxDataFlowName.SALES_REPORT:
                     receiveSalesReport(request);
@@ -116,7 +117,7 @@ public class FluxMessageReceiverBean implements BridgeConnectorPortType {
     private void receiveSalesResponse(Connector2BridgeRequest request) throws MappingException {
         LOG.debug("Got sales response from FLUX in FLUX plugin");
         FLUXSalesResponseMessage fluxSalesResponseMessage = fluxSalesResponseMessageMapper.mapToSalesResponse(request);
-        String fr = requestHelper.getFRPropertyOrNull(request);
+        String fr = requestHelper.getFRPropertyOrException(request);
         String on = requestHelper.getONPropertyOrNull(request);
         exchange.sendSalesResponseToExchange(fluxSalesResponseMessage, fr, on);
     }
@@ -124,7 +125,7 @@ public class FluxMessageReceiverBean implements BridgeConnectorPortType {
     private void receiveSalesReport(Connector2BridgeRequest request) throws MappingException {
         LOG.debug("Got sales report from FLUX in FLUX plugin");
         Report report = fluxSalesReportMessageMapper.mapToReport(request);
-        String fr = requestHelper.getFRPropertyOrNull(request);
+        String fr = requestHelper.getFRPropertyOrException(request);
         String on = requestHelper.getONPropertyOrNull(request);
         exchange.sendSalesReportToExchange(report, fr, on);
     }
@@ -132,7 +133,7 @@ public class FluxMessageReceiverBean implements BridgeConnectorPortType {
     private void receiveSalesQuery(Connector2BridgeRequest request) throws MappingException {
         LOG.debug("Got sales query from FLUX in FLUX plugin");
         FLUXSalesQueryMessage salesQuery = fluxSalesQueryMessageMapper.mapToSalesQuery(request);
-        String fr = requestHelper.getFRPropertyOrNull(request);
+        String fr = requestHelper.getFRPropertyOrException(request);
         String on = requestHelper.getONPropertyOrNull(request);
         exchange.sendSalesQueryToExchange(salesQuery, fr, on);
     }

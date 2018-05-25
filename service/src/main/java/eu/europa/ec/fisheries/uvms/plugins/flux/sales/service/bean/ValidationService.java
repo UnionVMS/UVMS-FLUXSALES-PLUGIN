@@ -40,7 +40,7 @@ public class ValidationService {
             ValidationQualityAnalysisType validationQualityAnalysis = ValidationQualityAnalysisMapper.map("SALE-L00-00-0000", "L00", "ERR", builder.toString(), new ArrayList<String>());
 
             String onProperty = requestHelper.getONPropertyOrNull(request);
-            String frProperty = requestHelper.getFRPropertyOrNull(request);
+            String frProperty = requestHelper.getFRPropertyOrException(request);
             String requestForSales = SalesModuleRequestMapper.createRespondToInvalidMessageRequest(onProperty,
                     Arrays.asList(validationQualityAnalysis), "FLUX", frProperty, SalesIdType.FLUXTL_ON);
             String messageForExchange = ExchangeModuleRequestMapper.createReceiveInvalidSalesMessage(requestForSales, onProperty,

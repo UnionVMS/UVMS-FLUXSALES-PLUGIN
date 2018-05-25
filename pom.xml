@@ -3,7 +3,7 @@
 
     <groupId>eu.europa.ec.fisheries.uvms.plugins.flux.sales</groupId>
     <artifactId>flux-sales-plugin</artifactId>
-    <version>1.0.8</version>
+    <version>1.0.9</version>
     <packaging>pom</packaging>
     <description>The FLUX plugin which can receive and send sales messages</description>
 
@@ -24,7 +24,7 @@
 
         <uvms.commons.parent.version>3.0.17</uvms.commons.parent.version>
         <sales.model.version>1.0.9</sales.model.version>
-        <exchange.model.version>4.0.8</exchange.model.version>
+        <exchange.model.version>4.0.15</exchange.model.version>
         <rules.model.version>3.0.20</rules.model.version>
 
         <maven.ejb.plugin.version>3.0.0</maven.ejb.plugin.version>
@@ -124,7 +124,7 @@
 
     <scm>
         <connection>scm:git:https://github.com/UnionVMS/UVMS-FLUXSALES-PLUGIN.git</connection>
-        <tag>flux-sales-plugin-1.0.8</tag>
+        <tag>flux-sales-plugin-1.0.9</tag>
     </scm>
     
     <build>

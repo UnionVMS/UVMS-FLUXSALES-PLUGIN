@@ -62,7 +62,7 @@ public class ValidationServiceTest {
                 .thenReturn("createReceiveInvalidSalesMessage");
 
         doReturn("ON").when(helper).getONPropertyOrNull(any(Connector2BridgeRequest.class));
-        doReturn("FR").when(helper).getFRPropertyOrNull(any(Connector2BridgeRequest.class));
+        doReturn("FR").when(helper).getFRPropertyOrException(any(Connector2BridgeRequest.class));
 
         validationService.sendMessageToSales(connector2BridgeRequest, problems);
 
