@@ -68,9 +68,9 @@ public class FluxMessageReceiverBeanTest {
         doReturn(true).when(startupBean).isEnabled();
         doReturn("FLUXSalesReportMessage").when(requestHelper).determineMessageType(request);
         doReturn(report).when(fluxSalesReportMessageMapper).mapToReport(request);
-        doReturn(fr).when(requestHelper).getFRPropertyOrNull(request);
+        doReturn(fr).when(requestHelper).getFRPropertyOrException(request);
         doReturn(on).when(requestHelper).getONPropertyOrNull(request);
-        doReturn(new ValidationResult(true, Lists.<ValidationProblem>newArrayList())).when(xsdValidatorService).doesMessagePassXsdValidation(any(Element.class));
+        doReturn(new ValidationResult(true, Lists.<ValidationProblem>newArrayList())).when(xsdValidatorService).doesMessagePassXsdValidation(any(Element.class), any(String.class));
 
 
         //execute
@@ -80,7 +80,7 @@ public class FluxMessageReceiverBeanTest {
         verify(startupBean).isEnabled();
         verify(requestHelper).determineMessageType(request);
         verify(fluxSalesReportMessageMapper).mapToReport(request);
-        verify(requestHelper).getFRPropertyOrNull(request);
+        verify(requestHelper).getFRPropertyOrException(request);
         verify(requestHelper).getONPropertyOrNull(request);
         verify(exchangeService).sendSalesReportToExchange(report, fr, on);
         verifyNoMoreInteractions(fluxSalesReportMessageMapper, startupBean, exchangeService, requestHelper);
@@ -99,10 +99,10 @@ public class FluxMessageReceiverBeanTest {
         doReturn(true).when(startupBean).isEnabled();
         doReturn("FLUXSalesReportMessage").when(requestHelper).determineMessageType(request);
         doReturn(report).when(fluxSalesReportMessageMapper).mapToReport(request);
-        doReturn(fr).when(requestHelper).getFRPropertyOrNull(request);
+        doReturn(fr).when(requestHelper).getFRPropertyOrException(request);
         doReturn(on).when(requestHelper).getONPropertyOrNull(request);
         doThrow(new RuntimeException("oops")).when(exchangeService).sendSalesReportToExchange(report, fr, on);
-        doReturn(new ValidationResult(true, Lists.<ValidationProblem>newArrayList())).when(xsdValidatorService).doesMessagePassXsdValidation(any(Element.class));
+        doReturn(new ValidationResult(true, Lists.<ValidationProblem>newArrayList())).when(xsdValidatorService).doesMessagePassXsdValidation(any(Element.class), any(String.class));
 
         //execute
         Connector2BridgeResponse response = fluxMessageReceiverBean.post(request);
@@ -111,7 +111,7 @@ public class FluxMessageReceiverBeanTest {
         verify(startupBean).isEnabled();
         verify(requestHelper).determineMessageType(request);
         verify(fluxSalesReportMessageMapper).mapToReport(request);
-        verify(requestHelper).getFRPropertyOrNull(request);
+        verify(requestHelper).getFRPropertyOrException(request);
         verify(requestHelper).getONPropertyOrNull(request);
         verify(exchangeService).sendSalesReportToExchange(report, fr, on);
         verifyNoMoreInteractions(fluxSalesReportMessageMapper, startupBean, exchangeService, requestHelper);
@@ -129,10 +129,10 @@ public class FluxMessageReceiverBeanTest {
         doReturn(true).when(startupBean).isEnabled();
         doReturn("FLUXSalesQueryMessage").when(requestHelper).determineMessageType(request);
         doReturn(query).when(fluxSalesQueryMessageMapper).mapToSalesQuery(request);
-        doReturn(fr).when(requestHelper).getFRPropertyOrNull(request);
+        doReturn(fr).when(requestHelper).getFRPropertyOrException(request);
         doReturn(on).when(requestHelper).getONPropertyOrNull(request);
         doThrow(new RuntimeException("oops")).when(exchangeService).sendSalesQueryToExchange(query, fr, on);
-        doReturn(new ValidationResult(true, Lists.<ValidationProblem>newArrayList())).when(xsdValidatorService).doesMessagePassXsdValidation(any(Element.class));
+        doReturn(new ValidationResult(true, Lists.<ValidationProblem>newArrayList())).when(xsdValidatorService).doesMessagePassXsdValidation(any(Element.class), any(String.class));
 
         //execute
         Connector2BridgeResponse response = fluxMessageReceiverBean.post(request);
@@ -141,7 +141,7 @@ public class FluxMessageReceiverBeanTest {
         verify(startupBean).isEnabled();
         verify(requestHelper).determineMessageType(request);
         verify(fluxSalesQueryMessageMapper).mapToSalesQuery(request);
-        verify(requestHelper).getFRPropertyOrNull(request);
+        verify(requestHelper).getFRPropertyOrException(request);
         verify(requestHelper).getONPropertyOrNull(request);
         verify(exchangeService).sendSalesQueryToExchange(query, fr, on);
         verifyNoMoreInteractions(fluxSalesQueryMessageMapper, startupBean, exchangeService, requestHelper);
@@ -159,9 +159,9 @@ public class FluxMessageReceiverBeanTest {
         doReturn(true).when(startupBean).isEnabled();
         doReturn("FLUXSalesQueryMessage").when(requestHelper).determineMessageType(request);
         doReturn(query).when(fluxSalesQueryMessageMapper).mapToSalesQuery(request);
-        doReturn(fr).when(requestHelper).getFRPropertyOrNull(request);
+        doReturn(fr).when(requestHelper).getFRPropertyOrException(request);
         doReturn(on).when(requestHelper).getONPropertyOrNull(request);
-        doReturn(new ValidationResult(true, Lists.<ValidationProblem>newArrayList())).when(xsdValidatorService).doesMessagePassXsdValidation(any(Element.class));
+        doReturn(new ValidationResult(true, Lists.<ValidationProblem>newArrayList())).when(xsdValidatorService).doesMessagePassXsdValidation(any(Element.class), any(String.class));
 
         //execute
         Connector2BridgeResponse response = fluxMessageReceiverBean.post(request);
@@ -170,7 +170,7 @@ public class FluxMessageReceiverBeanTest {
         verify(startupBean).isEnabled();
         verify(requestHelper).determineMessageType(request);
         verify(fluxSalesQueryMessageMapper).mapToSalesQuery(request);
-        verify(requestHelper).getFRPropertyOrNull(request);
+        verify(requestHelper).getFRPropertyOrException(request);
         verify(requestHelper).getONPropertyOrNull(request);
         verify(exchangeService).sendSalesQueryToExchange(query, fr, on);
         verifyNoMoreInteractions(fluxSalesQueryMessageMapper, startupBean, exchangeService, requestHelper);
@@ -188,10 +188,10 @@ public class FluxMessageReceiverBeanTest {
         doReturn(true).when(startupBean).isEnabled();
         doReturn("FLUXSalesResponseMessage").when(requestHelper).determineMessageType(request);
         doReturn(response).when(fluxSalesResponseMessageMapper).mapToSalesResponse(request);
-        doReturn(fr).when(requestHelper).getFRPropertyOrNull(request);
+        doReturn(fr).when(requestHelper).getFRPropertyOrException(request);
         doReturn(on).when(requestHelper).getONPropertyOrNull(request);
         doThrow(new RuntimeException("oops")).when(exchangeService).sendSalesResponseToExchange(response, fr, on);
-        doReturn(new ValidationResult(true, Lists.<ValidationProblem>newArrayList())).when(xsdValidatorService).doesMessagePassXsdValidation(any(Element.class));
+        doReturn(new ValidationResult(true, Lists.<ValidationProblem>newArrayList())).when(xsdValidatorService).doesMessagePassXsdValidation(any(Element.class), any(String.class));
 
         //execute
         Connector2BridgeResponse Connector2BridgeResponse = fluxMessageReceiverBean.post(request);
@@ -200,7 +200,7 @@ public class FluxMessageReceiverBeanTest {
         verify(startupBean).isEnabled();
         verify(requestHelper).determineMessageType(request);
         verify(fluxSalesResponseMessageMapper).mapToSalesResponse(request);
-        verify(requestHelper).getFRPropertyOrNull(request);
+        verify(requestHelper).getFRPropertyOrException(request);
         verify(requestHelper).getONPropertyOrNull(request);
         verify(exchangeService).sendSalesResponseToExchange(response, fr, on);
         verifyNoMoreInteractions(fluxSalesResponseMessageMapper, startupBean, exchangeService, requestHelper);
@@ -218,9 +218,9 @@ public class FluxMessageReceiverBeanTest {
         doReturn(true).when(startupBean).isEnabled();
         doReturn("FLUXSalesResponseMessage").when(requestHelper).determineMessageType(request);
         doReturn(response).when(fluxSalesResponseMessageMapper).mapToSalesResponse(request);
-        doReturn(fr).when(requestHelper).getFRPropertyOrNull(request);
+        doReturn(fr).when(requestHelper).getFRPropertyOrException(request);
         doReturn(on).when(requestHelper).getONPropertyOrNull(request);
-        doReturn(new ValidationResult(true, Lists.<ValidationProblem>newArrayList())).when(xsdValidatorService).doesMessagePassXsdValidation(any(Element.class));
+        doReturn(new ValidationResult(true, Lists.<ValidationProblem>newArrayList())).when(xsdValidatorService).doesMessagePassXsdValidation(any(Element.class), any(String.class));
 
         //execute
         Connector2BridgeResponse Connector2BridgeResponse = fluxMessageReceiverBean.post(request);
@@ -229,7 +229,7 @@ public class FluxMessageReceiverBeanTest {
         verify(startupBean).isEnabled();
         verify(requestHelper).determineMessageType(request);
         verify(fluxSalesResponseMessageMapper).mapToSalesResponse(request);
-        verify(requestHelper).getFRPropertyOrNull(request);
+        verify(requestHelper).getFRPropertyOrException(request);
         verify(requestHelper).getONPropertyOrNull(request);
         verify(exchangeService).sendSalesResponseToExchange(response, fr, on);
         verifyNoMoreInteractions(fluxSalesResponseMessageMapper, startupBean, exchangeService, requestHelper);
@@ -265,7 +265,7 @@ public class FluxMessageReceiverBeanTest {
         //mock
         doReturn(true).when(startupBean).isEnabled();
         doReturn("NonExisting").when(requestHelper).determineMessageType(request);
-        doReturn(new ValidationResult(true, Lists.<ValidationProblem>newArrayList())).when(xsdValidatorService).doesMessagePassXsdValidation(any(Element.class));
+        doReturn(new ValidationResult(true, Lists.<ValidationProblem>newArrayList())).when(xsdValidatorService).doesMessagePassXsdValidation(any(Element.class), any(String.class));
 
         //execute
         Connector2BridgeResponse response = fluxMessageReceiverBean.post(request);

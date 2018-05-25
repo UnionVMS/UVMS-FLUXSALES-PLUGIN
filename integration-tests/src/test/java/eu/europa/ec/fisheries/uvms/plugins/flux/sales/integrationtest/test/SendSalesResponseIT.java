@@ -28,7 +28,6 @@ import static org.awaitility.Awaitility.await;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-@Ignore
 @RunWith(Arquillian.class)
 public class SendSalesResponseIT extends TestOnGoodWorkingPlugin {
 
