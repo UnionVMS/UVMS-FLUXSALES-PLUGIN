@@ -14,6 +14,7 @@ package eu.europa.ec.fisheries.uvms.plugins.flux.sales.service.mapper;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.service.exception.MappingException;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import xeu.connector_bridge.v1.POSTMSG;
@@ -48,7 +49,7 @@ public class PostMsgTypeMapper {
         message.setBUSINESSUUID(UUID.randomUUID().toString());
         message.setAD(ad);
         message.setDF(df);
-        message.setDT(DateTime.now());
+        message.setDT(DateTime.now().withZone(DateTimeZone.UTC));
         message.setAny(marshalToDOM(toBeWrapped));
 
         return message;
