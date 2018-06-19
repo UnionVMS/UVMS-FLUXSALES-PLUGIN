@@ -49,14 +49,14 @@ public class SendSalesResponseIT extends TestOnGoodWorkingPlugin {
 	@OperateOnDeployment("good-working-plugin")
 	public void pluginPicksUpAMessageFromItsQueueAndSendsIt() throws Exception {
         //wait until plugin has started up
-        await().atMost(30, SECONDS)
+        await().atMost(60, SECONDS)
                 .until(new Callable<Boolean>() {
                     public Boolean call() throws Exception {
                         return startupBean.isRegistered();
                     }
                 });
 
-        await().atMost(30, SECONDS)
+        await().atMost(60, SECONDS)
                 .until(new Callable<Boolean>() {
                     public Boolean call() throws Exception {
                         return startupBean.isEnabled();
@@ -67,7 +67,7 @@ public class SendSalesResponseIT extends TestOnGoodWorkingPlugin {
         eventBusMessageProducer.sendMessageToEventBus(MESSAGE_FROM_EXCHANGE, "eu.europa.ec.fisheries.uvms.plugins.flux.sales");
 
         //wait until message is "sent"
-        await().atMost(30, SECONDS)
+        await().atMost(60, SECONDS)
                 .until(new Callable<Boolean>() {
                     public Boolean call() throws Exception {
                         return !portMock.getAllSentMessages().isEmpty();
@@ -98,7 +98,7 @@ public class SendSalesResponseIT extends TestOnGoodWorkingPlugin {
         return serializer.writeToString(node);
     }
 
-    private static final String MESSAGE_FROM_EXCHANGE = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
+    private static final String MESSAGE_FROM_EXCHANGE =
             "<ns2:SendSalesResponseRequest xmlns:ns2=\"urn:plugin.exchange.schema.fisheries.ec.europa.eu:v1\">\n" +
             "    <method>SEND_SALES_RESPONSE</method>\n" +
             "    <response>&lt;?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?&gt;\n" +

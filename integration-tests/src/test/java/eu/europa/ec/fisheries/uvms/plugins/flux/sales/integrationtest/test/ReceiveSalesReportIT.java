@@ -53,14 +53,14 @@ public class ReceiveSalesReportIT extends TestOnGoodWorkingPlugin {
 	@OperateOnDeployment("good-working-plugin")
 	public void pluginReceivesAMessageAndSendsItExchangeSuccessfully() throws Exception {
         //wait until plugin has started up
-        await().atMost(30, SECONDS)
+        await().atMost(60, SECONDS)
                 .until(new Callable<Boolean>() {
                     public Boolean call() throws Exception {
                         return startupBean.isRegistered();
                     }
                 });
 
-        await().atMost(30, SECONDS)
+        await().atMost(60, SECONDS)
                 .until(new Callable<Boolean>() {
                     public Boolean call() throws Exception {
                         return startupBean.isEnabled();
@@ -72,7 +72,7 @@ public class ReceiveSalesReportIT extends TestOnGoodWorkingPlugin {
         fluxMessageReceiverBean.post(request);
 
         //wait until message is sent through to Exchange
-        await().atMost(30, SECONDS)
+        await().atMost(60, SECONDS)
                 .until(new Callable<Boolean>() {
                     public Boolean call() throws Exception {
                         return !receivedMessagesInExchange.getAll().isEmpty();
@@ -115,7 +115,7 @@ public class ReceiveSalesReportIT extends TestOnGoodWorkingPlugin {
         }
     }
 
-    private static final String EXPECTED_MESSAGE_BEFORE_CURRENT_DATE = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
+    private static final String EXPECTED_MESSAGE_BEFORE_CURRENT_DATE =
             "<ns2:ReceiveSalesReportRequest xmlns:ns2=\"urn:module.exchange.schema.fisheries.ec.europa.eu:v1\">\n" +
             "    <method>RECEIVE_SALES_REPORT</method>\n" +
             "    <username>FLUX</username>\n" +
@@ -333,7 +333,7 @@ public class ReceiveSalesReportIT extends TestOnGoodWorkingPlugin {
             "    &lt;/ns4:FLUXSalesReportMessage&gt;\n" +
             "&lt;/ns4:Report&gt;\n" +
             "</report>\n" +
-            "</ns2:ReceiveSalesReportRequest>\n";
+            "</ns2:ReceiveSalesReportRequest>";
 
 	private static final String SALES_REPORT = "<FLUXSalesReportMessage xmlns:clm63155CommunicationChannelCode=\"urn:un:unece:uncefact:codelist:standard:UNECE:CommunicationMeansTypeCode:D16A\" xmlns:qdt=\"urn:un:unece:uncefact:data:Standard:QualifiedDataType:20\" xmlns:ram=\"urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:20\" xmlns:udt=\"urn:un:unece:uncefact:data:standard:UnqualifiedDataType:20\" xsi:schemaLocation=\"urn:un:unece:uncefact:data:standard:FLUXSalesReportMessage:3 FLUXSalesReportMessage_3p1.xsd\" xmlns=\"urn:un:unece:uncefact:data:standard:FLUXSalesReportMessage:3\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n" +
             "\t<FLUXReportDocument>\n" +
