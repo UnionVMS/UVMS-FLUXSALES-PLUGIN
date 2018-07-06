@@ -9,8 +9,19 @@
     <parent>
         <groupId>eu.europa.ec.fisheries.uvms.plugins.flux.sales</groupId>
         <artifactId>flux-sales-plugin</artifactId>
-        <version>1.0.8</version>
+        <version>1.0.11</version>
     </parent>
+
+    <properties>
+        <!-- PROPERTIES USED FOR LOGBACK -->
+        <application.name>${project.parent.artifactId}</application.name>
+        <application.version>${project.parent.version}</application.version>
+        <application.logfile>/app/logs/${project.artifactId}/${project.artifactId}.log</application.logfile>
+        <application.error.logfile>/app/logs/${project.artifactId}/${project.artifactId}-error.log</application.error.logfile>
+        <integration.tests.wildfly-remote.host>localhost</integration.tests.wildfly-remote.host>
+        <integration.tests.wildfly-remote.port>8080</integration.tests.wildfly-remote.port>
+        <integration.tests.wildfly-remote.managementPort>9990</integration.tests.wildfly-remote.managementPort>
+    </properties>
 
     <dependencyManagement>
         <dependencies>
@@ -155,13 +166,39 @@
                     <target>1.7</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+                <version>1.0.0</version>
+                <executions>
+                    <execution>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>write-project-properties</goal>
+                        </goals>
+                        <configuration>
+                            <outputFile>${basedir}/src/test/resources/logging.properties</outputFile>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.20</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/*IT</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
         </plugins>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
                 <filtering>true</filtering>
-            </resource>
-        </resources>
+            </testResource>
+        </testResources>
     </build>
 
     <profiles>
@@ -209,15 +246,16 @@
                         </executions>
                     </plugin>
                 </plugins>
-                <resources>
-                    <resource>
-                        <directory>src/main/resources</directory>
-                        <filtering>true</filtering>
-                    </resource>
-                </resources>
             </build>
         </profile>
-
+        <profile>
+            <id>jenkins</id>
+            <properties>
+                <integration.tests.wildfly-remote.host />
+                <integration.tests.wildfly-remote.port>8080</integration.tests.wildfly-remote.port>
+                <integration.tests.wildfly-remote.managementPort>9990</integration.tests.wildfly-remote.managementPort>
+            </properties>
+        </profile>
     </profiles>
 
 </project>

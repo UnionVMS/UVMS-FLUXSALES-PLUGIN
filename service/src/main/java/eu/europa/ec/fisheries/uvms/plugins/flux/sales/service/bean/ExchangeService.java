@@ -24,6 +24,7 @@ import eu.europa.ec.fisheries.uvms.plugins.flux.sales.service.bean.helper.Respon
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.service.producer.ExchangeEventMessageProducerBean;
 import eu.europa.ec.fisheries.uvms.sales.model.exception.SalesMarshallException;
 import eu.europa.ec.fisheries.uvms.sales.model.mapper.JAXBMarshaller;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,8 +33,12 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import java.util.Date;
 
+import static org.apache.commons.lang3.Validate.notBlank;
+import static org.apache.commons.lang3.Validate.notNull;
+
 @LocalBean
 @Stateless
+@Slf4j
 public class ExchangeService {
 
     static final Logger LOG = LoggerFactory.getLogger(ExchangeService.class);

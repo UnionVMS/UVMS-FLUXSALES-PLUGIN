@@ -12,12 +12,12 @@
 
     <container qualifier="wildfly-remote" default="true">
         <protocol type="Servlet 3.0">
-            <property name="host">localhost</property>
-            <!--property name="port">28080</property-->
+            <property name="host">${integration.tests.wildfly-remote.host}</property>
+            <property name="port">${integration.tests.wildfly-remote.port}</property>
         </protocol>
         <configuration>
-            <property name="managementAddress">localhost</property>
-            <property name="managementPort">9990</property>
+            <property name="managementAddress">${integration.tests.wildfly-remote.host}</property>
+            <property name="managementPort">${integration.tests.wildfly-remote.managementPort}</property>
             <property name="username">admin</property>
             <property name="password">admin</property>
         </configuration>

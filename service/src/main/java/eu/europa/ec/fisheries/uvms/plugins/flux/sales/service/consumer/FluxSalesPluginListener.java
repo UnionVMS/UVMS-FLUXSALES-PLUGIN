@@ -29,6 +29,7 @@ import eu.europa.ec.fisheries.uvms.plugins.flux.sales.service.exception.PluginEx
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.service.producer.ExchangeEventMessageProducerBean;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.service.soap.FluxMessageSenderBean;
 import eu.europa.ec.fisheries.uvms.sales.model.exception.SalesMarshallException;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,6 +48,7 @@ import javax.jms.TextMessage;
     @ActivationConfigProperty(propertyName = "clientId", propertyValue = "eu.europa.ec.fisheries.uvms.plugins.flux.sales"),
     @ActivationConfigProperty(propertyName = "messageSelector", propertyValue = "ServiceName='eu.europa.ec.fisheries.uvms.plugins.flux.sales'")
 })
+@Slf4j
 public class FluxSalesPluginListener implements MessageListener {
 
     static final Logger LOG = LoggerFactory.getLogger(FluxSalesPluginListener.class);
@@ -76,6 +78,8 @@ public class FluxSalesPluginListener implements MessageListener {
             PluginBaseRequest request = JAXBMarshaller.unmarshallTextMessage(textMessage, PluginBaseRequest.class);
 
             String responseMessage = null;
+
+            log.info("Received method:" + request.getMethod());
 
             switch (request.getMethod()) {
                 case SET_CONFIG:

@@ -58,11 +58,13 @@ public class ValidationServiceTest {
 
         when(SalesModuleRequestMapper.createRespondToInvalidMessageRequest(eq("ON"), any(List.class),
                 eq("FLUX"), eq("FR"), eq(SalesIdType.FLUXTL_ON))).thenReturn("createRespondToInvalidMessageRequest");
-        when(ExchangeModuleRequestMapper.createReceiveInvalidSalesMessage(eq("createRespondToInvalidMessageRequest"), eq("ON"), eq("FR"), isA(Date.class), eq("FLUX"), eq(PluginType.FLUX)))
+        when(ExchangeModuleRequestMapper.createReceiveInvalidSalesMessage(eq("createRespondToInvalidMessageRequest"), eq("ON"), eq("FR"), isA(Date.class),
+                eq("FLUX"), eq(PluginType.FLUX), eq("xmlAsString")))
                 .thenReturn("createReceiveInvalidSalesMessage");
 
         doReturn("ON").when(helper).getONPropertyOrNull(any(Connector2BridgeRequest.class));
-        doReturn("FR").when(helper).getFRPropertyOrNull(any(Connector2BridgeRequest.class));
+        doReturn("FR").when(helper).getFRPropertyOrException(any(Connector2BridgeRequest.class));
+        doReturn("xmlAsString").when(helper).getContentAsString(connector2BridgeRequest);
 
         validationService.sendMessageToSales(connector2BridgeRequest, problems);
 

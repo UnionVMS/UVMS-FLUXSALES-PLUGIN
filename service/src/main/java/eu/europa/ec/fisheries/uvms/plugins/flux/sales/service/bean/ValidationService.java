@@ -28,23 +28,25 @@ public class ValidationService {
     private Connector2BridgeRequestHelper requestHelper;
 
     @EJB
-    ExchangeEventMessageProducerBean producer;
+    private ExchangeEventMessageProducerBean producer;
 
     public void sendMessageToSales(Connector2BridgeRequest request, Iterable<ValidationProblem> problems) {
         try {
             StringBuilder builder = new StringBuilder();
             for (ValidationProblem problem : problems) {
-                builder.append(problem.getMessage() + "\n");
+                builder.append(problem.getMessage()).append("\n");
             }
 
             ValidationQualityAnalysisType validationQualityAnalysis = ValidationQualityAnalysisMapper.map("SALE-L00-00-0000", "L00", "ERR", builder.toString(), new ArrayList<String>());
 
             String onProperty = requestHelper.getONPropertyOrNull(request);
-            String frProperty = requestHelper.getFRPropertyOrNull(request);
+            String frProperty = requestHelper.getFRPropertyOrException(request);
+            String xmlAsString = requestHelper.getContentAsString(request);
+
             String requestForSales = SalesModuleRequestMapper.createRespondToInvalidMessageRequest(onProperty,
                     Arrays.asList(validationQualityAnalysis), "FLUX", frProperty, SalesIdType.FLUXTL_ON);
             String messageForExchange = ExchangeModuleRequestMapper.createReceiveInvalidSalesMessage(requestForSales, onProperty,
-                    frProperty, new Date(), "FLUX", PluginType.FLUX);
+                    frProperty, new Date(), "FLUX", PluginType.FLUX, xmlAsString);
 
             producer.sendModuleMessage(messageForExchange, null);
         } catch (SalesMarshallException e) {
@@ -55,4 +57,6 @@ public class ValidationService {
             log.error("Failed to send createRespondToInvalidMessageRequest to Sales", e);
         }
     }
+
+
 }
