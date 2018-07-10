@@ -259,7 +259,6 @@
         <profile>
             <id>focus</id>
             <properties>
-                <integration.tests.wildfly-remote.host />
                 <integration.tests.wildfly-remote.port>28080</integration.tests.wildfly-remote.port>
                 <integration.tests.wildfly-remote.managementPort>29990</integration.tests.wildfly-remote.managementPort>
             </properties>
