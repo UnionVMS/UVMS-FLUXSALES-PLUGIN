@@ -260,7 +260,7 @@
             <id>focus</id>
             <properties>
                 <integration.tests.wildfly-remote.port>28080</integration.tests.wildfly-remote.port>
-                <integration.tests.wildfly-remote.managementPort>29990</integration.tests.wildfly-remote.managementPort>
+                <integration.tests.wildfly-remote.managementPort>9990</integration.tests.wildfly-remote.managementPort>
             </properties>
         </profile>
     </profiles>
