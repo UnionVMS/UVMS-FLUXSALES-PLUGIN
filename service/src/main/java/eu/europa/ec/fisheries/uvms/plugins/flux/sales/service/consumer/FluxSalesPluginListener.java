@@ -46,7 +46,9 @@ import javax.jms.TextMessage;
     @ActivationConfigProperty(propertyName = "destination", propertyValue = ExchangeModelConstants.EVENTBUS_NAME),
     @ActivationConfigProperty(propertyName = "subscriptionName", propertyValue = "eu.europa.ec.fisheries.uvms.plugins.flux.sales"),
     @ActivationConfigProperty(propertyName = "clientId", propertyValue = "eu.europa.ec.fisheries.uvms.plugins.flux.sales"),
-    @ActivationConfigProperty(propertyName = "messageSelector", propertyValue = "ServiceName='eu.europa.ec.fisheries.uvms.plugins.flux.sales'")
+    @ActivationConfigProperty(propertyName = "messageSelector", propertyValue = "ServiceName='eu.europa.ec.fisheries.uvms.plugins.flux.sales'"),
+    @ActivationConfigProperty(propertyName = "initialRedeliveryDelay", propertyValue = "60000"),
+    @ActivationConfigProperty(propertyName = "maximumRedeliveries", propertyValue = "3")
 })
 @Slf4j
 public class FluxSalesPluginListener implements MessageListener {
