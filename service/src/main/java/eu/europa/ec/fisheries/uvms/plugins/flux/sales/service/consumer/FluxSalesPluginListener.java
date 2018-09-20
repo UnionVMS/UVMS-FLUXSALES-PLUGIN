@@ -34,10 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ejb.*;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageListener;
-import javax.jms.TextMessage;
+import javax.jms.*;
 
 @MessageDriven(mappedName = ExchangeModelConstants.PLUGIN_EVENTBUS, activationConfig = {
     @ActivationConfigProperty(propertyName = "messagingType", propertyValue = ExchangeModelConstants.CONNECTION_TYPE),
@@ -117,7 +114,7 @@ public class FluxSalesPluginListener implements MessageListener {
             }
 
             if (responseMessage != null) {
-                messageProducer.sendResponseMessageToSender(textMessage, responseMessage);
+                messageProducer.sendResponseMessageToSender(textMessage, responseMessage, 60000, DeliveryMode.NON_PERSISTENT);
             }
 
         } catch (ExchangeModelMarshallException | NullPointerException e) {
