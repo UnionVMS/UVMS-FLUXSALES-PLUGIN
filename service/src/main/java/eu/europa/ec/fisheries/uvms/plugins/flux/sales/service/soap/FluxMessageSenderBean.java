@@ -29,13 +29,11 @@ import xeu.connector_bridge.v1.POSTMSG;
 import xeu.connector_bridge.wsdl.v1.BridgeConnectorPortType;
 
 import javax.ejb.EJB;
-import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
 
-@LocalBean
 @Stateless
 public class FluxMessageSenderBean {
 
