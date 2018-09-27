@@ -24,7 +24,7 @@
         <maven.compiler.target>1.7</maven.compiler.target>
         <jacoco.version>0.7.9</jacoco.version>
 
-        <uvms.commons.parent.version>3.0.26-SNAPSHOT</uvms.commons.parent.version>
+        <uvms.commons.parent.version>3.0.28</uvms.commons.parent.version>
         <sales.model.version>1.0.9</sales.model.version>
         <exchange.model.version>4.0.19</exchange.model.version>
         <rules.model.version>3.0.20</rules.model.version>
