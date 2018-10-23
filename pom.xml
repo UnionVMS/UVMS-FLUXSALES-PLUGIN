@@ -20,8 +20,8 @@
         <sl4j.version>1.7.7</sl4j.version>
         <logback.version>1.1.2</logback.version>
         <logback.core.version>1.1.2</logback.core.version>
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
+        <maven.compiler.source>${focus-pom.java.version}</maven.compiler.source>
+        <maven.compiler.target>${focus-pom.java.version}</maven.compiler.target>
         <jacoco.version>0.7.9</jacoco.version>
 
         <uvms.commons.parent.version>3.0.28</uvms.commons.parent.version>
@@ -235,9 +235,6 @@
                     <url>https://apjenp01.dg3.be/nexus/repository/maven-snapshots/</url>
                 </snapshotRepository>
             </distributionManagement>
-            <properties>
-                <focus-pom.java.version>1.8</focus-pom.java.version>
-            </properties>
         </profile>
     </profiles>
     
