@@ -9,12 +9,12 @@
     <parent>
         <groupId>eu.europa.ec.fisheries.uvms.plugins.flux.sales</groupId>
         <artifactId>flux-sales-plugin</artifactId>
-        <version>1.0.12</version>
+        <version>1.0.13</version>
     </parent>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.source>${focus-pom.java.version}</maven.compiler.source>
         <release.branch.name>uvms-1.0.0</release.branch.name>
         <contract.files.outputDirectory>contracts</contract.files.outputDirectory>
         <contract.files.location>${project.build.directory}/${contract.files.outputDirectory}</contract.files.location>

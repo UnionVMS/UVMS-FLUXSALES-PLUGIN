@@ -3,7 +3,7 @@
 
     <groupId>eu.europa.ec.fisheries.uvms.plugins.flux.sales</groupId>
     <artifactId>flux-sales-plugin</artifactId>
-    <version>1.0.12</version>
+    <version>1.0.13</version>
     <packaging>pom</packaging>
     <description>The FLUX plugin which can receive and send sales messages</description>
 
@@ -11,7 +11,7 @@
         <groupId>fish.focus.uvms.maven</groupId>
         <artifactId>uvms-pom</artifactId>
         <relativePath />
-        <version>1.19</version>
+        <version>1.21</version>
     </parent>
 
     <properties>
@@ -20,11 +20,11 @@
         <sl4j.version>1.7.7</sl4j.version>
         <logback.version>1.1.2</logback.version>
         <logback.core.version>1.1.2</logback.core.version>
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
+        <maven.compiler.source>${focus-pom.java.version}</maven.compiler.source>
+        <maven.compiler.target>${focus-pom.java.version}</maven.compiler.target>
         <jacoco.version>0.7.9</jacoco.version>
 
-        <uvms.commons.parent.version>3.0.17</uvms.commons.parent.version>
+        <uvms.commons.parent.version>3.0.29</uvms.commons.parent.version>
         <sales.model.version>1.0.9</sales.model.version>
         <exchange.model.version>4.0.19</exchange.model.version>
         <rules.model.version>3.0.20</rules.model.version>
@@ -49,6 +49,16 @@
                 <groupId>eu.europa.ec.fisheries.uvms.commons</groupId>
                 <artifactId>uvms-commons-message</artifactId>
                 <version>${uvms.commons.parent.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>eu.europa.ec.fisheries.uvms.config</groupId>
+                        <artifactId>config-model</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.sun.xml.bind</groupId>
+                        <artifactId>jaxb-impl</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.projectlombok</groupId>
@@ -126,7 +136,7 @@
 
     <scm>
         <connection>scm:git:https://github.com/UnionVMS/UVMS-FLUXSALES-PLUGIN.git</connection>
-        <tag>flux-sales-plugin-1.0.12</tag>
+        <tag>flux-sales-plugin-1.0.13</tag>
     </scm>
     
     <build>
@@ -225,9 +235,6 @@
                     <url>https://apjenp01.dg3.be/nexus/repository/maven-snapshots/</url>
                 </snapshotRepository>
             </distributionManagement>
-            <properties>
-                <focus-pom.java.version>1.8</focus-pom.java.version>
-            </properties>
         </profile>
     </profiles>
     

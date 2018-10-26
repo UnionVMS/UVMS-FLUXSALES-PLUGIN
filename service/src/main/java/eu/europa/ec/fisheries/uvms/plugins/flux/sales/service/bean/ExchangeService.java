@@ -11,7 +11,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.plugins.flux.sales.service.bean;
 
-import com.google.common.base.Optional;
 import eu.europa.ec.fisheries.schema.exchange.plugin.types.v1.PluginType;
 import eu.europa.ec.fisheries.schema.sales.FLUXSalesQueryMessage;
 import eu.europa.ec.fisheries.schema.sales.FLUXSalesResponseMessage;
@@ -32,9 +31,7 @@ import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import java.util.Date;
-
-import static org.apache.commons.lang3.Validate.notBlank;
-import static org.apache.commons.lang3.Validate.notNull;
+import java.util.Optional;
 
 @LocalBean
 @Stateless
@@ -58,8 +55,8 @@ public class ExchangeService {
     public void sendSalesReportToExchange(Report report, String fr, String on) {
         try {
             String reportAsString = JAXBMarshaller.marshallJaxBObjectToString(report);
-            String guid = Optional.fromNullable(reportHelper.getGuidOrNull(report))
-                    .or(on);
+            String guid = Optional  .ofNullable(reportHelper.getGuidOrNull(report))
+                                    .orElse(on);
 
             String text = ExchangeModuleRequestMapper.createReceiveSalesReportRequest(reportAsString, guid, fr, "FLUX", PluginType.FLUX, new Date(), on);
             producer.sendModuleMessage(text, null);
@@ -76,8 +73,8 @@ public class ExchangeService {
     public void sendSalesResponseToExchange(FLUXSalesResponseMessage response, String fr, String on) {
         try {
             String responseAsString = JAXBMarshaller.marshallJaxBObjectToString(response);
-            String guid = Optional  .fromNullable(responseHelper.getGuidOrNull(response))
-                                    .or(on);
+            String guid = Optional  .ofNullable(responseHelper.getGuidOrNull(response))
+                                    .orElse(on);
 
             String text = ExchangeModuleRequestMapper.createReceiveSalesResponseRequest(responseAsString, guid, fr,
                     new Date(), "FLUX", PluginType.FLUX, on);
@@ -94,8 +91,8 @@ public class ExchangeService {
     public void sendSalesQueryToExchange(FLUXSalesQueryMessage query, String fr, String on) {
         try {
             String queryAsString = JAXBMarshaller.marshallJaxBObjectToString(query);
-            String guid = Optional  .fromNullable(queryHelper.getGuidOrNull(query))
-                                    .or(on);
+            String guid = Optional  .ofNullable(queryHelper.getGuidOrNull(query))
+                                    .orElse(on);
 
             String text = ExchangeModuleRequestMapper.createReceiveSalesQueryRequest(queryAsString, guid, fr, new Date(), "FLUX", PluginType.FLUX, on);
             producer.sendModuleMessage(text, null);

@@ -9,7 +9,7 @@
     <parent>
         <groupId>eu.europa.ec.fisheries.uvms.plugins.flux.sales</groupId>
         <artifactId>flux-sales-plugin</artifactId>
-        <version>1.0.12</version>
+        <version>1.0.13</version>
     </parent>
 
     <properties>
@@ -162,8 +162,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.1</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>${focus-pom.java.version}</source>
+                    <target>${focus-pom.java.version}</target>
                 </configuration>
             </plugin>
             <plugin>

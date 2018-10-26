@@ -33,11 +33,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ejb.*;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageListener;
-import javax.jms.TextMessage;
+import javax.ejb.ActivationConfigProperty;
+import javax.ejb.EJB;
+import javax.ejb.MessageDriven;
+import javax.jms.*;
 
 @MessageDriven(mappedName = ExchangeModelConstants.PLUGIN_EVENTBUS, activationConfig = {
     @ActivationConfigProperty(propertyName = "messagingType", propertyValue = ExchangeModelConstants.CONNECTION_TYPE),
@@ -69,7 +68,6 @@ public class FluxSalesPluginListener implements MessageListener {
 
 
     @Override
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void onMessage(Message inMessage) {
 
         LOG.debug("FluxSalesPluginListener (MessageConstants.PLUGIN_SERVICE_CLASS_NAME): {}", startup.getRegisterClassName());
@@ -117,7 +115,7 @@ public class FluxSalesPluginListener implements MessageListener {
             }
 
             if (responseMessage != null) {
-                messageProducer.sendResponseMessageToSender(textMessage, responseMessage);
+                messageProducer.sendResponseMessageToSender(textMessage, responseMessage, 60000, DeliveryMode.NON_PERSISTENT);
             }
 
         } catch (ExchangeModelMarshallException | NullPointerException e) {
