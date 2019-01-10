@@ -61,6 +61,7 @@ public class PostMsgTypeMapper {
     private String convertCountryToFluxNode(String country) {
         String[] fluxNodes = startupBean.getSetting("flux_nodes").split(",");
         return Arrays.stream(fluxNodes)
+                .map(fluxNode -> fluxNode.toUpperCase())
                 .filter(fluxNode -> fluxNode.startsWith(country))
                 .findFirst()
                 .orElse(country);
