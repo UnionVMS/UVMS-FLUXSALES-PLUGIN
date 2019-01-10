@@ -11,6 +11,7 @@
  */
 package eu.europa.ec.fisheries.uvms.plugins.flux.sales.service.mapper;
 
+import eu.europa.ec.fisheries.uvms.plugins.flux.sales.service.StartupBean;
 import eu.europa.ec.fisheries.uvms.plugins.flux.sales.service.exception.MappingException;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
@@ -19,6 +20,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import xeu.connector_bridge.v1.POSTMSG;
 
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.validation.constraints.NotNull;
@@ -33,17 +35,18 @@ import java.util.Map.Entry;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-/**
- *
- */
 @LocalBean
 @Stateless
 @Slf4j
 public class PostMsgTypeMapper {
 
+    @EJB
+    private StartupBean startupBean;
 
-    public POSTMSG wrapInPostMsgType(@NotNull Object toBeWrapped, @NotNull String df, @NotNull String ad) throws MappingException {
-        validateInputs(toBeWrapped, df, ad);
+
+    public POSTMSG wrapInPostMsgType(@NotNull Object toBeWrapped, @NotNull String df, @NotNull String country) throws MappingException {
+        validateInputs(toBeWrapped, df, country);
+        String ad = convertCountryToFluxNode(country);
 
         POSTMSG message = new POSTMSG();
         message.setBUSINESSUUID(UUID.randomUUID().toString());
@@ -53,6 +56,14 @@ public class PostMsgTypeMapper {
         message.setAny(marshalToDOM(toBeWrapped));
 
         return message;
+    }
+
+    private String convertCountryToFluxNode(String country) {
+        String[] fluxNodes = startupBean.getSetting("flux_nodes").split(",");
+        return Arrays.stream(fluxNodes)
+                .filter(fluxNode -> fluxNode.startsWith(country))
+                .findFirst()
+                .orElse(country);
     }
 
     private void validateInputs(Object toBeWrapped, String df, String ad) {
