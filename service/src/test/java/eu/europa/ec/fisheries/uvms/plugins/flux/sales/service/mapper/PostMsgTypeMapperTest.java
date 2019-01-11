@@ -66,7 +66,7 @@ public class PostMsgTypeMapperTest {
     public void testWrapInPostMsgTypeWhenObjectIsNotKnownToJAXB() throws Exception {
         Object toBeWrapped = new Object();
 
-        doReturn(fluxNodes).when(startupBean).getSetting("flux_nodes");
+        doReturn(fluxNodes).when(startupBean).getSetting("FLUX_NODES");
         exception.expect(MappingException.class);
         exception.expectMessage("Could not wrap object " + toBeWrapped.toString() + " in post msg");
         postMsgTypeMapper.wrapInPostMsgType(toBeWrapped, "df", "ad");
