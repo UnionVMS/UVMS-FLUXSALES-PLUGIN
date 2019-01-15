@@ -59,7 +59,12 @@ public class PostMsgTypeMapper {
     }
 
     private String convertCountryToFluxNode(String country) {
-        String[] fluxNodes = startupBean.getSetting("FLUX_NODES").split(",");
+        String fluxNodesString = startupBean.getSetting("FLUX_NODES");
+        if (fluxNodesString == null) {
+            throw new RuntimeException("FLUX_NODES setting from Exchange parameters is null.");
+        }
+
+        String[] fluxNodes = fluxNodesString.split(",");
         return Arrays.stream(fluxNodes)
                 .filter(fluxNode -> fluxNode.toUpperCase().startsWith(country.toUpperCase()))
                 .findFirst()
