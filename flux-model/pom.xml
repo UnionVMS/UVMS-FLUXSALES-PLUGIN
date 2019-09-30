@@ -28,6 +28,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>eu.europa.ec.fisheries.uvms.rules</groupId>
+            <artifactId>rules-model</artifactId>
+            <version>3.4-MARE-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>org.jvnet.jaxb2_commons</groupId>
             <artifactId>jaxb2-basics</artifactId>
             <version>${jaxb2.basics.version}</version>
