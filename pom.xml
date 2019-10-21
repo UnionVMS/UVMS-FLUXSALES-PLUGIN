@@ -1,18 +1,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>eu.europa.ec.fisheries.uvms</groupId>
+        <artifactId>mare-pom</artifactId>
+        <version>1.6.0-MARE</version>
+        <relativePath />
+    </parent>
+
     <groupId>eu.europa.ec.fisheries.uvms.plugins.flux.sales</groupId>
     <artifactId>flux-sales-plugin</artifactId>
-    <version>1.0.17-SNAPSHOT</version>
+    <version>${uvms.plugins.flux.sales.version}</version>
     <packaging>pom</packaging>
     <description>The FLUX plugin which can receive and send sales messages</description>
-
-    <parent>
-        <groupId>fish.focus.uvms.maven</groupId>
-        <artifactId>uvms-pom</artifactId>
-        <relativePath />
-        <version>1.21</version>
-    </parent>
 
     <properties>
         <sonar.exclusions>**/eu/europa/ec/fisheries/schema/**/*, **/un/unece/uncefact/**/*, **/xeu/**/*</sonar.exclusions>
@@ -24,10 +24,10 @@
         <maven.compiler.target>${focus-pom.java.version}</maven.compiler.target>
         <jacoco.version>0.7.9</jacoco.version>
 
-        <uvms.commons.parent.version>3.0.29</uvms.commons.parent.version>
-        <sales.model.version>1.0.9</sales.model.version>
-        <exchange.model.version>4.0.19</exchange.model.version>
-        <rules.model.version>3.4-MARE-SNAPSHOT</rules.model.version>
+        <uvms.commons.parent.version>${uvms.commonsLibrary.version}</uvms.commons.parent.version>
+        <sales.model.version>${uvms.sales.model.version}</sales.model.version>
+        <exchange.model.version>${uvms.exchange.model.version}</exchange.model.version>
+        <rules.model.version>${uvms.rules.module.version}</rules.model.version>
 
         <maven.ejb.plugin.version>3.0.0</maven.ejb.plugin.version>
         <maven-release-plugin>2.5.3</maven-release-plugin>
