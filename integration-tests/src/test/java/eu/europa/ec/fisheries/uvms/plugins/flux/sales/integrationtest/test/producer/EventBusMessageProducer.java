@@ -14,12 +14,10 @@ public class EventBusMessageProducer {
 
     private static final Logger LOG = LoggerFactory.getLogger(EventBusMessageProducer.class);
 
-    private ConnectionFactory connectionFactory;
     private Topic eventBus;
 
     @PostConstruct
     public void initialize() {
-        connectionFactory = JMSUtils.lookupConnectionFactory();
         eventBus = JMSUtils.lookupTopic(ExchangeModelConstants.PLUGIN_EVENTBUS);
     }
 
@@ -27,8 +25,8 @@ public class EventBusMessageProducer {
         Connection connection = null;
 
         try {
-            connection = connectionFactory.createConnection();
-            final Session session = JMSUtils.connectToQueue(connection);
+            connection = JMSUtils.getConnectionV2();
+            Session session = JMSUtils.createSessionAndStartConnection(connection);
 
             TextMessage textMessage = session.createTextMessage();
             textMessage.setText(message);
@@ -38,9 +36,7 @@ public class EventBusMessageProducer {
         } catch (Exception e) {
             LOG.error("[ Error when sending message. ] ", e);
             throw new RuntimeException(e);
-        } finally {
-            JMSUtils.disconnectQueue(connection);
-        }
+        } 
     }
 
     private MessageProducer getProducer(Session session, Destination destination) throws JMSException {
