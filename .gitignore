@@ -8,3 +8,4 @@ flux-model/src/main/java/eu/europa/ec/fisheries/schema
 flux-model/src/main/java/org
 flux-model/src/main/java/un
 service/src/main/resources/sales
+.flattened-pom.xml
