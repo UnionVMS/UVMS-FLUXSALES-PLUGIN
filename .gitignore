@@ -9,3 +9,7 @@ flux-model/src/main/java/org
 flux-model/src/main/java/un
 service/src/main/resources/sales
 .flattened-pom.xml
+.project
+.classpath
+.settings/
+pom.xml.versionsBackup
