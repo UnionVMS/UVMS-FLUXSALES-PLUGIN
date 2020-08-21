@@ -110,7 +110,7 @@ public class PluginRegistrationListener implements MessageListener {
                 }
             }
         } catch (ExchangeModelMarshallException | NullPointerException e) {
-            LOG.error("[ Error when receiving message in flux ]", e);
+            LOG.error("Error when receiving message in flux", e);
         }
     }
 
@@ -122,6 +122,7 @@ public class PluginRegistrationListener implements MessageListener {
         try {
             return JAXBMarshaller.unmarshallTextMessage(textMessage, ExchangeRegistryBaseRequest.class);
         } catch (ExchangeModelMarshallException e) {
+            LOG.error("Could not unmarshall message: " + textMessage,e);
             return null;
         }
     }
