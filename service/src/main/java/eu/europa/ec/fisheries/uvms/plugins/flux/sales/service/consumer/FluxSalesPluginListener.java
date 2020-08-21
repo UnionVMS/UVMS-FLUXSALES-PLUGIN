@@ -119,9 +119,9 @@ public class FluxSalesPluginListener implements MessageListener {
             }
 
         } catch (ExchangeModelMarshallException | NullPointerException e) {
-            LOG.error("[ Error when receiving message in flux " + startup.getRegisterClassName() + " ]", e);
+            LOG.error("Error when receiving message in flux " + startup.getRegisterClassName() , e);
         } catch (JMSException | MessageException | PluginException | SalesMarshallException ex) {
-            LOG.error("[ Error when handling JMS message in flux " + startup.getRegisterClassName() + " ]", ex);
+            LOG.error("Error when handling JMS message in flux " + startup.getRegisterClassName(), ex);
         }
     }
 }

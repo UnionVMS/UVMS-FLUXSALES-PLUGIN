@@ -34,7 +34,7 @@ public class FileHandlerBean {
             InputStream inputStream = FileHandlerBean.class.getClassLoader().getResourceAsStream(fileName);
             props.load(inputStream);
         } catch (IOException e) {
-            LOG.debug("Properties file failed to load");
+            LOG.debug("Properties file failed to load",e);
         }
         return props;
     }

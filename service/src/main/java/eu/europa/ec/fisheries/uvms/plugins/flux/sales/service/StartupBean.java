@@ -130,7 +130,7 @@ public class StartupBean extends PluginDataHolder {
             String unregisterServiceRequest = ExchangeModuleRequestMapper.createUnregisterServiceRequest(serviceType);
             eventBusMessageProducerBean.sendEventBusMessage(unregisterServiceRequest, ExchangeModelConstants.EXCHANGE_REGISTER_SERVICE, DeliveryMode.NON_PERSISTENT, TIME_TO_LIVE);
         } catch (MessageException | ExchangeModelMarshallException e) {
-            LOG.error("Failed to send unregistration message to {}", ExchangeModelConstants.EXCHANGE_REGISTER_SERVICE);
+            LOG.error("Failed to send unregistration message to " + ExchangeModelConstants.EXCHANGE_REGISTER_SERVICE,e);
         }
     }
 
@@ -138,7 +138,7 @@ public class StartupBean extends PluginDataHolder {
         try {
             return (String) super.getPluginApplicationProperties().get(key);
         } catch (Exception e) {
-            LOG.error("Failed to getSetting for key: " + key, getRegisterClassName());
+            LOG.error("Failed to getSetting for key: " + key + "  and class: " + getRegisterClassName(),e);
             return null;
         }
     }
@@ -164,7 +164,7 @@ public class StartupBean extends PluginDataHolder {
             LOG.debug("Trying to get setting {} ", REGISTER_CLASS_NAME + "." + key);
             return super.getSettings().get(REGISTER_CLASS_NAME + "." + key);
         } catch (Exception e) {
-            LOG.error("Failed to getSetting for key: " + key, REGISTER_CLASS_NAME);
+            LOG.error("Failed to getSetting for key: " + key + " and class: " + REGISTER_CLASS_NAME,e);
             return null;
         }
     }

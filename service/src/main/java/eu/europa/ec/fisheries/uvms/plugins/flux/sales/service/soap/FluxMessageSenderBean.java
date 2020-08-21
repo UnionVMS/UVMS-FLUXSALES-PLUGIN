@@ -60,8 +60,7 @@ public class FluxMessageSenderBean {
             POSTMSG request = postMsgTypeMapper.wrapInPostMsgType(marshalledResponse, startupBean.getSetting("DF"), recipient);
             sendPostMsgType(request);
         } catch (MappingException e) {
-            LOG.error("[ Error when sending sales report to FLUX. ] {}", e.getMessage());
-            throw new PluginException(e);
+            throw new PluginException("Error when sending sales report to FLUX. ",e);
         }
     }
 
@@ -73,8 +72,7 @@ public class FluxMessageSenderBean {
             POSTMSG postMsgType = postMsgTypeMapper.wrapInPostMsgType(marshalledResponse, startupBean.getSetting("DF"), recipient);
             sendPostMsgType(postMsgType);
         } catch (PluginException | MappingException e) {
-            LOG.error("[ Error when sending sales response to FLUX. ] {}", e.getMessage());
-            throw new PluginException(e);
+            throw new PluginException("Error when sending sales response to FLUX.",e);
         }
     }
 
@@ -98,8 +96,7 @@ public class FluxMessageSenderBean {
 
             portType.post(request);
         } catch (Exception e) {
-            LOG.error("[ Error when sending a message to FLUX. ] {}", e.getMessage());
-            throw new PluginException(e);
+            throw new PluginException("Error when sending a message to FLUX.",e);
         }
     }
 
