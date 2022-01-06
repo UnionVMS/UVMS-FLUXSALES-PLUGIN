@@ -37,12 +37,6 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>fish.focus.uvms.maven</groupId>
-                <artifactId>uvms-pom-logging-deps</artifactId>
-                <version>1.21</version>
-                <type>pom</type>
-            </dependency>
-            <dependency>
                 <groupId>eu.europa.ec.fisheries.uvms.exchange</groupId>
                 <artifactId>exchange-model</artifactId>
                 <version>${exchange.model.version}</version>
